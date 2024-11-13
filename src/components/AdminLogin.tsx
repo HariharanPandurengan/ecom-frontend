@@ -15,6 +15,9 @@ const AdminLogin: React.FC = () => {
             if(res.data.status === true){
                 navigate('/AdminDashboard')
             }
+            else{
+                alert('wrong username or password')
+            }
         })
         .catch(err=>{
             console.log(err)
