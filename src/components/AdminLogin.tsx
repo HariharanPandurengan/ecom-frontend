@@ -9,7 +9,7 @@ const AdminLogin: React.FC = () => {
     const navigate = useNavigate()
     const handleLogin = (e: React.FormEvent) => { 
         e.preventDefault();  
-        axios.post(JSON.stringify(import.meta.env.VITE_REACT_API_URL)+'AdminLogin',{username:username,password:password})
+        axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
         .then(res=>{
             if(res.data.status === true){
                 navigate('/AdminDashboard')
