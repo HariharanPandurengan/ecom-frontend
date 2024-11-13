@@ -9,7 +9,7 @@ const App: React.FC = () => {
     <>
       <Routes>
         <Route path='*' element={<PageNotFound/>}></Route>
-        <Route path='/AdminLogin' element={<AdminLogin/>}></Route>
+        <Route path='/' element={<AdminLogin/>}></Route>
         <Route path='/AdminDashboard' element={<AdminDashboard/>}></Route>
       </Routes>
     </>
