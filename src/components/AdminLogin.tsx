@@ -11,6 +11,7 @@ const AdminLogin: React.FC = () => {
         e.preventDefault();  
         axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
         .then(res=>{
+            console.log(res)
             if(res.data.status === true){
                 navigate('/AdminDashboard')
             }
