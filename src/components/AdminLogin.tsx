@@ -9,7 +9,7 @@ const AdminLogin: React.FC = () => {
     const navigate = useNavigate()
     const handleLogin = (e: React.FormEvent) => { 
         e.preventDefault();  
-        axios.post('https://ecom-backend-jbui.onrender.com/AdminLogin',{username:username,password:password})
+        axios.post(import.meta.env.API_URL+'AdminLogin',{username:username,password:password})
         .then(res=>{
             if(res.data.status === true){
                 navigate('/AdminDashboard')
