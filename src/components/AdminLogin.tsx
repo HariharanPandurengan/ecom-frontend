@@ -7,11 +7,11 @@ const AdminLogin: React.FC = () => {
     const [username, setUsername] = useState<string>(''); 
     const [password, setPassword] = useState<string>(''); 
     const navigate = useNavigate()
-    const handleLogin = (e: React.FormEvent) => { 
+    const handleLogin = async (e: React.FormEvent) => { 
         e.preventDefault();  
-        axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
+        console.log('hgfcv')
+        await axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
         .then(res=>{
-            console.log(res)
             if(res.data.status === true){
                 navigate('/AdminDashboard')
             }
