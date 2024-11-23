@@ -16,7 +16,8 @@ const initialProductState = {
     description: '', 
     image: '', 
     colors: [] as string[], 
-    sizes: {} 
+    sizes: {}, 
+    trendingProd: false,
 };
 
 interface Product {
@@ -30,6 +31,7 @@ interface Product {
   image: string;
   colors: string[];
   sizes: SizesOptions;
+  trendingProd: boolean;
 }
 
 const AdminDashboard: React.FC = () => {
