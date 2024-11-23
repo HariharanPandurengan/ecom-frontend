@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import "../App.css";
 import axios from 'axios';
 
-interface ColorOptions { 
+interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
 }
 
@@ -15,8 +15,8 @@ const initialProductState = {
     totalQuantity: '', 
     description: '', 
     image: '', 
-    sizes: [] as string[], 
-    colors: {} 
+    colors: [] as string[], 
+    sizes: {} 
 };
 
 interface Product {
@@ -28,14 +28,14 @@ interface Product {
   totalQuantity: string;
   description: string;
   image: string;
-  sizes: string[];
-  colors: ColorOptions;
+  colors: string[];
+  sizes: SizesOptions;
 }
 
 const AdminDashboard: React.FC = () => {
     const [product, setProduct] = useState<Product>(initialProductState);
     const [products, setProducts] = useState([]);
-    const [colors, setColors] = useState(["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Brown", "Grey", "Navy", "Teal", "Maroon"])
+    const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL'])
     const fields = [
         { name: 'name', label: 'Product Name', type: 'text' },
         { name: 'price', label: 'Product Price', type: 'text' },
@@ -45,7 +45,7 @@ const AdminDashboard: React.FC = () => {
         { name: 'totalQuantity', label: 'Product Total Quantity', type: 'text' },
         { name: 'description', label: 'Product Description', type: 'textarea' },
         { name: 'image', label: 'Product Image', type: 'file' },
-        { name: 'sizes', label: 'Sizes Available', type: 'select', options: ['S', 'M', 'L', 'XL'], multiple: true },
+        { name: 'colors', label: 'Colors Available', type: 'select', options: ["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Brown", "Grey", "Navy", "Teal", "Maroon"], multiple: true },
     ];
 
     useEffect(()=>{
@@ -106,30 +106,30 @@ const AdminDashboard: React.FC = () => {
         }));
     };
 
-    const colorsSelect = (e: ChangeEvent<HTMLSelectElement>,size: string) => {
-        const color = e.target.value;
+    const sizeSelect = (e: ChangeEvent<HTMLSelectElement>,color: string) => {
+        const size = e.target.value;
 
         setProduct(prevState => ({
             ...prevState,
-            colors: {
-                ...prevState.colors,
-                [size]: {
-                    ...(prevState.colors[size] || {}), 
-                    [color]: '0' 
+            sizes: {
+                ...prevState.sizes,
+                [color]: {
+                    ...(prevState.sizes[color] || {}), 
+                    [size]: '0' 
                 }
             }
         }))
     }
 
-    const changeQuantityOfColorOfSize = (e: ChangeEvent<HTMLSelectElement>,size: string,color: string) => {
-        const colorCount = e.target.value;
+    const changeQuantityOfColorOfSize = (e: any,color: string,size: string) => {
+        const sizeCount = e.target.value;
         setProduct(prevState => ({
             ...prevState,
-            colors: {
-                ...prevState.colors,
-                [size]: {
-                    ...(prevState.colors[size] || {}), 
-                    [color]: colorCount 
+            sizes: {
+                ...prevState.sizes,
+                [color]: {
+                    ...(prevState.sizes[color] || {}), 
+                    [size]: sizeCount 
                 }
             }
         }))
@@ -171,8 +171,6 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    console.log(product)
-
   return (
     <div className="dashboard-container">
         <div className="search-bar">
@@ -211,28 +209,28 @@ const AdminDashboard: React.FC = () => {
                         </div>
                     ))}
                     {
-                        product.sizes.length !== 0 && 
+                        product.colors.length !== 0 && 
                                                     <div>
                                                         <h3 style={{marginBottom:'0px'}}>Select colors and quantity for sizes availabe</h3>
                                                         {
-                                                            product.sizes.map(item => {
+                                                            product.colors.map(item => {
                                                                 return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
                                                                             <div style={{display:'flex',alignItems:'center'}}>
                                                                                 <p style={{marginRight:'10px'}}>{item}</p>
-                                                                                <select onChange={(e) => colorsSelect(e,item)}>
+                                                                                <select onChange={(e) => sizeSelect(e,item)}>
                                                                                     {
-                                                                                        colors.map(color => {
-                                                                                            return  <option key={color}>{color}</option>
+                                                                                        sizes.map(size => {
+                                                                                            return  <option key={size}>{size}</option>
                                                                                         })
                                                                                     }
                                                                                 </select>
                                                                             </div>
                                                                             <div>
                                                                                 {
-                                                                                    product.colors[item] && Object.keys(product.colors[item]).map(color => {
-                                                                                        return  <div key={color} style={{display:'flex',alignItems:'center'}}>
-                                                                                                    <p style={{marginRight:'10px'}}>{color}</p>
-                                                                                                    <input type="text" placeholder="Enter Quantity" value={product.colors[item][color]} onChange={(e) => changeQuantityOfColorOfSize(e,item,color)}/>
+                                                                                    product.sizes[item] && Object.keys(product.sizes[item]).map(size => {
+                                                                                        return  <div key={size} style={{display:'flex',alignItems:'center'}}>
+                                                                                                    <p style={{marginRight:'10px'}}>{size}</p>
+                                                                                                    <input type="text" placeholder="Enter Quantity" value={product.sizes[item][size]} onChange={(e) => changeQuantityOfColorOfSize(e,item,size)}/>
                                                                                                 </div>
                                                                                     })
                                                                                 }
