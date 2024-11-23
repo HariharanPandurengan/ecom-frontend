@@ -9,7 +9,6 @@ const AdminLogin: React.FC = () => {
     const navigate = useNavigate()
     const handleLogin = async (e: React.FormEvent) => { 
         e.preventDefault();  
-        console.log('hgfcv')
         await axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
         .then(res=>{
             if(res.data.status === true){
