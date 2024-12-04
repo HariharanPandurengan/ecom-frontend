@@ -57,7 +57,7 @@ button:hover {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .search-bar {
@@ -75,7 +75,7 @@ button:hover {
 
 .dashboard-sections {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.2fr 0.8fr;
   gap: 20px;
 }
 
@@ -92,5 +92,9 @@ button:hover {
 }
 
 .customer-list {
-  grid-column: 1 / -1; 
+  grid-column: 1 / -1;
+}
+
+li {
+  cursor: pointer;
 }
