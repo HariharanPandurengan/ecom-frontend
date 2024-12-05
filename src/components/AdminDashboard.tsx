@@ -37,7 +37,7 @@ interface Product {
 const AdminDashboard: React.FC = () => {
     const [product, setProduct] = useState<Product>(initialProductState);
     const [products, setProducts] = useState([]);
-    const [sizes, setSizes] = useState(['S', 'M', 'L', 'XL'])
+    const sizes = ['S', 'M', 'L', 'XL'];
     const fields = [
         { name: 'name', label: 'Product Name', type: 'text' },
         { name: 'price', label: 'Product Price', type: 'text' },
@@ -275,9 +275,9 @@ const AdminDashboard: React.FC = () => {
             <section className="section add-trending-product">
                 <h2>Add Trending Product</h2>
             </section>
-            <section className="section customer-list">
+            {/* <section className="section customer-list">
                 <h2>Customer List</h2>
-            </section>
+            </section> */}
         </div>
     </div>
   );
