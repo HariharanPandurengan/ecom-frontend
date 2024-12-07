@@ -76,7 +76,7 @@ button:hover {
 .dashboard-sections {
   display: grid;
   grid-template-columns: 0.2fr 0.8fr;
-  gap: 20px;
+  gap: 10px;
 }
 
 .section {
@@ -97,4 +97,168 @@ button:hover {
 
 li {
   cursor: pointer;
+}
+
+
+
+
+/* Container for the grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 3px;
+  padding: 16px;
+  background-color: #f8f8f8;
+}
+
+/* Individual product cards */
+.product-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 16px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Product image */
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* Product name */
+.product-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+/* Product price */
+.product-price {
+  font-size: 1em;
+  color: #555;
+}
+
+.carousel-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 5px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.carousel-slide {
+  text-align: center;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+.carousel-title {
+  margin-top: 8px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+
+/* Navbar Container */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+/* Logo */
+.navbar-logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Links */
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  margin: 0 15px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.navbar-links a:hover {
+  color: #000;
+}
+
+/* Actions */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-action {
+  margin-right: 15px;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+}
+
+.navbar-action:hover {
+  color: #000;
+}
+
+/* Icons */
+.navbar-icon {
+  position: relative;
+  margin: 0 10px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #333;
+}
+
+.navbar-icon:hover {
+  color: #000;
+}
+
+/* Cart Count Badge */
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
 }
