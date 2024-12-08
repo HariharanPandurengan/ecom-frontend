@@ -193,7 +193,7 @@ const Home: React.FC = () => {
                                         }
                                     }
                                 }
-                                else if(material && filteredOne.length !== 0){
+                                else if(material){
                                     for(let i=0;i<filteredOne.length;i++){
                                         if(!(Number((filteredOne[i]['price']) >= Number(priceLimit[0])) && Number(products[i]['price']) <= Number(priceLimit[1]))){
                                             filteredOne.splice(i, 1);
@@ -214,7 +214,7 @@ const Home: React.FC = () => {
                                         }
                                     }
                                 }
-                                else if(material && filteredOne.length !== 0){
+                                else if(material){
                                     for(let i=0;i<filteredOne.length;i++){
                                         if((Number(products[i]['price']) > Number(key2.slice(0,-1))) === false){
                                             filteredOne.splice(i, 1);
@@ -224,7 +224,7 @@ const Home: React.FC = () => {
                             }
                         } 
                         else if (key === 'colors') {
-                            if((material || price) && filteredOne.length !== 0){
+                            if(material || price){
                                 for (let i = 0;i < filteredOne.length; i++) {
                                     let thisColorsTotalCount = 0;
                                     const Colorkeys = Object.keys(filteredOne[i]['sizes']); 
@@ -260,7 +260,7 @@ const Home: React.FC = () => {
                             }
                         } 
                         else if (key === 'sizes') {
-                            if((colors || price || material)  && filteredOne.length !== 0){
+                            if(colors || price || material){
                                 for (let i = 0;i < filteredOne.length; i++) {
                                     let thisSizeTotalCount = 0;
                                     const Colorkeys = Object.keys(filteredOne[i]['sizes']); 
