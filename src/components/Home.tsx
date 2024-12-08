@@ -1,11 +1,17 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "../App.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { User, Heart, ShoppingBag } from 'lucide-react';
 
 const Home: React.FC = () => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
+    const [isSticky, setIsSticky] = useState(false)
+    const [bagItemCount, setBagItemCount] = useState(0)
     const filterMet = [
         {
             title:'material',
@@ -24,6 +30,17 @@ const Home: React.FC = () => {
             list:['S', 'M', 'L', 'XL']
         }
     ]
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+    };
     
     useEffect(() => {
         fetchProducts()
@@ -37,6 +54,7 @@ const Home: React.FC = () => {
             }
         }
         setCurrentFilters(initialState)
+        setBagItemCount(3)
     }, [])
 
     const fetchProducts = () => {
