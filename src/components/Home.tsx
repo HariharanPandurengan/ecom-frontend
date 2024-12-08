@@ -301,29 +301,43 @@ const Home: React.FC = () => {
     },[currentFilters])
 
     return (
+
         <div className="dashboard-container">
-            <div className="search-bar">
-                <input type="text" placeholder="Search..." />
-            </div>
-            <section className="section add-trending-product">
-                <h2>Trending Products</h2>
-                <div>
+            <section>
+                <nav className="navbar">
+
+                    <ul className="navbar-links">
+                        <li><a href="/collections">Contact us</a></li>
+                        <li><a href="/new-arrivals">About</a></li>
+                    </ul>
+                    <div className="navbar-logo">
+                        <a href="/">HarishClothing</a>
+                    </div>
+                    <div className="navbar-actions">
+                        <a href="/Admin" className="navbar-action"><User /></a>
+                        <a href="/favourites" className="navbar-icon" aria-label="Favourites">
+                            <Heart />
+                        </a>
+                        <a href="/cart" className="navbar-icon" aria-label="Add to Bag">
+                            <ShoppingBag />
+                            {bagItemCount > 0 && (
+                                <span>
+                                    {bagItemCount}
+                                </span>
+                            )}
+                        </a>
+                    </div>
+                </nav>
+            </section>
+            <div className="carousel-container" style={{ backgroundColor: '#D2B48C', borderRadius: '8px 8px 8px 0' }}>
+                <h2 style={{ color: '#F5F5F5' }}>Trending Products</h2>
+                <Slider {...settings}>
                     {
-                        products.length !== 0 ? products.map((prod, index) => {
-                            if (prod.trendingProd) {
-                                return <div key={prod} style={{ border: '1px solid gray', borderRadius: '8px', margin: '5px', padding: '5px', display: 'flex', alignItems: 'center', width: '100%', maxHeight: '150px', overflow: "hidden" }}>
-                                    <div style={{ width: '30%', overflow: "hidden" }}>
-                                        <img style={{ width: '50%' }} src={`${prod.image}`} />
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                        {/* <h3>{(index + 1) + '. '}</h3> */}
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h3 style={{ marginRight: '10px' }}>{prod.name}</h3>
-                                            <p style={{ marginRight: '10px' }}>| {prod.price + ' RS'} |</p>
-                                            <p>{prod.material} |</p>
-                                            <p>{prod.colors} | </p>
-                                        </div>
-                                    </div>
+                        products.length !== 0 ? products.map((trendprod) => {
+                            if (trendprod.trendingProd) {
+                                return <div className="carousel-slide">
+                                    <img className="carousel-image" src={`${trendprod.image}`} />
+                                    <h3 className="carousel-title">{trendprod.name}</h3>
                                 </div>
                             }
                         })
@@ -332,10 +346,10 @@ const Home: React.FC = () => {
                                 <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
                             </div>
                     }
-                </div>
-            </section>
+                </Slider>
+            </div>
             <div className="dashboard-sections">
-                <section className="section add-trending-product" style={{ width: '100%' }}>
+                <section className="section add-trending-product" style={{ width: '100%', backgroundColor: '#D2B48C', borderRadius: '0 0 0 8px' }}>
                     <h2>Filter</h2>
                     {
                         filterMet.map(item => {
@@ -354,7 +368,7 @@ const Home: React.FC = () => {
                 </section>
                 <section className="section add-trending-product" style={{ width: '96%' }}>
                     <h2>Products</h2>
-                    <div>
+                    <div className="grid-container">
                         {
                             filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
                                 return <div key={prod} style={{ border: '1px solid gray', borderRadius: '8px', margin: '5px', padding: '5px', display: 'flex', alignItems: 'center', width: '100%', maxHeight: '150px', overflow: "hidden" }}>
