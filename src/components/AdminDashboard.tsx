@@ -6,6 +6,10 @@ interface SizesOptions {
     [key: string]: { [key: string]: string }; 
 }
 
+interface Image { 
+    [key: string]:  string ; 
+}
+
 const initialProductState = { 
     name: '', 
     price: '', 
@@ -14,9 +18,9 @@ const initialProductState = {
     material: '', 
     totalQuantity: '', 
     description: '', 
-    image: '', 
     colors: [] as string[], 
     sizes: {}, 
+    images: {}, 
     trendingProd: false,
 };
 
@@ -28,9 +32,9 @@ interface Product {
   material: string;
   totalQuantity: string;
   description: string;
-  image: string;
   colors: string[];
   sizes: SizesOptions;
+  images: Image;
   trendingProd: boolean;
 }
 
@@ -46,7 +50,6 @@ const AdminDashboard: React.FC = () => {
         { name: 'material', label: 'Product Material', type: 'text' },
         { name: 'totalQuantity', label: 'Product Total Quantity', type: 'text' },
         { name: 'description', label: 'Product Description', type: 'textarea' },
-        { name: 'image', label: 'Product Image', type: 'file' },
         { name: 'colors', label: 'Colors Available', type: 'select', options: ["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Brown", "Grey", "Navy", "Teal", "Maroon"], multiple: true },
     ];
 
@@ -59,7 +62,6 @@ const AdminDashboard: React.FC = () => {
         .then(res=>{
             if(res.data.status === true){
                 setProducts(res.data.products);
-                console.log(res.data.products)
             }
         })
         .catch(err=>{
@@ -75,14 +77,17 @@ const AdminDashboard: React.FC = () => {
         }));
     };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>,color:any) => {
         if (e.target.files) {
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onloadend = () => {
                 setProduct(prevState => ({
                 ...prevState,
-                image: reader.result as string 
+                images: {
+                    ...prevState.images,
+                    [color]: reader.result as string
+                } 
                 }));
             };
             reader.readAsDataURL(file);
@@ -242,6 +247,20 @@ const AdminDashboard: React.FC = () => {
                                                         }
                                                     </div>
                     }
+                    {
+                        product.colors.length !== 0 && 
+                        <div>
+                            <h3 style={{marginBottom:'0px'}}>Select images for colors you selected</h3>
+                            {
+                                product.colors.map(item => {
+                                    return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
+                                                <p style={{marginRight:'10px'}}>{item}</p>
+                                                <input type="file" onChange={(e) => handleFileChange(e,item)}/>
+                                            </div>
+                                })
+                            }
+                        </div>
+                    }
                     <button type="submit">Add Product</button>
                 </form>
             </section>
@@ -252,7 +271,7 @@ const AdminDashboard: React.FC = () => {
                         products.length !== 0 ? products.map((prod,index) => {
                                                     return  <div key={prod} style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
                                                                 <div style={{width:'30%',overflow:"hidden"}}>
-                                                                    <img style={{width:'100%'}} src={`${prod.image}`} />
+                                                                    <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
                                                                 </div>
                                                                 <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
                                                                     <h3>{(index+1)+'. '}</h3>
