@@ -325,8 +325,8 @@ const Home: React.FC = () => {
 
         <div className="dashboard-container">
             <Header></Header>
-            <div className="carousel-container" style={{ backgroundColor: '#D2B48C', borderRadius: '0px 0px 8px 0' }}>
-                <h2 style={{ color: '#4A403A' }}>TRENDING PRODUCTS</h2>
+            <div className="carousel-container">
+                <h2 style={{ color: '#000000' }}>TRENDING PRODUCTS</h2>
                 <Slider {...settings}>
                     {
                         products.length !== 0 ? products.map((trendprod) => {
@@ -345,7 +345,7 @@ const Home: React.FC = () => {
                 </Slider>
             </div>
             <div className="dashboard-sections">
-                <section className="section add-trending-product" style={{ width: '90%', backgroundColor: '#E5E5E5', borderRadius: '0 0 0 8px', position: 'sticky' }}>
+                <section className="filter">
                     <h2>FILTERS</h2>
                     {
                         filterMet.map(item => {
@@ -369,7 +369,7 @@ const Home: React.FC = () => {
                         })
                     }
                 </section>
-                <section className="section add-trending-product" style={{ width: '98%' }}>
+                <section className="section add-trending-product">
                     <h2>PRODUCTS</h2>
                     <div className="grid-container">
                         {
