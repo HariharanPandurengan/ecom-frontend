@@ -1,3 +1,38 @@
+@font-face {
+  font-family: versilo;
+  src: url(src\assets\versilo-font\VersiloDemo-6RvpY.otf);
+}
+
+@font-face {
+  font-family: dealing;
+  src: url(C:\Users\Thowfiq\Documents\GitHub\ecom-frontend\src\assets\dealing-font\Dealing-G3ynG.otf);
+}
+
+@font-face {
+  font-family: 'ablation';
+  src: url(C:\Users\Thowfiq\Documents\GitHub\ecom-frontend\src\assets\ablation-font\AblationFreeDemo-ovRE4.otf);
+}
+
+@font-face {
+  font-family: kelystone;
+  src: url(C:\Users\Thowfiq\Documents\GitHub\ecom-frontend\src\assets\kelystone-font\KelystoneDemo-7O6BD.otf);
+}
+
+@font-face {
+  font-family: bepholar;
+  src: url(C:\Users\Thowfiq\Documents\GitHub\ecom-frontend\src\assets\bepholar-font\BepholarRegular-MAJov.ttf);
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: url(C:\Users\Thowfiq\Documents\GitHub\ecom-frontend\src\assets\Montserrat\Montserrat-VariableFont_wght.ttf);
+}
+
+h2 {
+  font-size: x-large;
+  font-family: dealing;
+}
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -57,7 +92,6 @@ button:hover {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .search-bar {
@@ -75,12 +109,12 @@ button:hover {
 
 .dashboard-sections {
   display: grid;
-  grid-template-columns: 0.2fr 0.8fr;
+  grid-template-columns: 0.4fr 2fr;
   gap: 10px;
 }
 
 .section {
-  background-color: #f9f9f9;
+  background-color: #FFFFFF;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -108,16 +142,15 @@ li {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 3px;
   padding: 16px;
-  background-color: #f8f8f8;
+  background-color: #FFFFFF;
 }
 
 /* Individual product cards */
 .product-card {
-  background: white;
-  border: 1px solid #ddd;
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
   padding: 16px;
   transition: transform 0.2s;
   cursor: pointer;
@@ -129,7 +162,7 @@ li {
 
 /* Product image */
 .product-image {
-  max-width: 100%;
+  width: 100%;
   height: auto;
   border-radius: 4px;
   margin-bottom: 12px;
@@ -137,15 +170,16 @@ li {
 
 /* Product name */
 .product-name {
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   margin: 8px 0;
+  font-family: 'ablation';
 }
 
 /* Product price */
 .product-price {
   font-size: 1em;
-  color: #555;
+  color: #C8A165;
 }
 
 .carousel-container {
@@ -153,7 +187,7 @@ li {
   margin: 0 auto;
   padding: 5px;
   background-color: #f8f8f8;
-  border-radius: 8px;
+  border-radius: 0 0 0 8px;
 }
 
 .carousel-slide {
@@ -165,37 +199,37 @@ li {
   height: 200px;
   object-fit: contain;
   margin-bottom: 12px;
-  border-radius: 8px;
+  border-radius: 30px;
 }
 
 .carousel-title {
   margin-top: 8px;
   font-size: 1.2em;
-  color: #333;
+  color: #000000;
+  font-family: 'ablation';
 }
 
 
 /* Navbar Container */
 .navbar {
   position: sticky;
-  top: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid #ddd;
-  font-family: Arial, sans-serif;
+  background-color: #333333;
+  font-family: monospace;
+  width: 100.7%;
+  border-radius: 8px 8px 0 0;
 }
 
 /* Logo */
 .navbar-logo a {
   font-size: 24px;
   font-weight: bold;
-  color: #000;
+  color: #F5F5DC;
   text-decoration: none;
+  font-family: kelystone;
 }
 
 /* Links */
@@ -204,6 +238,8 @@ li {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-family: monospace;
+  font-weight: bolder;
 }
 
 .navbar-links li {
@@ -212,7 +248,7 @@ li {
 
 .navbar-links a {
   text-decoration: none;
-  color: #333;
+  color: #FFFFFF;
   font-size: 16px;
 }
 
@@ -229,7 +265,7 @@ li {
 .navbar-action {
   margin-right: 15px;
   font-size: 16px;
-  color: #333;
+  color: #FFFFFF;
   text-decoration: none;
 }
 
@@ -243,7 +279,7 @@ li {
   margin: 0 10px;
   font-size: 18px;
   text-decoration: none;
-  color: #333;
+  color: #FFFFFF;
 }
 
 .navbar-icon:hover {
@@ -261,4 +297,104 @@ li {
   font-weight: bold;
   border-radius: 50%;
   padding: 2px 6px;
+}
+
+/* General styling */
+.filter-dropdown {
+  width: 250px;
+  border-radius: 4px;
+  font-family: Montserrat;
+}
+
+.filter-dropdown p {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-color: #333;
+}
+
+.filter-dropdown p:after {
+  content: '>';
+  font-size: 1px;
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.filter-dropdown p.collapsed:after {
+  transform: rotate(-90deg);
+  /* Rotate arrow when collapsed */
+}
+
+.filter-options {
+  margin-top: 5px;
+  max-height: 200px;
+  /* Add scroll for longer lists */
+  overflow-y: auto;
+  padding-right: 5px;
+  cursor: pointer;
+}
+
+.filter-options label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.filter-options input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.filter-options span.count {
+  margin-left: auto;
+  color: #888;
+  font-size: 12px;
+}
+
+/* Scrollbar customization (optional) */
+.filter-options::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filter-options::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 2px;
+}
+
+/* General styling for the container */
+.collections {
+  padding: 10px;
+  width: 200px;
+}
+
+
+/* Style for the individual items */
+.collections ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.collections li {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+/* Checkbox styling */
+.collections input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Count styling */
+.collections span {
+  margin-left: auto;
+  color: #000000;
+  font-weight: light;
+  font-size: 12px;
 }
