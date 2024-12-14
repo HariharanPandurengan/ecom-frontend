@@ -91,7 +91,7 @@ button:hover {
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .search-bar {
@@ -225,7 +225,7 @@ li {
   align-items: center;
   background-color: #333333;
   font-family: monospace;
-  border-radius: 8px 8px 0 0;
+  /* border-radius: 8px 8px 0 0; */
 }
 
 /* Logo */

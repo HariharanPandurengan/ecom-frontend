@@ -35,6 +35,9 @@ const Home: React.FC = () => {
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
     const [bagItemCount, setBagItemCount] = useState(0)
+    const [search,setSearch] = useState('')
+    const [searchPopup,setSearchPopup] = useState(false)
+    const [searchFilter,setSearchFilter] = useState([])
     const filterMet = [
         {
             title: 'material',
@@ -342,11 +345,57 @@ const Home: React.FC = () => {
         }
     }, [currentFilters])
 
+    const searchFun = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        if(search === ''){
+            alert('Enter something to search')
+        }
+        else{
+            setSearchPopup(true)
+            const filterdOne = products.filter(list => {
+                const nameArray = list.name.split(' ');
+                const arrayOfSizesObjcet = Object.values(list.sizes);
+
+                const matchesColor = list.colors.some((color) =>
+                    search.toLowerCase().includes(color.toLowerCase())
+                );
+
+                const matchesSize = arrayOfSizesObjcet.some((sizeObject) => {
+                    const arrayOfSize = Object.keys(sizeObject);
+                    return arrayOfSize.some((size) =>
+                    search.toLowerCase().includes(size.toLowerCase())
+                    );
+                });
+
+                const matchesName = nameArray.some((word) =>
+                    search.toLowerCase().includes(word.toLowerCase())
+                );
+
+                const matchesOther =
+                    list.material.toLowerCase().includes(search.toLowerCase()) ||
+                    search.includes(list.price) ||
+                    list.name.toLowerCase().includes(search.toLowerCase()) ||
+                    search.toLowerCase().includes(list.name.toLowerCase());
+
+                return matchesColor || matchesSize || matchesName || matchesOther;
+            })
+            setSearchFilter(filterdOne)
+        }
+    }
 
     return (
 
         <div className="dashboard-container">
             <Header></Header>
+            <div className="w-full my-2 border border-gray-900 p-1 flex items-center">
+                <input 
+                    className="border-2 border-gray-400 rounded-lg w-[80%] py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                    type="text" 
+                    placeholder="Search..."
+                    onChange={e=>setSearch(e.target.value)} value={search} 
+                />
+                <button onClick={(e)=>searchFun(e)} className="w-[20%] ml-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Search</button>
+            </div>
             <div className="carousel-container">
                 <h2 style={{ color: '#000000' }}>TRENDING PRODUCTS</h2>
                 <Slider {...settings}>
@@ -425,6 +474,35 @@ const Home: React.FC = () => {
                     </div>
                 </section>
             </div>
+            {searchPopup &&
+                <div className="fixed top-[13%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
+                    <div className="bg-white p-2 pe-5">
+                        <h3 className="text-center text-3xl font-bold underline">{searchFilter.length} Results found for "{search}"</h3>
+                        {
+                            searchFilter.length !== 0 ? searchFilter.map((prod,index) => {
+                                return  <div key={prod} className="mb-3" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
+                                            <div style={{width:'30%',overflow:"hidden"}}>
+                                                <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
+                                            </div>
+                                            <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
+                                                <h3>{(index+1)+'. '}</h3>
+                                                <div style={{display:'flex',alignItems:'center'}}>
+                                                    <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
+                                                    <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
+                                                    <p>{prod.material} |</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                            })
+                           :
+                           <div>
+                                <p style={{textAlign:'center'}}>--- No products to show ---</p>
+                           </div>
+                        }
+                    </div>
+                </div>
+            }
         </div>
 
     );
