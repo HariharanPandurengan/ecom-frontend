@@ -7,8 +7,30 @@ import "slick-carousel/slick/slick-theme.css";
 import { User, Heart, ShoppingBag } from 'lucide-react';
 import Header from "./Header,Footer/Header";
 
+interface SizesOptions { 
+    [key: string]: { [key: string]: string }; 
+}
+
+interface Image { 
+    [key: string]:  string ; 
+}
+
+interface Product {
+    name: string;
+    price: string;
+    category: string;
+    subCategory: string;
+    material: string;
+    totalQuantity: string;
+    description: string;
+    colors: string[];
+    sizes: SizesOptions;
+    images: Image;
+    trendingProd: boolean;
+  }
+
 const Home: React.FC = () => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
@@ -174,7 +196,7 @@ const Home: React.FC = () => {
                     if (currentFilters[key][key2] === true) {
                         if (key === 'material') {
                             for (let i = 0; i < products.length; i++) {
-                                if (products[i]['material'] === key2) {
+                                if (products[i]['material'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
                                     filteredOne.push(products[i])
                                 }
                             }
