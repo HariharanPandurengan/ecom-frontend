@@ -41,7 +41,35 @@ const Home: React.FC = () => {
     const filterMet = [
         {
             title: 'material',
-            list: ['Cotton', 'Cylon', 'Rexin']
+            list: [ 'Cotton',
+                'Cotton Blend',
+                'Rayon',
+                'Polyester',
+                'Poly Blend',
+                'Linen',
+                'Rayon Blend',
+                'Lyocell Blend',
+                'Viscose Blend',
+                'Viscose',
+                'Nylon Blend',
+                'Acrylic Blend']
+        },
+        {
+            title: 'sizes',
+            list: ["S", "M", "L", "XL", "XXL"]
+        },
+        {
+            title : 'fits',
+            list : ['Baggy Fit',
+                'Boot cut',
+                'Box Fit',
+                'Comfort Fit',
+                'Loose Fit',
+                'Oversized Fit',
+                'Regular Fit',
+                'Relaxed Fit',
+                'Skinny Fit',
+                'Slim Fit']
         },
         {
             title: 'price',
@@ -52,20 +80,50 @@ const Home: React.FC = () => {
             list: ["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Brown", "Grey", "Navy", "Teal", "Maroon"]
         },
         {
-            title: 'sizes',
-            list: ['S', 'M', 'L', 'XL']
-        }
+            title : 'sleeves',
+            list : ['Elbow Sleeve',
+                'Full Sleeve',
+                'Half Sleeve']
+        },
+        {
+            title : 'occasion',
+            list : ["Casual Wear",
+                    "Formal Wear",
+                    "Festive Wear",
+                    "College Wear",
+                    "Street Wear"]
+        },
+        {
+            title : 'pattern',
+            list : ["Checks",
+                    "Graphic Print",
+                    "Colourblocked",
+                    "Plain",
+                    "Printed",
+                    "Self-Design",
+                    "Stripes",
+                    "Geometric",
+                    "Abstract",
+                    "Textured",
+                    "Marble",
+                    "Distressed",
+                    "Floral"]
+        },
     ]
     const [isCollapsed, setIsCollapsed] = useState(false);
-
+    const sections = [
+        { title: "Trendings", imgSrc: "src/assets/Pictures/blue shirt.jpg", alt: "Trendings" },
+        { title: "Shirts", imgSrc: "src/assets/Pictures/pink shirt.jpg", alt: "Shirts" },
+        { title: "T-Shirts", imgSrc: "src/assets/Pictures/yellow shirt.jpg", alt: "T-Shirts" },
+        { title: "Pants", imgSrc: "src/assets/Pictures/purple shirt.jpg", alt: "Pants" },
+      ];
     const settings = {
-        dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3000,
+        autoplaySpeed: 2000,
         arrows: true,
     };
 
@@ -384,41 +442,53 @@ const Home: React.FC = () => {
     }
 
     return (
-
-        <div className="dashboard-container">
+        <div>
             <Header></Header>
-            <div className="w-full my-2 border border-gray-900 p-1 flex items-center">
-                <input 
-                    className="border-2 border-gray-400 rounded-lg w-[80%] py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                    type="text" 
-                    placeholder="Search..."
-                    onChange={e=>setSearch(e.target.value)} value={search} 
-                />
-                <button onClick={(e)=>searchFun(e)} className="w-[20%] ml-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Search</button>
-            </div>
-            <div className="carousel-container">
-                <h2 style={{ color: '#000000' }}>TRENDING PRODUCTS</h2>
-                <Slider {...settings}>
-                    {
-                        products.length !== 0 ? products.map((trendprod) => {
-                            if (trendprod.trendingProd) {
-                                return <div className="carousel-slide">
-                                    <img className="product-image" style={{ height: '300px', objectFit: 'contain', borderRadius: '12px' }} src={`${Object.values(trendprod.images)[0]}`} />
-                                    <h3 className="carousel-title">{trendprod.name}</h3>
+            <section>
+                <div className="carousel-container">
+                    <Slider {...settings}>
+                        {
+                            products.length !== 0 ? products.map((trendprod) => {
+                                if (trendprod.trendingProd) {
+                                    return <div className=".carousel-slides">
+                                                <div className="carousel-slide">
+                                                    <img src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
+                                                </div>
+                                            </div>
+                                }
+                            })
+                                :
+                                <div>
+                                    <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
                                 </div>
-                            }
-                        })
-                            :
-                            <div>
-                                <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
-                            </div>
-                    }
-                </Slider>
+                        }
+                    </Slider>
+                </div>
+            </section>
+            <section>
+            <div className="shop-by-section">
+                <h1>SHOP BY SECTION</h1>
+                    <div className="sections-container">
+                        {sections.map((section, index) => (
+                        <div className="div-section" key={index}>
+                            <img src={section.imgSrc} alt={section.alt} />
+                            <div className="section-text">{section.title}</div>
+                        </div>
+                        ))}
+                    </div>
             </div>
-            <div className="dashboard-sections">
-                <section className="filter">
-                    <h2>FILTERS</h2>
-                    {
+            </section>
+            <section>
+                <div className="gender-button">
+                    <button className="men-button">Men</button>
+                    <button className="women-button">Women</button>
+                </div>
+            </section>
+            <section>
+                <div className="landing-dashboard">
+                    <section>
+                        <div className="filter-column">
+                        {
                         filterMet.map(item => {
                             return <div className="filter-dropdown">
                                 <div className="collections">
@@ -439,9 +509,9 @@ const Home: React.FC = () => {
                             </div>
                         })
                     }
-                </section>
-                <section className="section add-trending-product">
-                    <h2>PRODUCTS</h2>
+                        </div>
+                    </section>
+                    <section>
                     <div className="grid-container">
                         {
                             filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
@@ -450,6 +520,7 @@ const Home: React.FC = () => {
                                     <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                                         <div style={{ alignItems: 'center' }}>
                                             <h3 className="product-name">{prod.name}</h3>
+                                            <p className="product-description">{prod.description}</p>
                                             <p className="product-price">{'Rs.' + prod.price}</p>
                                             {/* <p>( {
                                                 prod.colors.map((list, index) => {
@@ -473,7 +544,19 @@ const Home: React.FC = () => {
                         }
                     </div>
                 </section>
-            </div>
+                </div>
+            </section>
+            <section>
+                <div className="w-full my-2 border border-gray-900 p-1 flex items-center">
+                    <input 
+                        className="border-2 border-gray-400 rounded-lg w-[80%] py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                        type="text" 
+                        placeholder="Search..."
+                        onChange={e=>setSearch(e.target.value)} value={search} 
+                    />
+                    <button onClick={(e)=>searchFun(e)} className="w-[20%] ml-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Search</button>
+                </div>
+            </section>
             {searchPopup &&
                 <div className="fixed top-[13%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
                     <div className="bg-white p-2 pe-5">
