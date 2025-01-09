@@ -63,7 +63,7 @@ const Header: React.FC = () => {
                     <div className="search-box">
                         <input type="text" placeholder="Search here..." 
                         onChange={e=>setSearch(e.target.value)} value={search} />
-                        <img onClick={(e)=>headersearchFun(e)} src='src\assets\Search-Circle--Streamline-Ionic-Filled.svg'/>
+                        <img onClick={(e)=>headersearchFun(e)} src='src\assets\Icons - SVG\Search-Circle--Streamline-Ionic-Filled.svg'/>
                     </div>
                 )}
             </div>
