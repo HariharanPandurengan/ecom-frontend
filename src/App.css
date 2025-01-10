@@ -28,7 +28,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd; /* Light gray bottom border */
   background-color: #FFFFFF;
   height: 64px;
 }
@@ -36,7 +35,7 @@
   font-family: 'Avenir' !important;   
   padding-top: 10px;
   font-size: 20px;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   color: #000; /* Black text color */
   text-transform: uppercase;
   position: relative;
@@ -392,8 +391,6 @@ header .spacer {
 .carousel-container {
   max-width: 100%;
   margin: 0 auto;
-  padding: 5px;
-  background-color: #E5E5E5;
   border-radius: 0px 0px 8px 0;
 }
 
@@ -575,54 +572,23 @@ li {
 }
 
 /* product-card page */
-.container {
-  display: flex;
+.showproduct{
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
+  background-image: url(C:\Users\akash\OneDrive\Documents\GitHub\ecom-frontend\src\assets\bgs\Chaotic20-%2010.jpg);
+}
+.productimage-container{
+  max-width: 100%;
+  max-height: 100%;
+}
+.product-image {
+  padding: 30px;
+}
+.product-texts {
+  display: block;
+  padding: 100px;
+  margin: 100px;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-.image-section {
-  position: relative;
-  flex: 1;
-}
-.image-wrapper {
-  position: relative;
-}
-.hoodie-image {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 10px;
-}
-.overlay-text {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: white;
-  font-weight: bold;
-}
-.oversized-fit {
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-.fabric-info {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-.text-section {
-  flex: 1;
-  margin-left: 20px;
-}
-.text-section h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-.text-section p {
-  font-size: 1rem;
-  color: #555;
 }

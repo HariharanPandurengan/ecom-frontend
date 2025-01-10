@@ -68,7 +68,7 @@ const Header: React.FC = () => {
                 )}
             </div>
             <div className='companyname'>
-                <a href=''>H - CLOTHING</a>
+                <a href=''>H  C L O T H I N G</a>
             </div>
             <div className='usericon'>
                 <img src='src\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
