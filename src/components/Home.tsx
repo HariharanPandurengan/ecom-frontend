@@ -8,6 +8,8 @@ import { User, Heart, ShoppingBag } from 'lucide-react';
 import Header from "./Header,Footer/Header";
 import ProductCard from "./ProductCard";
 import { redirect, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -43,7 +45,7 @@ interface Product {
     sizes: SizesOptions;
     images: Image;
     trendingProd: boolean;
-  }
+}
 
 const Home: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -424,43 +426,43 @@ const Home: React.FC = () => {
         }
     }, [currentFilters])
 
-    const searchFun = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        if(search === ''){
-            alert('Enter something to search')
-        }
-        else{
-            setSearchPopup(true)
-            const filterdOne = products.filter(list => {
-                const nameArray = list.name.split(' ');
-                const arrayOfSizesObjcet = Object.values(list.sizes);
+    // const searchFun = (e: React.MouseEvent<HTMLButtonElement>) => {
+    //     e.preventDefault()
+    //     if(search === ''){
+    //         alert('Enter something to search')
+    //     }
+    //     else{
+    //         setSearchPopup(true)
+    //         const filterdOne = products.filter(list => {
+    //             const nameArray = list.name.split(' ');
+    //             const arrayOfSizesObjcet = Object.values(list.sizes);
 
-                const matchesColor = list.colors.some((color) =>
-                    search.toLowerCase().includes(color.toLowerCase())
-                );
+    //             const matchesColor = list.colors.some((color) =>
+    //                 search.toLowerCase().includes(color.toLowerCase())
+    //             );
 
-                const matchesSize = arrayOfSizesObjcet.some((sizeObject) => {
-                    const arrayOfSize = Object.keys(sizeObject);
-                    return arrayOfSize.some((size) =>
-                    search.toLowerCase().includes(size.toLowerCase())
-                    );
-                });
+    //             const matchesSize = arrayOfSizesObjcet.some((sizeObject) => {
+    //                 const arrayOfSize = Object.keys(sizeObject);
+    //                 return arrayOfSize.some((size) =>
+    //                 search.toLowerCase().includes(size.toLowerCase())
+    //                 );
+    //             });
 
-                const matchesName = nameArray.some((word) =>
-                    search.toLowerCase().includes(word.toLowerCase())
-                );
+    //             const matchesName = nameArray.some((word) =>
+    //                 search.toLowerCase().includes(word.toLowerCase())
+    //             );
 
-                const matchesOther =
-                    list.material.toLowerCase().includes(search.toLowerCase()) ||
-                    search.includes(list.price) ||
-                    list.name.toLowerCase().includes(search.toLowerCase()) ||
-                    search.toLowerCase().includes(list.name.toLowerCase());
+    //             const matchesOther =
+    //                 list.material.toLowerCase().includes(search.toLowerCase()) ||
+    //                 search.includes(list.price) ||
+    //                 list.name.toLowerCase().includes(search.toLowerCase()) ||
+    //                 search.toLowerCase().includes(list.name.toLowerCase());
 
-                return matchesColor || matchesSize || matchesName || matchesOther;
-            })
-            setSearchFilter(filterdOne)
-        }
-    }
+    //             return matchesColor || matchesSize || matchesName || matchesOther;
+    //         })
+    //         setSearchFilter(filterdOne)
+    //     }
+    // }
 
     const navigate = useNavigate();
 
@@ -572,7 +574,7 @@ const Home: React.FC = () => {
                     </section>
                 </div>
             </section>
-            <section>
+            {/* <section>
                 <div className="w-full my-2 border border-gray-900 p-1 flex items-center">
                     <input 
                         className="border-2 border-gray-400 rounded-lg w-[80%] py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
@@ -582,15 +584,16 @@ const Home: React.FC = () => {
                     />
                     <button onClick={(e)=>searchFun(e)} className="w-[20%] ml-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Search</button>
                 </div>
-            </section>
-            {searchPopup &&
+            </section> */}
+            {/* {searchPopup &&
                 <div className="fixed top-[13%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
-                    <div className="bg-white p-2 pe-5">
-                        <h3 className="text-center text-3xl font-bold underline">{searchFilter.length} Results found for "{search}"</h3>
+                    <div className="relative bg-white p-2 pe-5 w-full">
+                        <h3 className="text-center text-3xl font-bold underline">"{searchFilter.length}" Results found for "{search}"</h3>
                         {
                             searchFilter.length !== 0 ? searchFilter.map((prod,index) => {
                                 return  <div key={prod} className="mb-3" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
-                                            <div style={{width:'30%',overflow:"hidden"}}>
+                                            <div className="font-bold text-xl me-2">{index+1} </div>
+                                            <div style={{width:'29%',overflow:"hidden"}}>
                                                 <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
                                             </div>
                                             <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
@@ -609,9 +612,15 @@ const Home: React.FC = () => {
                                 <p style={{textAlign:'center'}}>--- No products to show ---</p>
                            </div>
                         }
+                        <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
+                            setSearchPopup(false)
+                            setSearchFilter([])
+                        }}>
+                            <FontAwesomeIcon icon={faXmark}/>
+                        </div>
                     </div>
                 </div>
-            }
+            } */}
         </div>
 
     );
