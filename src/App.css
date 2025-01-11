@@ -43,14 +43,13 @@
 .left-icons {
   display: flex;
   align-items: center;
+  position: relative;
   gap: 20px; /* Space between the hamburger and search icons */
 }
 .hamburgermenu,
 .usericon{
   display: flex;
-  justify-content:center;
   align-items:center;
-  width: 40px;
   height: 40px;
   color: #fff; /* White text/icon color */
   border-radius: 50%; /* Circular shape */
@@ -60,16 +59,15 @@
   display: flex;
   width: 38px;
   height: 38px;
+  position: relative;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 .search-box {
-  top: 60px;
+  width:250px;
   display:flex;
   align-items: center;
-  left: 10%;
-  width: 80%;
   text-align: center;
   color: #000000;
 }
@@ -305,7 +303,6 @@ header .spacer {
 /* Gender Button region css - End*/
 
 /*Overall filter and product dashboard*/
-
 .landing-dashboard {
   background-color: white;
   display: grid;
@@ -314,9 +311,8 @@ header .spacer {
 }
 .filter-column{
   border-radius: 0 0 0 8px;
-  position: sticky;
-  padding: 20px;
-  width: 250px;
+  height: 90vh;
+  overflow-y: auto;
 }
 .filter-title{
   font-family: 'Montserrat';
@@ -331,11 +327,14 @@ header .spacer {
 }
 .filter-dropdown p {
   margin: 0;
+  text-transform: capitalize;
   font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   border-color: #333;
+  color: '#000000';
+  font-family: 'Montserrat'
 }
 .filter-dropdown
  p:after {
@@ -356,6 +355,8 @@ header .spacer {
   grid-template-columns: repeat(3, 1fr);
   gap: .250rem;
   padding: 0px 16px 16px 0px;
+  height: 200vh;
+  overflow-y: auto;
   background-color: #FFFFFF;
 }
 .product-card {
@@ -363,9 +364,14 @@ header .spacer {
   transition: transform 0.2s;
   cursor: pointer;
 }
-.product-image {
-  aspect-ratio: 1/1;
+.product-image-div {
   margin-bottom: 12px;
+  width: 100%;
+  padding: 10px;
+}
+
+.product-image{
+  aspect-ratio: 1/1;
   object-fit: cover;
 }
 .product-name {
@@ -583,9 +589,7 @@ li {
   max-width: 100%;
   max-height: 100%;
 }
-.product-image {
-  padding: 30px;
-}
+
 .product-texts {
   display: block;
   padding: 100px;

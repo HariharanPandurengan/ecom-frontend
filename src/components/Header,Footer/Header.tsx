@@ -19,19 +19,6 @@ interface Image {
     [key: string]:  string ; 
 }
 
-const initialProductState = { 
-    name: '', 
-    price: '', 
-    category: '', 
-    subCategory: '', 
-    material: '', 
-    totalQuantity: '', 
-    description: '', 
-    colors: [] as string[], 
-    sizes: {}, 
-    images: {}, 
-    trendingProd: false,
-};
 
 interface Product {
     name: string;
@@ -91,15 +78,17 @@ const Header: React.FC = () => {
         }
         else{
             setSearchPopup(true)
+            // console.log(search)
             const filterdOne = products.filter(list => {
                 const nameArray = list.name.split(' ');
-                const arrayOfSizesObjcet = Object.values(list.sizes);
+                const arrayOfSizesObjcet = list.sizes && Object.values(list.sizes);
 
                 const matchesColor = list.colors.some((color) =>
                     search.toLowerCase().includes(color.toLowerCase())
                 );
 
-                const matchesSize = arrayOfSizesObjcet.some((sizeObject) => {
+            
+                const matchesSize = arrayOfSizesObjcet && arrayOfSizesObjcet.some((sizeObject) => {
                     const arrayOfSize = Object.keys(sizeObject);
                     return arrayOfSize.some((size) =>
                     search.toLowerCase().includes(size.toLowerCase())
@@ -123,51 +112,54 @@ const Header: React.FC = () => {
     }
 
     return (
-        <div>
-            <section className='sectionheader'>
-                <div className='left-icons'>
-                    <div className="menu-container">
-                        <div className='hahamburgermenu' onClick={toggleMenu}>
+        <div className='fixed w-full top-0 z-50'>
+            <section className='sectionheader flex justify-between items-center p-[10px] h-[64px]'>
+                <div className='left-icons relative flex items-center gap-[20px] w-[24%]'>
+                    <div className="menu-container w-full relative flex items-center justify-start">
+                        <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
                             <img src='src\assets\Icons - SVG\hamburger.png'></img>
                         </div>
 
-                        <div className={`dropdown-menu ${isMenuOpen ? "active" : ""}`}>
+                        <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] rounded-30`}>
                             <div className="close-icon" onClick={toggleMenu}>
                                 <img src='src\assets\Icons - SVG\Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
                             </div>
-                            <ul className="menu-items">
-                                <li>
-                                    <a href="#">Home</a>
+                            <ul className="menu-items list-none p-[20px] m-0">
+                                <li className='my-[10px]'>
+                                    <a className='text-[20]px' href="#">Home</a>
                                 </li>
-                                <li>
-                                    <a href="#">About us</a>
+                                <li className='my-[10px]'>
+                                    <a className='text-[20]px' href="#">About us</a>
                                 </li>
-                                <li>
-                                    <a href="#">Products</a>
+                                <li className='my-[10px]'>
+                                    <a className='text-[20]px' href="#">Products</a>
                                 </li>
                             </ul>
-                            <div className="contact">
-                                <strong>Contact:</strong>
+                            <div className="contact mt-30 p-5 text-base">
+                                <strong className='block'>Contact:</strong>
                                 <p>akh@gmail.com</p>
                             </div>
                         </div>
-                    </div>
-                    <div className='searchicon' onClick={toggleSearchBox}>
-                        <img src='src\assets\Icons - SVG\Searchicon.svg' alt="Search Icon" />
-                    </div>
-                    {showSearch && (
-                        <div className="search-box">
-                            <input type="text" placeholder="Search here..." 
+
+                        <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
+                            <img className='w-[40px] h-[40px]' src='src\assets\Icons - SVG\Searchicon.svg' alt="Search Icon" />
+                        </div>
+
+                        {showSearch && (
+                        <div className="search-box flex items-center text-center w-[250px] absolute top-0 z-50 right-0">
+                            <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
                                 onChange={e=>setSearch(e.target.value)} value={search} />
                             <FontAwesomeIcon className='text-black'  onClick={(e)=>searchFun(e)} icon={faSearch} />
                             {/* <img onClick={(e)=>headersearchFun(e)} src='src\assets\Search-Circle--Streamline-Ionic-Filled.svg'/> */}
                         </div>
                     )}
+                        
+                    </div>
                 </div>
-                <div className='companyname'>
+                <div className='companyname relative pt-2.5 text-xl tracking-wider'>
                     <a href=''>H  C L O T H I N G</a>
                 </div>
-                <div className='usericon'>
+                <div className='usericon w-[24%] flex items-center justify-end h-[40px]'>
                     <img src='src\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
                 </div>
             </section>
