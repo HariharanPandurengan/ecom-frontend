@@ -5,6 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 // import { User, Heart, ShoppingBag } from 'lucide-react';
 import React, { useState, useEffect } from "react";
 import { Home, Import } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 
 const Header: React.FC = () => {
     const [bagItemCount, setBagItemCount] = useState(0)
@@ -40,15 +43,15 @@ const Header: React.FC = () => {
                             <img src='src\assets\Icons - SVG\Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
                         </div>
                         <ul className="menu-items">
-                        <li>
-                            <a href="#">Home</a>
-                        </li>
-                        <li>
-                            <a href="#">About us</a>
-                        </li>
-                        <li>
-                            <a href="#">Products</a>
-                        </li>
+                            <li>
+                                <a href="#">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">About us</a>
+                            </li>
+                            <li>
+                                <a href="#">Products</a>
+                            </li>
                         </ul>
                         <div className="contact">
                             <strong>Contact:</strong>
@@ -62,8 +65,9 @@ const Header: React.FC = () => {
                 {showSearch && (
                     <div className="search-box">
                         <input type="text" placeholder="Search here..." 
-                        onChange={e=>setSearch(e.target.value)} value={search} />
-                        <img onClick={(e)=>headersearchFun(e)} src='src\assets\Search-Circle--Streamline-Ionic-Filled.svg'/>
+                            onChange={e=>setSearch(e.target.value)} value={search} />
+                        <FontAwesomeIcon className='text-black' icon={faSearch} />
+                        {/* <img onClick={(e)=>headersearchFun(e)} src='src\assets\Search-Circle--Streamline-Ionic-Filled.svg'/> */}
                     </div>
                 )}
             </div>
