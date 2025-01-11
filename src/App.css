@@ -18,13 +18,16 @@
   src: url(C:\Users\akash\OneDrive\Documents\GitHub\ecom-frontend\src\assets\Fonts\avenir-lt-pro\AvenirLTProLight.otf);
 }
 
+.h-clothingpage{
+  max-width: fit-content;
+  align-items: center;
+}
 /* Header region css - Start */
 .sectionheader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd; /* Light gray bottom border */
   background-color: #FFFFFF;
   height: 64px;
 }
@@ -32,7 +35,7 @@
   font-family: 'Avenir' !important;   
   padding-top: 10px;
   font-size: 20px;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   color: #000; /* Black text color */
   text-transform: uppercase;
   position: relative;
@@ -279,14 +282,16 @@ header .spacer {
   display: flex;
   font-family: Montserrat-Thin;
   gap: 100px;
-  padding: 10px 600px 10px; /* Reduced padding */
+  padding: 10px 600px 10px;
 }
 .men-button{
   align-items: center;
+  aspect-ratio: 3/0.5;
   background-color: #000;
 }
 .women-button{
   align-items: center;
+  aspect-ratio: 3/0.5;
   background-color: #000;
 }
 .women-button:hover{
@@ -300,30 +305,31 @@ header .spacer {
 /* Gender Button region css - End*/
 
 /*Overall filter and product dashboard*/
+
 .landing-dashboard {
   background-color: white;
   display: grid;
-  grid-template-columns: 0.1fr 2fr;
+  grid-template-columns: 0.2fr 1fr;
+  overflow-y: auto;
 }
 .filter-column{
   border-radius: 0 0 0 8px;
   position: sticky;
   padding: 20px;
+  width: 250px;
 }
 .filter-title{
   font-family: 'Montserrat';
    text-transform: 'capitalize'; 
    color: '#000000';
 }
-.filter-dropdown-Material
-.filter-dropdown-sizes {
-  max-width: 250px;
+.filter-dropdown {
+  max-width: 100%;
+  max-height: 500px;
   border-radius: 4px;
   font-family: Montserrat-Thin;
 }
-.filter-dropdown-Material
-.filter-dropdown-sizes
- p {
+.filter-dropdown p {
   margin: 0;
   font-size: 16px;
   cursor: pointer;
@@ -331,19 +337,135 @@ header .spacer {
   align-items: center;
   border-color: #333;
 }
-.filter-dropdown-Material
-.filter-dropdown-sizes
+.filter-dropdown
  p:after {
   content: '>';
   font-size: 1px;
   margin-left: auto;
   transition: transform 0.3s ease;
 }
-.filter-dropdown-Material
-.filter-dropdown-sizes
+.filter-dropdown
  p.collapsed:after {
   transform: rotate(-90deg);
+  
   /* Rotate arrow when collapsed */
+}
+/* Container for the grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .250rem;
+  padding: 0px 16px 16px 0px;
+  background-color: #FFFFFF;
+}
+.product-card {
+  background: #FFFFFF;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.product-image {
+  aspect-ratio: 1/1;
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+.product-name {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 8px 0;
+  font-family: Montserrat;
+  color: #C8A165;
+}
+.product-description {
+  font-size: 1em;
+  margin: 8px 0;
+  font-family: Montserrat;
+  color: #555;
+}
+/* Product price */
+.product-price {
+  font-size: 1em;
+  color: #000000;
+  font-family: Montserrat-Thin;
+}
+
+.carousel-container {
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 0px 0px 8px 0;
+}
+
+.carousel-slide {
+  text-align: center;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 12px;
+  border-radius: 30px;
+}
+
+.carousel-title {
+  margin-top: 8px;
+  font-size: 1.2em;
+  color: #000000;
+  font-family: 'ablation';
+}
+
+.filter-options {
+  margin-top: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+  cursor: pointer;
+}
+.filter-options label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.filter-options input[type="checkbox"] {
+  margin-right: 10px;
+}
+.filter-options span.count {
+  margin-left: auto;
+  color: #888;
+  font-size: 12px;
+}
+.filter-options::-webkit-scrollbar {
+  width: 5px;
+}
+.filter-options::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 2px;
+}
+.collections {
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.collections ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.collections li {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 13px;
+  color: #333;
+}
+.collections input[type="checkbox"] {
+  margin-right: 10px;
+}
+.collections span {
+  margin-left: auto;
+  color: #000000;
+  font-weight: light;
+  font-size: 12px;
 }
 
 h2 {
@@ -429,14 +551,6 @@ button:hover {
   display: grid;
   grid-template-columns: 0.1fr 2fr;
 }
-
-/* .section {
-  background-color: #FFFFFF;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-} */
-
 .filter {
   background-color: #E5E5E5;
   border-radius: 0 0 0 8px;
@@ -457,153 +571,24 @@ li {
   cursor: pointer;
 }
 
-
-
-
-/* Container for the grid */
-.grid-container {
+/* product-card page */
+.showproduct{
+  background-color: white;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 16px;
-  background-color: #FFFFFF;
-}
-
-/* Individual product cards */
-.product-card {
-  background: #FFFFFF;
-  padding: 16px;
-  transition: transform 0.2s;
-  cursor: pointer;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-/* Product image */
-.product-image {
-  width: 450px;
-  height: 500px;
-  margin-bottom: 12px;
-}
-
-/* Product name */
-.product-name {
-  font-size: 1em;
-  font-weight: bold;
-  margin: 8px 0;
-  font-family: Montserrat;
-  color: #C8A165;
-}
-.product-description {
-  font-size: 1em;
-  margin: 8px 0;
-  font-family: Montserrat-Thin;
-  color: #000000;
-}
-/* Product price */
-.product-price {
-  font-size: 1em;
-  color: #000000;
-  font-family: Montserrat-Thin;
-}
-
-.carousel-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 5px;
-  background-color: #E5E5E5;
-  border-radius: 0px 0px 8px 0;
-}
-
-.carousel-slide {
-  text-align: center;
-}
-
-.carousel-image {
-  width: 100%;
-  height: 200px;
-  object-fit: contain;
-  margin-bottom: 12px;
-  border-radius: 30px;
-}
-
-.carousel-title {
-  margin-top: 8px;
-  font-size: 1.2em;
-  color: #000000;
-  font-family: 'ablation';
-}
-
-/* General styling */
-
-.filter-options {
-  margin-top: 5px;
-  max-height: 200px;
-  /* Add scroll for longer lists */
+  grid-template-columns: 1fr 1fr;
   overflow-y: auto;
-  padding-right: 5px;
-  cursor: pointer;
+  background-image: url(C:\Users\akash\OneDrive\Documents\GitHub\ecom-frontend\src\assets\bgs\Chaotic20-%2010.jpg);
 }
-
-.filter-options label {
-  display: flex;
+.productimage-container{
+  max-width: 100%;
+  max-height: 100%;
+}
+.product-image {
+  padding: 30px;
+}
+.product-texts {
+  display: block;
+  padding: 100px;
+  margin: 100px;
   align-items: center;
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-.filter-options input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.filter-options span.count {
-  margin-left: auto;
-  color: #888;
-  font-size: 12px;
-}
-
-/* Scrollbar customization (optional) */
-.filter-options::-webkit-scrollbar {
-  width: 5px;
-}
-
-.filter-options::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 2px;
-}
-
-/* General styling for the container */
-.collections {
-  padding: 10px;
-  width: 200px;
-}
-
-
-/* Style for the individual items */
-.collections ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.collections li {
-  display: flex;
-  align-items: center;
-  margin: 8px 0;
-  font-size: 13px;
-  color: #333;
-}
-
-/* Checkbox styling */
-.collections input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-/* Count styling */
-.collections span {
-  margin-left: auto;
-  color: #000000;
-  font-weight: light;
-  font-size: 12px;
 }

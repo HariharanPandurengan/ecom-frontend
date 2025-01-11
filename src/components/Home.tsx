@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../App.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { User, Heart, ShoppingBag } from 'lucide-react';
 import Header from "./Header,Footer/Header";
+import ProductCard from "./ProductCard";
+import { redirect, useNavigate } from "react-router-dom";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -14,6 +16,20 @@ interface SizesOptions {
 interface Image { 
     [key: string]:  string ; 
 }
+
+const initialProductState = { 
+    name: '', 
+    price: '', 
+    category: '', 
+    subCategory: '', 
+    material: '', 
+    totalQuantity: '', 
+    description: '', 
+    colors: [] as string[], 
+    sizes: {}, 
+    images: {}, 
+    trendingProd: false,
+};
 
 interface Product {
     name: string;
@@ -31,6 +47,7 @@ interface Product {
 
 const Home: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
+    const [product, setProduct] = useState<Product>(initialProductState);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
@@ -220,6 +237,10 @@ const Home: React.FC = () => {
         }))
     }
 
+    const sendingProdData = (product : any) => {
+        <ProductCard data = {product}/>
+        redirecttoProductCard();
+    }
     useEffect(() => {
         let AllFalse = true;
         let material = false;
@@ -441,8 +462,13 @@ const Home: React.FC = () => {
         }
     }
 
+    const navigate = useNavigate();
+
+    const redirecttoProductCard = () => {
+        navigate('/ProductCard')
+    }
     return (
-        <div>
+        <div className="h-clothingpage">
             <Header></Header>
             <section>
                 <div className="carousel-container">
@@ -487,23 +513,23 @@ const Home: React.FC = () => {
             <section>
                 <div className="landing-dashboard">
                     <section>
-                        <div className="filter-column">
+                    <div className="filter-column">
                         {
                         filterMet.map(item => {
                             return <div className="filter-dropdown">
-                                <div className="collections">
                                     <div key={item.title} >
                                         <p style={{ fontFamily: 'Montserrat', textTransform: 'capitalize', color: '#000000' }} onClick={() => setIsCollapsed(!isCollapsed)} className={isCollapsed ? "" : "collapsed"}><strong>{item.title}</strong></p>
-                                        <ul style={{ marginTop: '0' }}>
-                                            {
-                                                !isCollapsed && item.list.map(list => {
-                                                    return <li className="filter-options" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
-                                                        <label key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
-                                                        <span>{'(' + fetchCount(item.title, list) + ')'}</span>
-                                                    </li>
-                                                })
-                                            }
-                                        </ul>
+                                        <div className="collections">
+                                            <ul style={{ marginTop: '0' }}>
+                                                {
+                                                    !isCollapsed && item.list.map(list => {
+                                                        return <li className="filter-options" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
+                                                            <label key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
+                                                            <span>{'(' + fetchCount(item.title, list) + ')'}</span>
+                                                        </li>
+                                                    })
+                                                }
+                                            </ul>
                                     </div>
                                 </div>
                             </div>
@@ -512,38 +538,38 @@ const Home: React.FC = () => {
                         </div>
                     </section>
                     <section>
-                    <div className="grid-container">
-                        {
-                            filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
-                                return <div key={prod} className="product-card">
-                                    <img className="product-image" src={`${Object.values(prod.images)[0]}`} />
-                                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                        <div style={{ alignItems: 'center' }}>
-                                            <h3 className="product-name">{prod.name}</h3>
-                                            <p className="product-description">{prod.description}</p>
-                                            <p className="product-price">{'Rs.' + prod.price}</p>
-                                            {/* <p>( {
-                                                prod.colors.map((list, index) => {
-                                                    if (index == prod.colors.length - 1) {
-                                                        return list
-                                                    }
-                                                    else {
-                                                        return list + ' , '
-                                                    }
-                                                })
-                                            } )</p> */}
+                        <div className="grid-container">
+                            {
+                                filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
+                                    return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod)}>
+                                            <img className="product-image" src={`${Object.values(prod.images)[0]}`} />
+                                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                            <div style={{ alignItems: 'center' }}>
+                                                <h3 className="product-name">{prod.name}</h3>
+                                                <p className="product-description">{prod.description}</p>
+                                                <p className="product-price">{'Rs.' + prod.price}</p>
+                                                {/* <p>( {
+                                                    prod.colors.map((list, index) => {
+                                                        if (index == prod.colors.length - 1) {
+                                                            return list
+                                                        }
+                                                        else {
+                                                            return list + ' , '
+                                                        }
+                                                    })
+                                                } )</p> */}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                </div>
-                            })
-                                :
-                                <div>
-                                    <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
-                                </div>
-                        }
-                    </div>
-                </section>
+                                    </div>
+                                })
+                                    :
+                                    <div>
+                                        <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
+                                    </div>
+                            }
+                        </div>
+                    </section>
                 </div>
             </section>
             <section>
