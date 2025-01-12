@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import "../App.css";
 import axios from 'axios';
+import Header from "./Header,Footer/Header";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -13,6 +14,7 @@ interface Image {
 const initialProductState = { 
     name: '', 
     price: '', 
+    sex: '',
     category: '', 
     subCategory: '', 
     material: '', 
@@ -21,12 +23,17 @@ const initialProductState = {
     colors: [] as string[], 
     sizes: {}, 
     images: {}, 
+    fits: '',
+    sleeves: '',
+    occasion: '',
+    pattern:  '',
     trendingProd: false,
 };
 
 interface Product {
   name: string;
   price: string;
+  sex: string;
   category: string;
   subCategory: string;
   material: string;
@@ -35,19 +42,68 @@ interface Product {
   colors: string[];
   sizes: SizesOptions;
   images: Image;
+  fits: string,
+  sleeves: string,
+  occasion: string,
+  pattern:  string,
   trendingProd: boolean;
 }
 
 const AdminDashboard: React.FC = () => {
     const [product, setProduct] = useState<Product>(initialProductState);
     const [products, setProducts] = useState([]);
-    const sizes = ['S', 'M', 'L', 'XL'];
+    const sizes = ['select','S', 'M', 'L', 'XL'];
     const fields = [
         { name: 'name', label: 'Product Name', type: 'text' },
         { name: 'price', label: 'Product Price', type: 'text' },
+        { name: 'sex', label: 'Sex', type: 'select', options: ['select','Male',
+            'Female',
+            'Unisex'] , multiple: false},
         { name: 'category', label: 'Product Category', type: 'text' },
         { name: 'subCategory', label: 'Product Sub Category', type: 'text' },
-        { name: 'material', label: 'Product Material', type: 'text' },
+        { name: 'material', label: 'Product Material', type: 'select',options:[ 'select','Cotton',
+            'Cotton Blend',
+            'Rayon',
+            'Polyester',
+            'Poly Blend',
+            'Linen',
+            'Rayon Blend',
+            'Lyocell Blend',
+            'Viscose Blend',
+            'Viscose',
+            'Nylon Blend',
+            'Acrylic Blend'] },
+        { name: 'fits', label: 'Fit', type: 'select',options: ['select','Baggy Fit',
+            'Boot cut',
+            'Box Fit',
+            'Comfort Fit',
+            'Loose Fit',
+            'Oversized Fit',
+            'Regular Fit',
+            'Relaxed Fit',
+            'Skinny Fit',
+            'Slim Fit'] , multiple: false},
+        { name: 'sleeves', label: 'Sleeves', type: 'select',options: ['select','Elbow Sleeve',
+            'Full Sleeve',
+            'Half Sleeve'], multiple: false },
+        { name: 'occasion', label: 'Occasion', type: 'select',options: ['select',"Casual Wear",
+            "Formal Wear",
+            "Festive Wear",
+            "College Wear",
+            "Street Wear"], multiple: false },
+        { name: 'pattern', label: 'Pattern', type: 'select',options: ['select',"Checks",
+            "Graphic Print",
+            "Colourblocked",
+            "Plain",
+            "Printed",
+            "Self-Design",
+            "Stripes",
+            "Geometric",
+            "Abstract",
+            "Textured",
+            "Marble",
+            "Distressed",
+            "Floral"] , multiple: false },
         { name: 'totalQuantity', label: 'Product Total Quantity', type: 'text' },
         { name: 'description', label: 'Product Description', type: 'textarea' },
         { name: 'colors', label: 'Colors Available', type: 'select', options: ["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink", "Purple", "Orange", "Brown", "Grey", "Navy", "Teal", "Maroon"], multiple: true },
@@ -71,10 +127,12 @@ const AdminDashboard: React.FC = () => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setProduct(prevState => ({
-        ...prevState,
-        [name]: value
-        }));
+        if(value != 'select'){
+            setProduct(prevState => ({
+            ...prevState,
+            [name]: value
+            }));
+        }
     };
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>,color:any) => {
@@ -98,7 +156,7 @@ const AdminDashboard: React.FC = () => {
         const { name, options } = e.target;
         const selectedValue = Array.from(options).find(option => option.selected)?.value;
 
-        if (selectedValue && !product[name].includes(selectedValue)) {
+        if (selectedValue && selectedValue !== 'select' && !product[name].includes(selectedValue)) {
         setProduct(prevState => ({
             ...prevState,
             [name]: [...(prevState[name as keyof Product] as string[]), selectedValue]
@@ -115,17 +173,18 @@ const AdminDashboard: React.FC = () => {
 
     const sizeSelect = (e: ChangeEvent<HTMLSelectElement>,color: string) => {
         const size = e.target.value;
-
-        setProduct(prevState => ({
-            ...prevState,
-            sizes: {
-                ...prevState.sizes,
-                [color]: {
-                    ...(prevState.sizes[color] || {}), 
-                    [size]: '0' 
+        if(size != 'select'){
+            setProduct(prevState => ({
+                ...prevState,
+                sizes: {
+                    ...prevState.sizes,
+                    [color]: {
+                        ...(prevState.sizes[color] || {}), 
+                        [size]: '0' 
+                    }
                 }
-            }
-        }))
+            }))
+        }
     }
 
     const changeQuantityOfColorOfSize = (e: any,color: string,size: string) => {
@@ -179,124 +238,126 @@ const AdminDashboard: React.FC = () => {
     };
 
   return (
-    <div className="dashboard-container">
-        <div className="search-bar">
-            <input type="text" placeholder="Search..." />
-        </div>
-        <div className="dashboard-sections">
-            <section className="section add-product">
-                <h2>Add Product</h2>
-                <form onSubmit={addProduct}>
-                    {fields.map((field) => (
-                        <div key={field.name} className="form-group">
-                            <label htmlFor={field.name}>{field.label}</label>
-                            {field.type === 'textarea' ? (
-                            <textarea id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
-                            ) : field.type === 'file' ? (
-                            <input type={field.type} id={field.name} name={field.name} onChange={handleFileChange} />
-                            ) : field.type === 'select' ? (
-                            <div key={field.name}>
-                                <select id={field.name} name={field.name} multiple={field.multiple} value={product[field.name as keyof Product] as string[]} onChange={field.multiple ? handleMultiSelectChange : handleChange}>
-                                {field.options && field.options.map(option => (
-                                    <option key={option} value={option}>{option}</option>
-                                ))}
-                                </select>
-                                <div key={field.name} style={{ display: 'flex', alignItems: 'center', overflowX: 'auto', border: '1px solid gray', padding: '10px' }}>
-                                {product[field.name].map((selectOpt: string) => (
-                                    <div style={{ marginLeft: '5px', paddingLeft: '10px', paddingRight: '10px', border: '1px solid black', position: 'relative' }} key={selectOpt}>
-                                    <p style={{ marginBottom: '5px' }}>{selectOpt}</p>
-                                    <small onClick={() => handleMultiSelectRemove(field.name as keyof Product, selectOpt)} style={{ position: 'absolute', top: '1px', right: '1px', paddingLeft: '4px', paddingRight: '5px', borderRadius: '50%', color: 'white', background: 'red', cursor: 'pointer' }}>x</small>
-                                    </div>
-                                ))}
+    <div>
+        <Header/>
+        <div className="dashboard-container mt-20">
+            <div className="dashboard-sections">
+                <section className="section add-product">
+                    <h2 className="font-bold">Add Product</h2>
+                    <form onSubmit={addProduct}>
+                        {fields.map((field) => (
+                            <div key={field.name} className="form-group">
+                                <label className="underline" htmlFor={field.name}>{field.label}</label>
+                                {field.type === 'textarea' ? (
+                                <textarea className="border" id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
+                                ) : field.type === 'file' ? (
+                                <input required type={field.type} id={field.name} name={field.name} onChange={handleFileChange} />
+                                ) : field.type === 'select' ? (
+                                <div key={field.name}>
+                                    <select className="border mb-2" required id={field.name} name={field.name} multiple={field.multiple} value={product[field.name as keyof Product] as string[]} onChange={field.multiple ? handleMultiSelectChange : handleChange}>
+                                    {field.options && field.options.map(option => (
+                                        <option key={option} value={option}>{option}</option>
+                                    ))}
+                                    </select>
+                                    {field.multiple &&
+                                        <div key={field.name} style={{ display: 'flex', alignItems: 'center', overflowX: 'auto', border: '1px solid gray', padding: '10px' }}>
+                                        {product[field.name].map((selectOpt: string) => (
+                                            <div style={{ marginLeft: '5px', paddingLeft: '10px', paddingRight: '15px', border: '1px solid black', position: 'relative' }} key={selectOpt}>
+                                                <p style={{ marginBottom: '5px' }}>{selectOpt}</p>
+                                                <small onClick={() => handleMultiSelectRemove(field.name as keyof Product, selectOpt)} className="py-0 px-1.5 pb-0.5 " style={{ position: 'absolute', top: '-30%', right: '-10%', borderRadius: '50%', color: 'white', background: 'red', cursor: 'pointer' }}>x</small>
+                                            </div>
+                                        ))}
+                                        </div>
+                                    }
                                 </div>
+                                ) : (
+                                <input type={field.type} id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
+                                )}
                             </div>
-                            ) : (
-                            <input type={field.type} id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
-                            )}
-                        </div>
-                    ))}
-                    {
-                        product.colors.length !== 0 && 
-                                                    <div>
-                                                        <h3 style={{marginBottom:'0px'}}>Select colors and quantity for sizes availabe</h3>
-                                                        {
-                                                            product.colors.map(item => {
-                                                                return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
-                                                                            <div style={{display:'flex',alignItems:'center'}}>
-                                                                                <p style={{marginRight:'10px'}}>{item}</p>
-                                                                                <select onChange={(e) => sizeSelect(e,item)}>
+                        ))}
+                        {
+                            product.colors.length !== 0 && 
+                                                        <div>
+                                                            <h3 style={{marginBottom:'0px'}}>Select colors and quantity for sizes availabe</h3>
+                                                            {
+                                                                product.colors.map(item => {
+                                                                    return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
+                                                                                <div className="mb-3" style={{display:'flex',alignItems:'center'}}>
+                                                                                    <p style={{marginRight:'10px'}} className="underline">{item}</p>
+                                                                                    <select className="border" onChange={(e) => sizeSelect(e,item)}>
+                                                                                        {
+                                                                                            sizes.map(size => {
+                                                                                                return  <option key={size}>{size}</option>
+                                                                                            })
+                                                                                        }
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div>
                                                                                     {
-                                                                                        sizes.map(size => {
-                                                                                            return  <option key={size}>{size}</option>
+                                                                                        product.sizes[item] && Object.keys(product.sizes[item]).map(size => {
+                                                                                            return  <div key={size} className="mb-3" style={{display:'flex',alignItems:'center'}}>
+                                                                                                        <p style={{marginRight:'10px'}}>{size}</p>
+                                                                                                        <input required type="text" placeholder="Enter Quantity" className="border" value={product.sizes[item][size]} onChange={(e) => changeQuantityOfColorOfSize(e,item,size)}/>
+                                                                                                    </div>
                                                                                         })
                                                                                     }
-                                                                                </select>
+                                                                                </div>
                                                                             </div>
-                                                                            <div>
-                                                                                {
-                                                                                    product.sizes[item] && Object.keys(product.sizes[item]).map(size => {
-                                                                                        return  <div key={size} style={{display:'flex',alignItems:'center'}}>
-                                                                                                    <p style={{marginRight:'10px'}}>{size}</p>
-                                                                                                    <input type="text" placeholder="Enter Quantity" value={product.sizes[item][size]} onChange={(e) => changeQuantityOfColorOfSize(e,item,size)}/>
-                                                                                                </div>
-                                                                                    })
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                            })
-                                                        }
-                                                    </div>
-                    }
-                    {
-                        product.colors.length !== 0 && 
-                        <div>
-                            <h3 style={{marginBottom:'0px'}}>Select images for colors you selected</h3>
-                            {
-                                product.colors.map(item => {
-                                    return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
-                                                <p style={{marginRight:'10px'}}>{item}</p>
-                                                <input type="file" onChange={(e) => handleFileChange(e,item)}/>
-                                            </div>
-                                })
-                            }
-                        </div>
-                    }
-                    <button type="submit">Add Product</button>
-                </form>
-            </section>
-            <section className="section add-trending-product">
-                <h2>Products</h2>
-                <div>
-                    {
-                        products.length !== 0 ? products.map((prod,index) => {
-                                                    return  <div key={prod} style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
-                                                                <div style={{width:'30%',overflow:"hidden"}}>
-                                                                    <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
-                                                                </div>
-                                                                <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
-                                                                    <h3>{(index+1)+'. '}</h3>
-                                                                    <div style={{display:'flex',alignItems:'center'}}>
-                                                                        <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
-                                                                        <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
-                                                                        <p>{prod.material} |</p>
+                                                                })
+                                                            }
+                                                        </div>
+                        }
+                        {
+                            product.colors.length !== 0 && 
+                            <div>
+                                <h3 style={{marginBottom:'0px'}}>Select images for colors you selected</h3>
+                                {
+                                    product.colors.map(item => {
+                                        return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
+                                                    <p style={{marginRight:'10px'}}>{item}</p>
+                                                    <input required type="file" onChange={(e) => handleFileChange(e,item)}/>
+                                                </div>
+                                    })
+                                }
+                            </div>
+                        }
+                        <button type="submit">Add Product</button>
+                    </form>
+                </section>
+                <section className="section add-trending-product">
+                    <h2 className="font-bold text-center">Products </h2>
+                    <div>
+                        {
+                            products.length !== 0 ? products.map((prod,index) => {
+                                                        return  <div key={prod} style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
+                                                                    <div style={{width:'30%',overflow:"hidden"}}>
+                                                                        <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
                                                                     </div>
+                                                                    <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
+                                                                        <h3>{(index+1)+'. '}</h3>
+                                                                        <div style={{display:'flex',alignItems:'center'}}>
+                                                                            <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
+                                                                            <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
+                                                                            <p>{prod.material} |</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    
                                                                 </div>
-                                                                
-                                                            </div>
-                                                })
-                                               :
-                                               <div>
-                                                    <p style={{textAlign:'center'}}>--- No products to show ---</p>
-                                               </div>
-                    }
-                </div>
-            </section>
-            <section className="section add-trending-product">
-                <h2>Add Trending Product</h2>
-            </section>
-            {/* <section className="section customer-list">
-                <h2>Customer List</h2>
-            </section> */}
+                                                    })
+                                                :
+                                                <div>
+                                                        <p style={{textAlign:'center'}}>--- No products to show ---</p>
+                                                </div>
+                        }
+                    </div>
+                </section>
+                <section className="section add-trending-product">
+                    <h2>Add Trending Product</h2>
+                </section>
+                {/* <section className="section customer-list">
+                    <h2>Customer List</h2>
+                </section> */}
+            </div>
         </div>
     </div>
   );

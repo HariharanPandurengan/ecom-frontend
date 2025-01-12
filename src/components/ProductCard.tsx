@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import Header from "./Header,Footer/Header";
 import "../App.css";
+import { useParams } from "react-router-dom";
 
 const initialProductState = { 
   name: '', 
@@ -33,7 +34,9 @@ trendingProd: boolean;
 }
 
 const ProductCard = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const params = useParams()
+  console.log(params)
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };

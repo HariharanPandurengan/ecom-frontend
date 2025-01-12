@@ -41,6 +41,7 @@ const Header: React.FC = () => {
     const [searchPopup,setSearchPopup] = useState(false)
     const [searchFilter,setSearchFilter] = useState([])
     const [search,setSearch] = useState('')
+    const [aSearch,setASearch] = useState('')
     const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(()=>{
@@ -149,7 +150,11 @@ const Header: React.FC = () => {
                         <div className="search-box flex items-center text-center w-[250px] absolute top-0 z-50 right-0">
                             <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
                                 onChange={e=>setSearch(e.target.value)} value={search} />
-                            <FontAwesomeIcon className='text-black'  onClick={(e)=>searchFun(e)} icon={faSearch} />
+                            <FontAwesomeIcon className='text-black'  onClick={(e)=>{
+                                    setASearch(search)
+                                    searchFun(e)
+                                }} icon={faSearch} 
+                            />
                             {/* <img onClick={(e)=>headersearchFun(e)} src='src\assets\Search-Circle--Streamline-Ionic-Filled.svg'/> */}
                         </div>
                     )}
@@ -164,9 +169,9 @@ const Header: React.FC = () => {
                 </div>
             </section>
             {searchPopup &&
-                <div className="fixed top-[13%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
+                <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
                     <div className="relative bg-white p-2 pe-5 w-full">
-                        <h3 className="text-center text-3xl font-bold underline">"{searchFilter.length}" Results found for "{search}"</h3>
+                        <h3 className="text-center text-3xl font-bold underline">"{searchFilter.length}" Results found for "{aSearch}"</h3>
                         {
                             searchFilter.length !== 0 ? searchFilter.map((prod,index) => {
                                 return  <div key={prod} className="mb-3" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>

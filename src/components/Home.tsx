@@ -19,23 +19,11 @@ interface Image {
     [key: string]:  string ; 
 }
 
-const initialProductState = { 
-    name: '', 
-    price: '', 
-    category: '', 
-    subCategory: '', 
-    material: '', 
-    totalQuantity: '', 
-    description: '', 
-    colors: [] as string[], 
-    sizes: {}, 
-    images: {}, 
-    trendingProd: false,
-};
 
 interface Product {
     name: string;
     price: string;
+    sex: string;
     category: string;
     subCategory: string;
     material: string;
@@ -44,20 +32,27 @@ interface Product {
     colors: string[];
     sizes: SizesOptions;
     images: Image;
+    fits: string,
+    sleeves: string,
+    occasion: string,
+    pattern:  string,
     trendingProd: boolean;
-}
+  }
 
 const Home: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [product, setProduct] = useState<Product>(initialProductState);
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
     const [bagItemCount, setBagItemCount] = useState(0)
-    const [search,setSearch] = useState('')
-    const [searchPopup,setSearchPopup] = useState(false)
-    const [searchFilter,setSearchFilter] = useState([])
+    const [scrollPosition, setScrollPosition] = useState(0);
     const filterMet = [
+        {
+            title: 'sex',
+            list : ['Male',
+                'Female',
+                'Unisex']
+        },
         {
             title: 'material',
             list: [ 'Cotton',
@@ -176,7 +171,7 @@ const Home: React.FC = () => {
 
     // Generate counts for the filters
     const fetchCount = (title: string, subCat: string) => {
-        if (title == 'material') {
+        if (title == 'material' || title == 'sex' || title == 'fits' || title == 'sleeves' || title == 'occasion' || title == 'pattern') {
             const filtered = products.filter(items => {
                 return items[title].toLowerCase() == subCat.toLowerCase();
             })
@@ -242,19 +237,10 @@ const Home: React.FC = () => {
     const sendingProdData = (productID : any) => {
         navigate('/ProductCard/'+productID)
     }
-
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [scrollDirection, setScrollDirection] = useState(null);
   
     useEffect(() => {
       const handleScroll = () => {
         const currentScrollPosition = window.scrollY;
-  
-        if (currentScrollPosition > scrollPosition) {
-          setScrollDirection("down");
-        } else if (currentScrollPosition < scrollPosition) {
-          setScrollDirection("up");
-        }
         if(currentScrollPosition > 1100)
         {
             setIsSticky(true)
@@ -270,20 +256,20 @@ const Home: React.FC = () => {
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };
-    }, [scrollPosition]); // Dependency to trigger `useEffect` when `scrollPosition` changes
-  
-    useEffect(() => {
-      if (scrollDirection) {
-        console.log(`User is scrolling ${scrollDirection}`);
-      }
+    }); 
 
-    }, [scrollDirection]);
-    console.log(scrollPosition)
     useEffect(() => {
+        const filteredOne = [];
         let AllFalse = true;
         let material = false;
         let price = false;
         let colors = false;
+        let sizes = false;
+        let sex = false;
+        let fits = false;
+        let sleeves = false;
+        let occasion = false;
+        // let pattern = false;
         let whichColor = '';
 
         for (let key in currentFilters) {
@@ -298,10 +284,28 @@ const Home: React.FC = () => {
                     if (key === 'price') {
                         price = true;
                     }
+                    if (key === 'sizes') {
+                        sizes = true;
+                    }
                     if (key === 'colors') {
                         colors = true;
                         whichColor = key2
                     }
+                    if (key === 'sex') {
+                        sex = true;
+                    }
+                    if (key === 'fits') {
+                        fits = true;
+                    }
+                    if (key === 'sleeves') {
+                        sleeves = true;
+                    }
+                    if (key === 'occasion') {
+                        occasion = true;
+                    }
+                    // if (key === 'pattern') {
+                    //     pattern = true;
+                    // }
                 }
             }
         }
@@ -310,14 +314,29 @@ const Home: React.FC = () => {
             setFilteredProducts(products)
         }
         else {
-            const filteredOne = [];
             for (let key in currentFilters) {
                 for (let key2 in currentFilters[key]) {
                     if (currentFilters[key][key2] === true) {
-                        if (key === 'material') {
+                        if(key === 'sex'){
                             for (let i = 0; i < products.length; i++) {
-                                if (products[i]['material'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                if (products[i]['sex'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
                                     filteredOne.push(products[i])
+                                }
+                            }
+                        }
+                        else if (key === 'material') {
+                            if(sex){
+                                for (let i = 0; i < filteredOne.length; i++) {
+                                    if (filteredOne[i]['material'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
+                                        filteredOne.splice(i, 1);
+                                    }
+                                }
+                            }
+                            else{
+                                for (let i = 0; i < products.length; i++) {
+                                    if (products[i]['material'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(products[i])
+                                    }
                                 }
                             }
                         }
@@ -325,7 +344,7 @@ const Home: React.FC = () => {
                             let priceLimit: any = [];
                             if (key2.includes('-')) {
                                 priceLimit = key2.split('-')
-                                if (!material) {
+                                if (!material && !sex) {
                                     for (let i = 0; i < products.length; i++) {
                                         if (Number(products[i]['price']) >= Number(priceLimit[0]) && Number(products[i]['price']) <= Number(priceLimit[1])) {
                                             const alreadyExist = filteredOne.filter(list => {
@@ -337,7 +356,7 @@ const Home: React.FC = () => {
                                         }
                                     }
                                 }
-                                else if (material) {
+                                else if (material || sex) {
                                     for (let i = 0; i < filteredOne.length; i++) {
                                         if (!(Number((filteredOne[i]['price']) >= Number(priceLimit[0])) && Number(products[i]['price']) <= Number(priceLimit[1]))) {
                                             filteredOne.splice(i, 1);
@@ -346,7 +365,7 @@ const Home: React.FC = () => {
                                 }
                             }
                             else {
-                                if (!material) {
+                                if (!material && !sex) {
                                     for (let i = 0; i < products.length; i++) {
                                         if (Number(products[i]['price']) > Number(key2.slice(0, -1))) {
                                             const alreadyExist = filteredOne.filter(list => {
@@ -358,7 +377,7 @@ const Home: React.FC = () => {
                                         }
                                     }
                                 }
-                                else if (material) {
+                                else if (material || sex) {
                                     for (let i = 0; i < filteredOne.length; i++) {
                                         if ((Number(products[i]['price']) > Number(key2.slice(0, -1))) === false) {
                                             filteredOne.splice(i, 1);
@@ -368,7 +387,7 @@ const Home: React.FC = () => {
                             }
                         }
                         else if (key === 'colors') {
-                            if (material || price) {
+                            if (material || price || sex) {
                                 for (let i = 0; i < filteredOne.length; i++) {
                                     let thisColorsTotalCount = 0;
                                     const Colorkeys = Object.keys(filteredOne[i]['sizes']);
@@ -404,7 +423,7 @@ const Home: React.FC = () => {
                             }
                         }
                         else if (key === 'sizes') {
-                            if (colors || price || material) {
+                            if (colors || price || material || sex) {
                                 for (let i = 0; i < filteredOne.length; i++) {
                                     let thisSizeTotalCount = 0;
                                     const Colorkeys = Object.keys(filteredOne[i]['sizes']);
@@ -455,50 +474,76 @@ const Home: React.FC = () => {
                                 }
                             }
                         }
+                        else if(key === 'fits'){
+                            if(material || price || colors || sizes || sex){
+                                for (let i = 0; i < filteredOne.length; i++) {
+                                    if (filteredOne[i]['fits'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
+                                        filteredOne.splice(i, 1);
+                                    }
+                                }
+                            }
+                            else{
+                                for (let i = 0; i < products.length; i++) {
+                                    if (products[i]['fits'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(products[i])
+                                    }
+                                }
+                            }
+                        }
+                        else if(key === 'sleeves'){
+                            if(material || price || colors || sizes || fits || sex){
+                                for (let i = 0; i < filteredOne.length; i++) {
+                                    if (filteredOne[i]['sleeves'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
+                                        filteredOne.splice(i, 1);
+                                    }
+                                }
+                            }
+                            else{
+                                for (let i = 0; i < products.length; i++) {
+                                    if (products[i]['sleeves'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(products[i])
+                                    }
+                                }
+                            }
+                        }
+                        else if(key === 'occasion'){
+                            if(material || price || colors || sizes || sleeves || sex || fits){
+                                for (let i = 0; i < filteredOne.length; i++) {
+                                    if (filteredOne[i]['occasion'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
+                                        filteredOne.splice(i, 1);
+                                    }
+                                }
+                            }
+                            else{
+                                for (let i = 0; i < products.length; i++) {
+                                    if (products[i]['occasion'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(products[i])
+                                    }
+                                }
+                            }
+                        }
+                        else if(key === 'pattern'){
+                            if(material || price || colors || sizes || occasion || sex || sleeves || fits){
+                                for (let i = 0; i < filteredOne.length; i++) {
+                                    if (filteredOne[i]['pattern'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
+                                        filteredOne.splice(i, 1);
+                                    }
+                                }
+                            }
+                            else{
+                                for (let i = 0; i < products.length; i++) {
+                                    if (products[i]['pattern'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(products[i])
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
             setFilteredProducts(filteredOne)
         }
     }, [currentFilters])
-
-    // const searchFun = (e: React.MouseEvent<HTMLButtonElement>) => {
-    //     e.preventDefault()
-    //     if(search === ''){
-    //         alert('Enter something to search')
-    //     }
-    //     else{
-    //         setSearchPopup(true)
-    //         const filterdOne = products.filter(list => {
-    //             const nameArray = list.name.split(' ');
-    //             const arrayOfSizesObjcet = Object.values(list.sizes);
-
-    //             const matchesColor = list.colors.some((color) =>
-    //                 search.toLowerCase().includes(color.toLowerCase())
-    //             );
-
-    //             const matchesSize = arrayOfSizesObjcet.some((sizeObject) => {
-    //                 const arrayOfSize = Object.keys(sizeObject);
-    //                 return arrayOfSize.some((size) =>
-    //                 search.toLowerCase().includes(size.toLowerCase())
-    //                 );
-    //             });
-
-    //             const matchesName = nameArray.some((word) =>
-    //                 search.toLowerCase().includes(word.toLowerCase())
-    //             );
-
-    //             const matchesOther =
-    //                 list.material.toLowerCase().includes(search.toLowerCase()) ||
-    //                 search.includes(list.price) ||
-    //                 list.name.toLowerCase().includes(search.toLowerCase()) ||
-    //                 search.toLowerCase().includes(list.name.toLowerCase());
-
-    //             return matchesColor || matchesSize || matchesName || matchesOther;
-    //         })
-    //         setSearchFilter(filterdOne)
-    //     }
-    // }
 
     const navigate = useNavigate();
     return (
@@ -548,20 +593,20 @@ const Home: React.FC = () => {
             <section>
                 <div className="landing-dashboard grid grid-cols-[0.2fr_0.8fr] overflow-y-auto">
                     <section>
-                        <div className={`sticky-div ${isSticky ? 'fixed top-12' : 'relative'} filter-column rounded-bl-[8px] pl-[20px] w-[250px] h-[90vh] overflow-y-auto`} id="stickyDiv">
+                        <div className={`sticky-div ${isSticky ? 'fixed top-16' : 'relative'} filter-column rounded-bl-[8px] pl-[20px] w-[250px] h-[90vh] overflow-y-auto`} id="stickyDiv">
                             {
-                            filterMet.map(item => {
-                                return <div className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
+                            filterMet.map((item,index) => {
+                                return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
                                         <div key={item.title} >
                                             <p onClick={() => setIsCollapsed(!isCollapsed)} className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex"}><strong>{item.title}</strong></p>
                                             <div className="collections p-[10px] max-h-[400px] overflow-y-auto">
                                                 <ul className="list-none p-0 m-0" style={{ marginTop: '0' }}>
                                                     {
-                                                        !isCollapsed && item.list.map(list => {
-                                                            return <li className="filter-options mt-[5px] max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
-                                                                <label className="flex items-center mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
-                                                                <span className="ml-auto">{'(' + fetchCount(item.title, list) + ')'}</span>
-                                                            </li>
+                                                        !isCollapsed && item.list.map((list,index) => {
+                                                            return   <li key={index} className="filter-options mt-[5px] max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
+                                                                        <label className="flex items-center mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
+                                                                        <span className="ml-auto">{'(' + fetchCount(item.title, list) + ')'}</span>
+                                                                    </li>
                                                         })
                                                     }
                                                 </ul>
