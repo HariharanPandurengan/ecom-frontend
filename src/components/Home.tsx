@@ -266,6 +266,7 @@ const Home: React.FC = () => {
         let colors = false;
         let sizes = false;
         let sex = false;
+        let sexType = ''
         let fits = false;
         let sleeves = false;
         let occasion = false;
@@ -293,6 +294,7 @@ const Home: React.FC = () => {
                     }
                     if (key === 'sex') {
                         sex = true;
+                        sexType = key2
                     }
                     if (key === 'fits') {
                         fits = true;
@@ -310,6 +312,15 @@ const Home: React.FC = () => {
             }
         }
 
+        let arr = []
+
+        if(sex){
+            arr = products.filter(list => list.sex == sexType)
+        }
+        else{
+            arr = products
+        }
+
         if (AllFalse === true) {
             setFilteredProducts(products)
         }
@@ -318,24 +329,26 @@ const Home: React.FC = () => {
                 for (let key2 in currentFilters[key]) {
                     if (currentFilters[key][key2] === true) {
                         if(key === 'sex'){
-                            for (let i = 0; i < products.length; i++) {
-                                if (products[i]['sex'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                    filteredOne.push(products[i])
+                            for (let i = 0; i < arr.length; i++) {
+                                if (arr[i]['sex'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                    filteredOne.push(arr[i])
                                 }
                             }
                         }
                         else if (key === 'material') {
                             if(sex){
                                 for (let i = 0; i < filteredOne.length; i++) {
+                                    console.log(filteredOne[i]['material'],key2)
                                     if (filteredOne[i]['material'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
-                                        filteredOne.splice(i, 1);
+                                        console.log('condi')
+                                        filteredOne.slice(i, 1);
                                     }
                                 }
                             }
                             else{
-                                for (let i = 0; i < products.length; i++) {
-                                    if (products[i]['material'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                        filteredOne.push(products[i])
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i]['material'].toLocaleLowerCase().trim() === key2.toLocaleLowerCase().trim()) {
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -345,20 +358,20 @@ const Home: React.FC = () => {
                             if (key2.includes('-')) {
                                 priceLimit = key2.split('-')
                                 if (!material && !sex) {
-                                    for (let i = 0; i < products.length; i++) {
-                                        if (Number(products[i]['price']) >= Number(priceLimit[0]) && Number(products[i]['price']) <= Number(priceLimit[1])) {
+                                    for (let i = 0; i < arr.length; i++) {
+                                        if (Number(arr[i]['price']) >= Number(priceLimit[0]) && Number(arr[i]['price']) <= Number(priceLimit[1])) {
                                             const alreadyExist = filteredOne.filter(list => {
-                                                return list._id === products[i]['_id']
+                                                return list._id === arr[i]['_id']
                                             })
                                             if (alreadyExist.length === 0) {
-                                                filteredOne.push(products[i])
+                                                filteredOne.push(arr[i])
                                             }
                                         }
                                     }
                                 }
                                 else if (material || sex) {
                                     for (let i = 0; i < filteredOne.length; i++) {
-                                        if (!(Number((filteredOne[i]['price']) >= Number(priceLimit[0])) && Number(products[i]['price']) <= Number(priceLimit[1]))) {
+                                        if (!(Number((filteredOne[i]['price']) >= Number(priceLimit[0])) && Number(arr[i]['price']) <= Number(priceLimit[1]))) {
                                             filteredOne.splice(i, 1);
                                         }
                                     }
@@ -366,20 +379,20 @@ const Home: React.FC = () => {
                             }
                             else {
                                 if (!material && !sex) {
-                                    for (let i = 0; i < products.length; i++) {
-                                        if (Number(products[i]['price']) > Number(key2.slice(0, -1))) {
+                                    for (let i = 0; i < arr.length; i++) {
+                                        if (Number(arr[i]['price']) > Number(key2.slice(0, -1))) {
                                             const alreadyExist = filteredOne.filter(list => {
-                                                return list._id === products[i]['_id']
+                                                return list._id === arr[i]['_id']
                                             })
                                             if (alreadyExist.length === 0) {
-                                                filteredOne.push(products[i])
+                                                filteredOne.push(arr[i])
                                             }
                                         }
                                     }
                                 }
                                 else if (material || sex) {
                                     for (let i = 0; i < filteredOne.length; i++) {
-                                        if ((Number(products[i]['price']) > Number(key2.slice(0, -1))) === false) {
+                                        if ((Number(arr[i]['price']) > Number(key2.slice(0, -1))) === false) {
                                             filteredOne.splice(i, 1);
                                         }
                                     }
@@ -406,15 +419,15 @@ const Home: React.FC = () => {
                                 }
                             }
                             else {
-                                for (let i = 0; i < products.length; i++) {
-                                    const Colorkeys = Object.keys(products[i]['sizes']);
+                                for (let i = 0; i < arr.length; i++) {
+                                    const Colorkeys = Object.keys(arr[i]['sizes']);
                                     for (let j = 0; j < Colorkeys.length; j++) {
-                                        const currentColorsArray = Object.values(products[i]['sizes'][Colorkeys[j]]);
+                                        const currentColorsArray = Object.values(arr[i]['sizes'][Colorkeys[j]]);
                                         if (key2.toLocaleLowerCase() === Colorkeys[j].toLocaleLowerCase()) {
                                             for (let cc = 0; cc < currentColorsArray.length; cc++) {
                                                 const total = currentColorsArray.reduce((sum, num) => sum + Number(num), 0);
                                                 if (total !== 0) {
-                                                    filteredOne.push(products[i])
+                                                    filteredOne.push(arr[i])
                                                 }
                                             }
                                         }
@@ -456,12 +469,12 @@ const Home: React.FC = () => {
                                 }
                             }
                             else {
-                                for (let i = 0; i < products.length; i++) {
+                                for (let i = 0; i < arr.length; i++) {
                                     let thisSizeTotalCount = 0;
-                                    const Colorkeys = products[i]['sizes'] ? Object.keys(products[i]['sizes']) : []
+                                    const Colorkeys = arr[i]['sizes'] ? Object.keys(arr[i]['sizes']) : []
                                     for (let j = 0; j < Colorkeys.length; j++) {
-                                        const currentSizesArray = Object.keys(products[i]['sizes'][Colorkeys[j]]);
-                                        const currentSizesValueArray = Object.values(products[i]['sizes'][Colorkeys[j]]);
+                                        const currentSizesArray = Object.keys(arr[i]['sizes'][Colorkeys[j]]);
+                                        const currentSizesValueArray = Object.values(arr[i]['sizes'][Colorkeys[j]]);
                                         for (let cc = 0; cc < currentSizesArray.length; cc++) {
                                             if (key2.toLocaleLowerCase() === currentSizesArray[cc].toLocaleLowerCase()) {
                                                 thisSizeTotalCount += parseInt(currentSizesValueArray[cc])
@@ -469,7 +482,7 @@ const Home: React.FC = () => {
                                         }
                                     }
                                     if (thisSizeTotalCount !== 0) {
-                                        filteredOne.push(products[i])
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -483,9 +496,9 @@ const Home: React.FC = () => {
                                 }
                             }
                             else{
-                                for (let i = 0; i < products.length; i++) {
-                                    if (products[i]['fits'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                        filteredOne.push(products[i])
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i]['fits'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -499,9 +512,9 @@ const Home: React.FC = () => {
                                 }
                             }
                             else{
-                                for (let i = 0; i < products.length; i++) {
-                                    if (products[i]['sleeves'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                        filteredOne.push(products[i])
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i]['sleeves'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -515,9 +528,9 @@ const Home: React.FC = () => {
                                 }
                             }
                             else{
-                                for (let i = 0; i < products.length; i++) {
-                                    if (products[i]['occasion'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                        filteredOne.push(products[i])
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i]['occasion'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -531,9 +544,9 @@ const Home: React.FC = () => {
                                 }
                             }
                             else{
-                                for (let i = 0; i < products.length; i++) {
-                                    if (products[i]['pattern'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                        filteredOne.push(products[i])
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i]['pattern'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                                        filteredOne.push(arr[i])
                                     }
                                 }
                             }
@@ -554,9 +567,9 @@ const Home: React.FC = () => {
                 <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
                     <Slider {...settings}>
                         {
-                            products.length !== 0 ? products.map((trendprod) => {
+                            products.length !== 0 ? products.map((trendprod,index) => {
                                 if (trendprod.trendingProd) {
-                                    return <div className=".carousel-slides flex">
+                                    return <div key={index} className=".carousel-slides flex">
                                                 <div className="carousel-slide min-w-full text-center">
                                                     <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
                                                 </div>
@@ -585,15 +598,15 @@ const Home: React.FC = () => {
             </div>
             </section>
             <section>
-                <div className="gender-button flex gap-[100px] py-[10px] px-[600px]">
-                    <button className="men-button items-center aspect-[3/0.5]">Men</button>
-                    <button className="women-button items-center aspect-[3/0.5]">Women</button>
+                <div className="gender-button flex gap-[100px] justify-center items-center h-[80px]">
+                    <button className="men-button items-center h-[60px] w-[200px]">Men</button>
+                    <button className="women-button items-center h-[60px] w-[200px]">Women</button>
                 </div>
             </section>
             <section>
-                <div className="landing-dashboard grid grid-cols-[0.2fr_0.8fr] overflow-y-auto">
-                    <section>
-                        <div className={`sticky-div ${isSticky ? 'fixed top-16' : 'relative'} filter-column rounded-bl-[8px] pl-[20px] w-[250px] h-[90vh] overflow-y-auto`} id="stickyDiv">
+                <div className="landing-dashboard flex flex-start justify-end  overflow-y-auto">
+                    <section className="w-[15%]">
+                        <div className={`sticky-div w-full ${isSticky ? 'fixed top-16 w-[15%]' : 'relative'}  filter-column rounded-bl-[8px] pl-[20px] w-[250px] h-[90vh] overflow-y-auto`} id="stickyDiv">
                             {
                             filterMet.map((item,index) => {
                                 return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
@@ -617,16 +630,16 @@ const Home: React.FC = () => {
                             }
                         </div>
                     </section>
-                    <section>
-                        <div className="grid-container grid gap-[.250rem] h-[200vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
+                    <section className="w-[85%]">
+                        <div className="grid-container w-full grid gap-[.250rem] h-[200vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
                             {
                                 filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
                                     return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod._id)}>
-                                                <div className="product-image-div mb-3 w-full p-2.5">
+                                                <div className="product-image-div mb-3 w-full pt-2.5">
                                                     <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
                                                 </div>
                                                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1px' }}>
-                                                    <div style={{ alignItems: 'center', padding:'10px' }}>
+                                                    <div className="pl-[10px]" style={{ alignItems: 'center' }}>
                                                         <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
                                                         <p className="product-description m-2">{prod.description}</p>
                                                         <p className="product-price">{'Rs.' + prod.price}</p>
