@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import "../App.css";
 import axios from 'axios';
 import Header from "./Header,Footer/Header";
+import Footer from "./Header,Footer/Footer";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -359,6 +360,7 @@ const AdminDashboard: React.FC = () => {
                 </section> */}
             </div>
         </div>
+        <Footer></Footer>
     </div>
   );
 }

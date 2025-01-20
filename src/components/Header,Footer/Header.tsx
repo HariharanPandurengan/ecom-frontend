@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import { User, Heart, ShoppingBag } from 'lucide-react';
 import React, { useState, useEffect } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { Home, Import } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
@@ -68,6 +69,18 @@ const Header: React.FC = () => {
         })
     }
 
+    const navigate = useNavigate();
+    
+    const sendingProdData = (productID : any) => {
+        navigate('/ProductCard')
+    }
+    const navigatetoHome = () => {
+        navigate('/')
+    }
+    const navigatetoFooter = () => {
+        navigate('/Footer')
+    }
+
     useEffect(() => {
         setBagItemCount(3);
     }, [])
@@ -127,13 +140,13 @@ const Header: React.FC = () => {
                             </div>
                             <ul className="menu-items list-none p-[20px] m-0">
                                 <li className='my-[10px]'>
-                                    <a className='text-[20]px' href="#">Home</a>
+                                    <Link className='text-[20]px' to="/">Home</Link>
                                 </li>
                                 <li className='my-[10px]'>
-                                    <a className='text-[20]px' href="#">About us</a>
+                                    <Link className='text-[20]px' to="/Footer">About us</Link>
                                 </li>
                                 <li className='my-[10px]'>
-                                    <a className='text-[20]px' href="#">Products</a>
+                                    <Link className='text-[20]px' to="ProductSection">Products</Link>
                                 </li>
                             </ul>
                             <div className="contact mt-30 p-5 text-base">
@@ -171,20 +184,18 @@ const Header: React.FC = () => {
             {searchPopup &&
                 <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
                     <div className="relative bg-white p-2 pe-5 w-full">
-                        <h3 className="text-center text-3xl font-bold underline">"{searchFilter.length}" Results found for "{aSearch}"</h3>
+                        <h3 className="text-center text-3xl font-['Montserrat-Thin] pb-[10px]">"{searchFilter.length}" Results found for "{aSearch}"</h3>
+                        <div className="grid-container w-full grid gap-[.250rem] h-[75vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
                         {
                             searchFilter.length !== 0 ? searchFilter.map((prod,index) => {
-                                return  <div key={prod} className="mb-3" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
-                                            <div className="font-bold text-xl me-2">{index+1} </div>
-                                            <div style={{width:'29%',overflow:"hidden"}}>
-                                                <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
+                                return  <div key={prod} onClick={()=>sendingProdData(prod._id)} className="product-card border">
+                                            <div className="product-image-div w-full pt-2.5">
+                                                <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
                                             </div>
-                                            <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
-                                                <h3>{(index+1)+'. '}</h3>
-                                                <div style={{display:'flex',alignItems:'center'}}>
-                                                    <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
-                                                    <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
-                                                    <p>{prod.material} |</p>
+                                            <div style={{display:'flex',alignItems:'center',marginLeft:'1px'}}>
+                                                <div className="pl-[10px]">
+                                                        <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
+                                                        <p className="product-price">{'Rs.'+prod.price}</p>
                                                 </div>
                                             </div>
                                             
@@ -195,6 +206,7 @@ const Header: React.FC = () => {
                                 <p style={{textAlign:'center'}}>--- No products to show ---</p>
                             </div>
                         }
+                        </div>
                         <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
                             setSearchPopup(false)
                             setSearchFilter([])

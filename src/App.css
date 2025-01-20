@@ -376,9 +376,6 @@ header .spacer {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: .250rem;
-  height: 200vh;
-  overflow-y: auto;
   background-color: #FFFFFF;
 }
 .product-card {
@@ -388,7 +385,6 @@ header .spacer {
 }
 .product-image-div {
   margin-bottom: 12px;
-  width: 100%;
   padding: 10px;
 }
 

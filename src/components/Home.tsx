@@ -10,6 +10,7 @@ import ProductCard from "./ProductCard";
 import { redirect, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import Footer from "./Header,Footer/Footer";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -234,8 +235,9 @@ const Home: React.FC = () => {
         }))
     }
 
+
     const sendingProdData = (productID : any) => {
-        navigate('/ProductCard/'+productID)
+        navigate('/ProductCard')
     }
   
     useEffect(() => {
@@ -561,159 +563,117 @@ const Home: React.FC = () => {
     const navigate = useNavigate();
     return (
         <div>
-            <Header></Header>
-        <div className="h-clothingpage max-w-fit items-center ">
-            <section>
-                <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
-                    <Slider {...settings}>
-                        {
-                            products.length !== 0 ? products.map((trendprod,index) => {
-                                if (trendprod.trendingProd) {
-                                    return <div key={index} className=".carousel-slides flex">
-                                                <div className="carousel-slide min-w-full text-center">
-                                                    <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
-                                                </div>
-                                            </div>
-                                }
-                            })
-                                :
-                                <div>
-                                    <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
-                                </div>
-                        }
-                    </Slider>
-                </div>
-            </section>
-            <section>
-            <div className="shop-by-section m-0 p-0 text-center">
-                <h1>SHOP BY SECTION</h1>
-                    <div className="sections-container flex justify-center flex-wrap gap-[60px] p-[20px]">
-                        {sections.map((section, index) => (
-                        <div className="div-section w-[250px] h-[250px] top-0 relative overflow-hidden rounded-lg" key={index}>
-                            <img src={section.imgSrc} alt={section.alt} />
-                            <div className="section-text absolute top-2/4 left-2/4">{section.title}</div>
-                        </div>
-                        ))}
-                    </div>
+            <div>
+                <Header></Header>
             </div>
-            </section>
-            <section>
-                <div className="gender-button flex gap-[100px] justify-center items-center h-[80px]">
-                    <button className="men-button items-center h-[60px] w-[200px]">Men</button>
-                    <button className="women-button items-center h-[60px] w-[200px]">Women</button>
-                </div>
-            </section>
-            <section>
-                <div className="landing-dashboard flex flex-start justify-end  overflow-y-auto">
-                    <section className="w-[15%]">
-                        <div className={`sticky-div w-full ${isSticky ? 'fixed top-16 w-[15%]' : 'relative'}  filter-column rounded-bl-[8px] pl-[20px] w-[250px] h-[90vh] overflow-y-auto`} id="stickyDiv">
+            <div className="h-clothingpage mt-[60px] max-w-fit items-center ">
+                <section>
+                    <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
+                        <Slider {...settings}>
                             {
-                            filterMet.map((item,index) => {
-                                return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
-                                        <div key={item.title} >
-                                            <p onClick={() => setIsCollapsed(!isCollapsed)} className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex"}><strong>{item.title}</strong></p>
-                                            <div className="collections p-[10px] max-h-[400px] overflow-y-auto">
-                                                <ul className="list-none p-0 m-0" style={{ marginTop: '0' }}>
-                                                    {
-                                                        !isCollapsed && item.list.map((list,index) => {
-                                                            return   <li key={index} className="filter-options mt-[5px] max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
-                                                                        <label className="flex items-center mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
-                                                                        <span className="ml-auto">{'(' + fetchCount(item.title, list) + ')'}</span>
-                                                                    </li>
-                                                        })
-                                                    }
-                                                </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            })
-                            }
-                        </div>
-                    </section>
-                    <section className="w-[85%]">
-                        <div className="grid-container w-full grid gap-[.250rem] h-[200vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
-                            {
-                                filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
-                                    return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod._id)}>
-                                                <div className="product-image-div mb-3 w-full pt-2.5">
-                                                    <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
-                                                </div>
-                                                <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1px' }}>
-                                                    <div className="pl-[10px]" style={{ alignItems: 'center' }}>
-                                                        <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
-                                                        <p className="product-description m-2">{prod.description}</p>
-                                                        <p className="product-price">{'Rs.' + prod.price}</p>
-                                                        {/* <p>( {
-                                                            prod.colors.map((list, index) => {
-                                                                if (index == prod.colors.length - 1) {
-                                                                    return list
-                                                                }
-                                                                else {
-                                                                    return list + ' , '
-                                                                }
-                                                            })
-                                                        } )</p> */}
+                                products.length !== 0 ? products.map((trendprod,index) => {
+                                    if (trendprod.trendingProd) {
+                                        return <div key={index} className=".carousel-slides flex">
+                                                    <div className="carousel-slide min-w-full text-center">
+                                                        <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
                                                     </div>
                                                 </div>
-                                            </div>
+                                    }
                                 })
                                     :
                                     <div>
                                         <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
                                     </div>
                             }
-                        </div>
-                    </section>
-                </div>
-            </section>
-            {/* <section>
-                <div className="w-full my-2 border border-gray-900 p-1 flex items-center">
-                    <input 
-                        className="border-2 border-gray-400 rounded-lg w-[80%] py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                        type="text" 
-                        placeholder="Search..."
-                        onChange={e=>setSearch(e.target.value)} value={search} 
-                    />
-                    <button onClick={(e)=>searchFun(e)} className="w-[20%] ml-3 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">Search</button>
-                </div>
-            </section> */}
-            {/* {searchPopup &&
-                <div className="fixed top-[13%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
-                    <div className="relative bg-white p-2 pe-5 w-full">
-                        <h3 className="text-center text-3xl font-bold underline">"{searchFilter.length}" Results found for "{search}"</h3>
-                        {
-                            searchFilter.length !== 0 ? searchFilter.map((prod,index) => {
-                                return  <div key={prod} className="mb-3" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
-                                            <div className="font-bold text-xl me-2">{index+1} </div>
-                                            <div style={{width:'29%',overflow:"hidden"}}>
-                                                <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
-                                            </div>
-                                            <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
-                                                <h3>{(index+1)+'. '}</h3>
-                                                <div style={{display:'flex',alignItems:'center'}}>
-                                                    <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
-                                                    <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
-                                                    <p>{prod.material} |</p>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                            })
-                           :
-                           <div>
-                                <p style={{textAlign:'center'}}>--- No products to show ---</p>
-                           </div>
-                        }
-                        <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
-                            setSearchPopup(false)
-                            setSearchFilter([])
-                        }}>
-                            <FontAwesomeIcon icon={faXmark}/>
-                        </div>
+                        </Slider>
                     </div>
+                </section>
+                <section>
+                <div className="shop-by-section m-0 p-0 text-center">
+                    <h1>SHOP BY SECTION</h1>
+                        <div className="sections-container flex justify-center flex-wrap gap-[60px] p-[20px]">
+                            {sections.map((section, index) => (
+                            <div className="div-section w-[250px] h-[250px] top-0 relative overflow-hidden rounded-lg" key={index}>
+                                <img src={section.imgSrc} alt={section.alt} />
+                                <div className="section-text absolute top-2/4 left-2/4">{section.title}</div>
+                            </div>
+                            ))}
+                        </div>
                 </div>
-            } */}
-        </div>
+                </section>
+                <section>
+                    <div className="gender-button flex gap-[100px] justify-center items-center h-[80px]">
+                        <button className="men-button items-center h-[60px] w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Male')}>Men</button>
+                        <button className="women-button items-center h-[60px] w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Female')}>Women</button>
+                    </div>  
+                </section>
+                <section id="ProductSection">
+                    <div className="landing-dashboard flex flex-start justify-end">
+                        <section className="w-[15%]">
+                            <div className={`sticky-div ${isSticky ? 'fixed top-16 w-[15%]' : 'relative'}  filter-column rounded-bl-[8px] pl-[20px] h-[90vh] overflow-y-auto`} id="stickyDiv">
+                                {
+                                filterMet.map((item,index) => {
+                                    return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
+                                            <div key={item.title} >
+                                                <p onClick={() => setIsCollapsed(!isCollapsed)} className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex"}><strong>{item.title}</strong></p>
+                                                <div className="collections p-[10px] max-h-[400px] overflow-y-auto">
+                                                    <ul className="list-none p-0 m-0" style={{ marginTop: '0' }}>
+                                                        {
+                                                            !isCollapsed && item.list.map((list,index) => {
+                                                                return   <li key={index} className="filter-options mt-[5px] max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
+                                                                            <label className="flex items-center mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
+                                                                            <span className="ml-auto">{'(' + fetchCount(item.title, list) + ')'}</span>
+                                                                        </li>
+                                                            })
+                                                        }
+                                                    </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                })
+                                }
+                            </div>
+                        </section>
+                        <section className="w-[85%]">
+                            <div className="grid-container w-full grid gap-[.250rem] h-[200vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
+                                {
+                                    filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
+                                        return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod._id)}>
+                                                    <div className="product-image-div mb-3 w-full pt-2.5">
+                                                        <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                                    </div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1px' }}>
+                                                        <div className="pl-[10px]" style={{ alignItems: 'center' }}>
+                                                            <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
+                                                            <p className="product-description m-2">{prod.description}</p>
+                                                            <p className="product-price">{'Rs.' + prod.price}</p>
+                                                            {/* <p>( {
+                                                                prod.colors.map((list, index) => {
+                                                                    if (index == prod.colors.length - 1) {
+                                                                        return list
+                                                                    }
+                                                                    else {
+                                                                        return list + ' , '
+                                                                    }
+                                                                })
+                                                            } )</p> */}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    })
+                                        :
+                                        <div>
+                                            <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
+                                        </div>
+                                }
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+            <div id="FooterSection">
+                <Footer></Footer>
+            </div>
         </div>
     );
 }
