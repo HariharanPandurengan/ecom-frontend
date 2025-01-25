@@ -41,6 +41,7 @@ interface Product {
   }
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<Product[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
@@ -237,6 +238,8 @@ const Home: React.FC = () => {
 
 
     const sendingProdData = (productID : any) => {
+        localStorage.setItem('current_product',productID)
+        console.log(productID)
         navigate('/ProductCard')
     }
   
@@ -261,7 +264,7 @@ const Home: React.FC = () => {
     }); 
 
     useEffect(() => {
-        const filteredOne = [];
+        let filteredOne = [];
         let AllFalse = true;
         let material = false;
         let price = false;
@@ -317,12 +320,12 @@ const Home: React.FC = () => {
         let arr = []
 
         if(sex){
-            arr = products.filter(list => list.sex == sexType)
+            arr = products.filter(list => list.sex.toLowerCase().trim() == sexType.toLowerCase().trim())
+            filteredOne = arr
         }
         else{
             arr = products
         }
-
         if (AllFalse === true) {
             setFilteredProducts(products)
         }
@@ -330,20 +333,19 @@ const Home: React.FC = () => {
             for (let key in currentFilters) {
                 for (let key2 in currentFilters[key]) {
                     if (currentFilters[key][key2] === true) {
-                        if(key === 'sex'){
-                            for (let i = 0; i < arr.length; i++) {
-                                if (arr[i]['sex'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
-                                    filteredOne.push(arr[i])
-                                }
-                            }
-                        }
-                        else if (key === 'material') {
+                        // if(key === 'sex'){
+                        //     for (let i = 0; i < arr.length; i++) {
+                        //         if (arr[i]['sex'].toLocaleLowerCase() === key2.toLocaleLowerCase()) {
+                        //             filteredOne.push(arr[i])
+                        //         }
+                        //     }
+                        // }
+                        if (key === 'material') {
                             if(sex){
                                 for (let i = 0; i < filteredOne.length; i++) {
-                                    console.log(filteredOne[i]['material'],key2)
-                                    if (filteredOne[i]['material'].toLocaleLowerCase() !== key2.toLocaleLowerCase()) {
-                                        console.log('condi')
+                                    if (filteredOne[i]['material'].toLocaleLowerCase().trim() !== key2.toLocaleLowerCase().trim()) {
                                         filteredOne.slice(i, 1);
+                                        filteredOne = filteredOne.filter((_, ii) => ii !== i);
                                     }
                                 }
                             }
@@ -560,7 +562,6 @@ const Home: React.FC = () => {
         }
     }, [currentFilters])
 
-    const navigate = useNavigate();
     return (
         <div>
             <div>
@@ -589,17 +590,17 @@ const Home: React.FC = () => {
                     </div>
                 </section>
                 <section>
-                <div className="shop-by-section m-0 p-0 text-center">
-                    <h1>SHOP BY SECTION</h1>
-                        <div className="sections-container flex justify-center flex-wrap gap-[60px] p-[20px]">
-                            {sections.map((section, index) => (
-                            <div className="div-section w-[250px] h-[250px] top-0 relative overflow-hidden rounded-lg" key={index}>
-                                <img src={section.imgSrc} alt={section.alt} />
-                                <div className="section-text absolute top-2/4 left-2/4">{section.title}</div>
+                    <div className="shop-by-section m-0 p-0 text-center">
+                        <h1>SHOP BY SECTION</h1>
+                            <div className="sections-container flex justify-center flex-wrap gap-[60px] p-[20px]">
+                                {sections.map((section, index) => (
+                                <div className="div-section w-[250px] h-[250px] top-0 relative overflow-hidden rounded-lg" key={index}>
+                                    <img src={section.imgSrc} alt={section.alt} />
+                                    <div className="section-text absolute top-2/4 left-2/4">{section.title}</div>
+                                </div>
+                                ))}
                             </div>
-                            ))}
-                        </div>
-                </div>
+                    </div>
                 </section>
                 <section>
                     <div className="gender-button flex gap-[100px] justify-center items-center h-[80px]">

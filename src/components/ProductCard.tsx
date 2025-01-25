@@ -54,19 +54,22 @@ const ProductCard = () => {
     setSelectedImage(e.target.value);
   }
 
-  const useEffect = () => {
-      const fetchProduct = () => {
-        axios.get(`${import.meta.env.VITE_REACT_API_URL}getProduct`)
-            .then(res => {
-                if (res.data.status === true) {
-                    setProduct(res.data.products);
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            })
+  useEffect(() => {
+    const fetchProduct = () => {
+      axios.post(`${import.meta.env.VITE_REACT_API_URL}getProduct`,{product_id:localStorage.getItem('current_product')})
+      .then(res => {
+          if (res.data.status === true) {
+              setProduct(res.data.product[0]);
+          }
+      })
+      .catch(err => {
+          console.log(err)
+      })
     }
-  }
+    fetchProduct()
+  }, [])
+
+  console.log(product)
 
   return (
     <div>
