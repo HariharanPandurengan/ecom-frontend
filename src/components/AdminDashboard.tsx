@@ -52,7 +52,12 @@ interface Product {
 
 const AdminDashboard: React.FC = () => {
     const [product, setProduct] = useState<Product>(initialProductState);
+    const [editProdID,setEditProdID] = useState('')
+    const [delProdID,setDelProdID] = useState('')
+    const [delProdName,setDelProdName] = useState('')
     const [products, setProducts] = useState([]);
+    const [editP,setEditP] = useState(false)
+    const [deleteP,setDeleteP] = useState(false)
     const sizes = ['select','S', 'M', 'L', 'XL'];
     const fields = [
         { name: 'name', label: 'Product Name', type: 'text' },
@@ -136,6 +141,12 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
+    function editProd(e_id){
+        setProduct(initialProductState)
+        const prod = products.filter(list=>list._id == e_id)
+        setProduct(prod[0])
+    }
+
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>,color:any) => {
         if (e.target.files) {
             const file = e.target.files[0];
@@ -202,28 +213,43 @@ const AdminDashboard: React.FC = () => {
         }))
     }
 
-    const addProduct = async (e: FormEvent<HTMLFormElement>) => {
+    const addProduct = async (e: FormEvent<HTMLFormElement>,type:string) => {
         e.preventDefault();
         let emptyField = '';
         Object.keys(product).map(val => {
         const key = val as keyof Product;
         if (Array.isArray(product[key])) {
             if (product[key] == null || (product[key] as string[]).length === 0) {
-            emptyField = val;
+                emptyField = val;
             }
         } else {
             if (product[key] === '' || product[key] == null) {
-            emptyField = val;
+                emptyField = val;
             }
         }
         });
-        if (emptyField === '') {
-            await axios.post(`${import.meta.env.VITE_REACT_API_URL}addProduct`,{product:product})
+        let ff = true;
+        if (emptyField === '' && ff) {
+            let link = '';
+            if(type == 'add'){
+                link = `${import.meta.env.VITE_REACT_API_URL}addProduct` 
+            }
+            else if(type == 'edit'){
+                link = `${import.meta.env.VITE_REACT_API_URL}editProduct`
+            }
+            await axios.post(link,{product:product,id:editProdID})
             .then(res=>{
                 if(res.data.status === true){
                     setProduct(initialProductState);
+                    ff = false
                     fetchProducts()
-                    alert('Product Added')
+                    if(type == 'add'){
+                        alert('Product Added') 
+                    }
+                    else if(type == 'edit'){
+                        setEditP(false)
+                        alert('Product Updated')
+                    }
                 }
                 else{
                     alert('Network issuse.product not added')
@@ -234,9 +260,27 @@ const AdminDashboard: React.FC = () => {
             })
         } 
         else {
-        alert(`${emptyField} field is empty`);
+            alert(`${emptyField} field is empty`);
         }
     };
+
+    async function deleteProd(e){
+        e.preventDefault();
+        await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteProduct`,{product:product,id:delProdID})
+        .then(res=>{
+            if(res.data.status === true){
+                fetchProducts()
+                setDeleteP(false)
+            }
+            else{
+                alert('Network issuse.product not added')
+            }
+            fetchProducts()
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
 
   return (
     <div>
@@ -245,7 +289,7 @@ const AdminDashboard: React.FC = () => {
             <div className="dashboard-sections">
                 <section className="section add-product">
                     <h2 className="font-bold">Add Product</h2>
-                    <form onSubmit={addProduct}>
+                    <form onSubmit={(e)=>addProduct(e,'add')}>
                         {fields.map((field) => (
                             <div key={field.name} className="form-group">
                                 <label className="underline" htmlFor={field.name}>{field.label}</label>
@@ -330,7 +374,7 @@ const AdminDashboard: React.FC = () => {
                     <div>
                         {
                             products.length !== 0 ? products.map((prod,index) => {
-                                                        return  <div key={prod} style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
+                                                        return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
                                                                     <div style={{width:'30%',overflow:"hidden"}}>
                                                                         <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
                                                                     </div>
@@ -342,7 +386,10 @@ const AdminDashboard: React.FC = () => {
                                                                             <p>{prod.material} |</p>
                                                                         </div>
                                                                     </div>
-                                                                    
+                                                                    <div className="absolute top-1 right-1 w-[10%] h-[20%] flex items-center justify-between">
+                                                                        <button className="w-[45%] h-[100%] b-e" onClick={()=>{setEditP(true);setEditProdID(prod._id);editProd(prod._id)}}>Edit</button>
+                                                                        <button className="w-[45%] h-[100%] bg-red-500 b-d" onClick={()=>{setDeleteP(true);setDelProdID(prod._id);setDelProdName(prod.name)}}>Delete</button>
+                                                                    </div>
                                                                 </div>
                                                     })
                                                 :
@@ -352,15 +399,120 @@ const AdminDashboard: React.FC = () => {
                         }
                     </div>
                 </section>
-                <section className="section add-trending-product">
+                {/* <section className="section add-trending-product">
                     <h2>Add Trending Product</h2>
-                </section>
+                </section> */}
                 {/* <section className="section customer-list">
                     <h2>Customer List</h2>
                 </section> */}
             </div>
         </div>
         <Footer></Footer>
+        {
+            editP &&    <div className="fixed top-0 bottom-0 w-full bgTrans flex justify-center">
+                            <div className="w-[80%] h-[500px] overflow-y-auto mt-5 bg-white relative rounded p-2">
+                                <h2 className="font-bold underline">Edit Product:</h2>
+                                <form onSubmit={(e)=>addProduct(e,'edit')}>
+                                    {fields.map((field) => (
+                                        <div key={field.name} className="form-group">
+                                            <label className="underline" htmlFor={field.name}>{field.label}</label>
+                                            {field.type === 'textarea' ? (
+                                            <textarea className="border" id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
+                                            ) : field.type === 'file' ? (
+                                            <input required type={field.type} id={field.name} name={field.name} onChange={handleFileChange} />
+                                            ) : field.type === 'select' ? (
+                                            <div key={field.name}>
+                                                <select className="border mb-2" required id={field.name} name={field.name} multiple={field.multiple} value={product[field.name as keyof Product] as string[]} onChange={field.multiple ? handleMultiSelectChange : handleChange}>
+                                                {field.options && field.options.map(option => (
+                                                    <option key={option} value={option}>{option}</option>
+                                                ))}
+                                                </select>
+                                                {field.multiple &&
+                                                    <div key={field.name} style={{ display: 'flex', alignItems: 'center', overflowX: 'auto', border: '1px solid gray', padding: '10px' }}>
+                                                    {product[field.name].map((selectOpt: string) => (
+                                                        <div style={{ marginLeft: '5px', paddingLeft: '10px', paddingRight: '15px', border: '1px solid black', position: 'relative' }} key={selectOpt}>
+                                                            <p style={{ marginBottom: '5px' }}>{selectOpt}</p>
+                                                            <small onClick={() => handleMultiSelectRemove(field.name as keyof Product, selectOpt)} className="py-0 px-1.5 pb-0.5 " style={{ position: 'absolute', top: '-30%', right: '-10%', borderRadius: '50%', color: 'white', background: 'red', cursor: 'pointer' }}>x</small>
+                                                        </div>
+                                                    ))}
+                                                    </div>
+                                                }
+                                            </div>
+                                            ) : (
+                                            <input type={field.type} id={field.name} name={field.name} value={product[field.name as keyof Product] as string} onChange={handleChange} />
+                                            )}
+                                        </div>
+                                    ))}
+                                    {
+                                        product.colors.length !== 0 && 
+                                                                    <div>
+                                                                        <h3 style={{marginBottom:'0px'}}>Select colors and quantity for sizes availabe</h3>
+                                                                        {
+                                                                            product.colors.map(item => {
+                                                                                return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
+                                                                                            <div className="mb-3" style={{display:'flex',alignItems:'center'}}>
+                                                                                                <p style={{marginRight:'10px'}} className="underline">{item}</p>
+                                                                                                <select className="border" onChange={(e) => sizeSelect(e,item)}>
+                                                                                                    {
+                                                                                                        sizes.map(size => {
+                                                                                                            return  <option key={size}>{size}</option>
+                                                                                                        })
+                                                                                                    }
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                {
+                                                                                                    product.sizes[item] && Object.keys(product.sizes[item]).map(size => {
+                                                                                                        return  <div key={size} className="mb-3" style={{display:'flex',alignItems:'center'}}>
+                                                                                                                    <p style={{marginRight:'10px'}}>{size}</p>
+                                                                                                                    <input required type="text" placeholder="Enter Quantity" className="border" value={product.sizes[item][size]} onChange={(e) => changeQuantityOfColorOfSize(e,item,size)}/>
+                                                                                                                </div>
+                                                                                                    })
+                                                                                                }
+                                                                                            </div>
+                                                                                        </div>
+                                                                            })
+                                                                        }
+                                                                    </div>
+                                    }
+                                    {
+                                        product.colors.length !== 0 && 
+                                        <div>
+                                            <h3 style={{marginBottom:'0px'}}>Select images for colors you selected</h3>
+                                            {
+                                                product.colors.map(item => {
+                                                    return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
+                                                                <p style={{marginRight:'10px'}}>{item}</p>
+                                                                <div className="flex items-center">
+                                                                    <input type="file" onChange={(e) => handleFileChange(e,item)}/>
+                                                                    <div className="h-[200px] flex items-center">
+                                                                        <p>Current Image :</p>
+                                                                        <img className="w-[50%] h-full ms-2" src={product.images[item]}/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                })
+                                            }
+                                        </div>
+                                    }
+                                    <button type="submit" className="font-bold">Save</button>
+                                </form>
+                                <button className="absolute top-2 right-2 bg-red-500 w-[27px] hover:bg-red-700 p-0 pb-1 rounded-full" onClick={()=>setEditP(false)}>x</button>
+                            </div>
+                        </div>
+        }
+        {
+            deleteP &&      <div className="fixed top-0 bottom-0 w-full bgTrans flex justify-center items-center">
+                                <div className="text-center w-[80%] h-[120px] overflow-y-auto mt-5 bg-white relative rounded p-2">
+                                    <h2 className="font-bold">Warning</h2>
+                                    <p>This will delete product : '{delProdName}'</p>
+                                    <div className="w-[50%] m-auto flex items-center justify-between mt-3">
+                                        <button className="w-[45%] h-[30px] b-e" onClick={()=>{setDeleteP(false)}}>Cancel</button>
+                                        <button className="w-[45%] h-[30px] bg-red-500 b-d" onClick={(e)=>{deleteProd(e);}}>Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+        }
     </div>
   );
 }

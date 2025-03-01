@@ -552,6 +552,21 @@ button:hover {
   background-color: #0056b3;
 }
 
+.b-e,.b-d{
+  padding: 0;
+  font-size:small;
+  font-weight: 600;
+}
+
+.b-d:hover{
+  background-color: rgb(179, 1, 1);
+}
+
+.bgTrans{
+  background-color: #000000da;
+  z-index: 999;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -581,6 +596,11 @@ button:hover {
   border-radius: 0 0 0 8px;
   position: sticky;
   padding: 20px;
+}
+
+.add-product{
+  padding-right: 5px;
+  border-right: 1px solid black;
 }
 
 .section h2 {
