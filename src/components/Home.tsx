@@ -564,118 +564,106 @@ const Home: React.FC = () => {
 
     return (
         <div>
-            <div>
-                <Header></Header>
-            </div>
-            <div className="h-clothingpage mt-[60px] max-w-fit items-center ">
-                <section>
-                    <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
-                        <Slider {...settings}>
-                            {
-                                products.length !== 0 ? products.map((trendprod,index) => {
-                                    if (trendprod.trendingProd) {
-                                        return <div key={index} className=".carousel-slides flex">
-                                                    <div className="carousel-slide min-w-full text-center">
-                                                        <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
-                                                    </div>
-                                                </div>
-                                    }
-                                })
-                                    :
-                                    <div>
-                                        <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
-                                    </div>
-                            }
-                        </Slider>
-                    </div>
-                </section>
-                <section>
-                    <div className="shop-by-section m-0 p-0 text-center">
-                        <h1>SHOP BY SECTION</h1>
-                            <div className="sections-container flex justify-center flex-wrap gap-[60px] p-[20px]">
-                                {sections.map((section, index) => (
-                                <div className="div-section w-[250px] h-[250px] top-0 relative overflow-hidden rounded-lg" key={index}>
-                                    <img src={section.imgSrc} alt={section.alt} />
-                                    <div className="section-text absolute top-2/4 left-2/4">{section.title}</div>
-                                </div>
-                                ))}
-                            </div>
-                    </div>
-                </section>
-                <section>
-                    <div className="gender-button flex gap-[100px] justify-center items-center h-[80px]">
-                        <button className="men-button items-center h-[60px] w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Male')}>Men</button>
-                        <button className="women-button items-center h-[60px] w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Female')}>Women</button>
-                    </div>  
-                </section>
-                <section id="ProductSection">
-                    <div className="landing-dashboard flex flex-start justify-end">
-                        <section className="w-[15%]">
-                            <div className={`sticky-div ${isSticky ? 'fixed top-16 w-[15%]' : 'relative'}  filter-column rounded-bl-[8px] pl-[20px] h-[90vh] overflow-y-auto`} id="stickyDiv">
-                                {
-                                filterMet.map((item,index) => {
-                                    return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
-                                            <div key={item.title} >
-                                                <p onClick={() => setIsCollapsed(!isCollapsed)} className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex"}><strong>{item.title}</strong></p>
-                                                <div className="collections p-[10px] max-h-[400px] overflow-y-auto">
-                                                    <ul className="list-none p-0 m-0" style={{ marginTop: '0' }}>
-                                                        {
-                                                            !isCollapsed && item.list.map((list,index) => {
-                                                                return   <li key={index} className="filter-options mt-[5px] max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}`, paddingLeft: `${currentFilters[item.title]?.[list] ? '5px' : ''}` }}>
-                                                                            <label className="flex items-center mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
-                                                                            <span className="ml-auto">{'(' + fetchCount(item.title, list) + ')'}</span>
-                                                                        </li>
-                                                            })
-                                                        }
-                                                    </ul>
+    <div>
+        <Header></Header>
+    </div>
+    <div className="h-clothingpage mt-[60px] max-w-fit items-center ">
+        <section>
+            <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
+                <Slider {...settings}>
+                    {
+                        products.length !== 0 ? products.map((trendprod,index) => {
+                            if (trendprod.trendingProd) {
+                                return <div key={index} className="carousel-slides flex">
+                                            <div className="carousel-slide min-w-full text-center">
+                                                <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
                                             </div>
                                         </div>
-                                    </div>
-                                })
-                                }
+                            }
+                        })
+                            :
+                            <div>
+                                <p className="text-center">--- No products to show ---</p>
                             </div>
-                        </section>
-                        <section className="w-[85%]">
-                            <div className="grid-container w-full grid gap-[.250rem] h-[200vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
-                                {
-                                    filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
-                                        return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod._id)}>
-                                                    <div className="product-image-div mb-3 w-full pt-2.5">
-                                                        <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
-                                                    </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '1px' }}>
-                                                        <div className="pl-[10px]" style={{ alignItems: 'center' }}>
-                                                            <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
-                                                            <p className="product-description m-2">{prod.description}</p>
-                                                            <p className="product-price">{'Rs.' + prod.price}</p>
-                                                            {/* <p>( {
-                                                                prod.colors.map((list, index) => {
-                                                                    if (index == prod.colors.length - 1) {
-                                                                        return list
-                                                                    }
-                                                                    else {
-                                                                        return list + ' , '
-                                                                    }
-                                                                })
-                                                            } )</p> */}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                    })
-                                        :
-                                        <div>
-                                            <p style={{ textAlign: 'center' }}>--- No products to show ---</p>
+                    }
+                </Slider>
+            </div>
+        </section>
+        <section>
+            <div className="shop-by-section m-0 p-0 text-center">
+                <h1 className="text-lg md:text-xl lg:text-2xl">SHOP BY SECTION</h1>
+                    <div className="sections-container flex justify-center flex-wrap gap-[30px] md:gap-[60px] p-[10px] md:p-[20px]">
+                        {sections.map((section, index) => (
+                        <div className="div-section w-[150px] h-[150px] md:w-[250px] md:h-[250px] relative overflow-hidden rounded-lg" key={index}>
+                            <img src={section.imgSrc} alt={section.alt} />
+                            <div className="section-text absolute top-2/4 left-2/4 text-sm md:text-base lg:text-lg">{section.title}</div>
+                        </div>
+                        ))}
+                    </div>
+            </div>
+        </section>
+        <section>
+            <div className="gender-button flex gap-[50px] md:gap-[100px] justify-center items-center h-[60px] md:h-[80px]">
+                <button className="men-button items-center h-[50px] w-[150px] md:h-[60px] md:w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Male')}>Men</button>
+                <button className="women-button items-center h-[50px] w-[150px] md:h-[60px] md:w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Female')}>Women</button>
+            </div>  
+        </section>
+        <section id="product">
+            <div className="landing-dashboard flex flex-wrap md:flex-nowrap justify-end">
+                <section className="w-full md:w-[15%]">
+                    <div className={`sticky-div ${isSticky ? 'fixed top-16 w-full md:w-[15%]' : 'relative'}  filter-column rounded-bl-[8px] pl-[10px] md:pl-[20px] h-[70vh] md:h-[90vh] overflow-y-auto`} id="stickyDiv">
+                        {
+                        filterMet.map((item,index) => {
+                            return <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
+                                    <div key={item.title}>
+                                        <p className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex text-sm md:text-base"}><strong>{item.title}</strong></p>
+                                        <div className="collections p-[5px] md:p-[10px] max-h-[300px] md:max-h-[400px] overflow-y-auto">
+                                            <ul className="list-none p-0 m-0">
+                                                {
+                                                    !isCollapsed && item.list.map((list,index) => {
+                                                        return <li key={index} className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}` }}>
+                                                                    <label className="flex items-center mb-[3px] md:mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
+                                                                    <span className="ml-auto text-xs md:text-sm">{'(' + fetchCount(item.title, list) + ')'}</span>
+                                                                </li>
+                                                    })
+                                                }
+                                            </ul>
                                         </div>
-                                }
-                            </div>
-                        </section>
+                                    </div>
+                                </div>
+                        })
+                        }
+                    </div>
+                </section>
+                <section className="w-full md:w-[85%]">
+                    <div className="grid-container w-full grid gap-[.250rem] h-[120vh] md:h-[200vh] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
+                        {
+                            filteredProducts.length !== 0 ? filteredProducts.map((prod, index) => {
+                                return <div key={prod} className="product-card" onClick={()=>sendingProdData(prod._id)}>
+                                            <div className="product-image-div mb-3 w-full pt-2.5">
+                                                <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                            </div>
+                                            <div className="pl-[10px]">
+                                                <h3 className="product-name text-sm md:text-base font-bold m-2">{prod.name}</h3>
+                                                <p className="product-description m-2 text-xs md:text-sm">{prod.description}</p>
+                                                <p className="product-price">{'₹' + prod.price}</p>
+                                            </div>
+                                        </div>
+                            })
+                                :
+                                <div>
+                                    <p className="text-center">--- No products to show ---</p>
+                                </div>
+                        }
                     </div>
                 </section>
             </div>
-            <div id="FooterSection">
-                <Footer></Footer>
-            </div>
-        </div>
+        </section>
+    </div>
+    <div id="footer">
+        <Footer></Footer>
+    </div>
+</div>
     );
 }
 

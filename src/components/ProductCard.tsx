@@ -73,99 +73,143 @@ const ProductCard = () => {
 
   return (
     <div>
-        <Header/>
-        <div className="flex mt-[60px]" style={{fontFamily:'Montserrat-Thin'}}>
-      <div className="flex-none h-[100vh] w-[40rem] relative">
-        <img
-          src={image}
-          alt="Classic Utility Jacket"
-          className="absolute inset-0 w-full object-cover p-5"
-        ></img>
+  <Header />
+  <div
+    className="flex flex-col sm:flex-row mt-[60px] p-4 sm:p-6"
+    style={{ fontFamily: "Montserrat-Thin" }}
+  >
+    {/* Image Section */}
+    <div className="flex-none h-[60vh] sm:h-[100vh] w-full sm:w-[40rem] relative">
+      <img
+        src={`${Object.values(product.images)[0]}`}
+        alt="Classic Utility Jacket"
+        className="absolute inset-0 w-full h-full object-cover p-5"
+      />
+    </div>
+
+    {/* Product Details Form */}
+    <form className="flex-auto p-6">
+      <div className="flex flex-wrap">
+        <h1
+          className="flex-auto text-2xl sm:text-3xl font-semibold text-slate-900"
+          style={{ fontFamily: "Avenir" }}
+        >
+          {product.name}
+        </h1>
       </div>
-      <form className="flex-auto p-6">
-        <div className="flex flex-wrap">
-          <h1 className="flex-auto text-2xl font-semibold text-slate-900 text-2xl" style={{fontFamily:'Avenir'}}>
-            Classic Utility Jacket
-          </h1>
-        </div>
-        <div className="w-full flex-none text-sm font-medium text-slate-700 mt-2">
-            Sizes Available : 
-          </div>
-        <div className="flex items-baseline mt-4 pb-6 border-slate-200">
-          <div className="space-x-2 flex text-sm">
-            {["xs", "s", "m", "l", "xl"].map((size) => (
-              <label key={size}>
-                <input
-                  className="sr-only peer"
-                  name="size"
-                  type="radio"
-                  value={size}
-                  checked={selectedSize === size}
-                  onChange={handleSizeChange}
-                />
-                <div
-                  className={`w-9 h-9 text-['Montserrat'] border rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white`}
-                >
-                  {size.toUpperCase()}
-                </div>
-              </label>
-            ))}
-          </div>
-        </div>
-        <div className="w-full flex-none text-sm font-medium text-slate-700 mt-0">
-            Colors Available : 
-          </div>
-        <div className="flex items-baseline mt-4 pb-6">
-          <div className="space-x-2 flex text-sm">
-            {["green", "red", "blue"].map((size) => (
-              <label key={size}>
-                <div
-                  className={`w-9 h-9 rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white ${
-                    size === "green"
-                      ? "bg-green-500"
-                      : size === "red"
-                      ? "bg-red-500"
-                      : "bg-blue-500"
-                  }`}
-                >
-                </div>
-              </label>
-            ))}
-          </div>
-        </div>
-        <div className="flex space-x-4 mb-6 pb-4 text-sm font-medium">
-          <div className="flex-auto flex space-x-4">
-            <button
-              className="h-10 w-40 px-6 font-semibold rounded-md bg-[#C8A165] text-white"
-              type="submit"
-            >
-              Enquiry
-            </button>
-            <button
-              className="h-10 w-40 px-6 font-semibold rounded-md bg-[#000] text-stone-50 border border-slate-200 text-slate-900"
-              type="button"
-            >
-              Bulk Buy
-            </button>
-          </div>
-        </div>
-        <div className="mt-6 border-t border-slate-200 pt-4">
-          <h2 className="text-2xl font-semibold text-slate-900" style={{fontFamily:'Montserrat-Thin'}}>Product Details</h2>
-          <ul className="mt-4 space-y-2 text-base text-slate-700">
-            <li><strong style={{fontFamily:'Montserrat'}}>Material:</strong> 100% Cotton</li>
-            <li><strong style={{fontFamily:'Montserrat'}}>Fit:</strong> Regular Fit</li>
-            <li><strong style={{fontFamily:'Montserrat'}}>Sleeve:</strong> Long Sleeve</li>
-            <li><strong style={{fontFamily:'Montserrat'}}>Color:</strong> Olive Green</li>
-            <li><strong style={{fontFamily:'Montserrat'}}>Description :</strong> Edgy graffiti art meets casual comfort in this urban favorite.</li>
-          </ul>
-        </div>
-        <div className="text-4xl mt-7 font-semibold text-slate-500 text-red-600">
-            <i>$110.00</i>
-        </div>
-      </form>
-    </div>
-    <Footer></Footer>
-    </div>
+
+      {/* Sizes */}
+      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-2">
+        Sizes Available:
+      </div>
+      <div className="flex flex-wrap gap-2 mt-4 pb-6">
+        {["xs", "s", "m", "l", "xl"].map((size) => (
+          <label key={size}>
+            <input
+              className="sr-only peer"
+              name="size"
+              type="radio"
+              value={size}
+              checked={selectedSize === size}
+              onChange={handleSizeChange}
+            />
+            <div className="w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
+              {size.toUpperCase()}
+            </div>
+          </label>
+        ))}
+      </div>
+
+      {/* Colors */}
+      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-0">
+        Colors Available:
+      </div>
+      <div className="flex flex-wrap gap-2 mt-4 pb-6">
+        {product.colors.map((color) => (
+          <label key={color}>
+            <div
+              className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                color === "Green"
+                  ? "bg-green-500"
+                  : color === "Red"
+                  ? "bg-red-500"
+                  : color === "Pink"
+                  ? "bg-pink-500"
+                  : color === "Blue"
+                  ? "bg-blue-500"
+                  : color === "White"
+                  ? "bg-gray-100"
+                  : color === "Yellow"
+                  ? "bg-yellow-500"
+                  : color === "Orange"
+                  ? "bg-orange-500"
+                  : color === "Purple"
+                  ? "bg-purple-500"
+                  : color === "Brown"
+                  ? "bg-amber-700"
+                  : color === "Grey"
+                  ? "bg-gray-500"
+                  : color === "Navy"
+                  ? "bg-blue-900"
+                  : color === "Teal"
+                  ? "bg-teal-500"
+                  : color === "Maroon"
+                  ? "bg-red-900"
+                  : "bg-black"
+              }`}
+            ></div>
+          </label>
+        ))}
+      </div>
+
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 pb-4 text-sm font-medium">
+        <button
+          className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#C8A165] text-white"
+          type="submit"
+        >
+          Enquiry
+        </button>
+        <button
+          className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#000] text-stone-50 border border-slate-200 text-slate-900"
+          type="button"
+        >
+          Bulk Buy
+        </button>
+      </div>
+
+      {/* Product Details */}
+      <div className="mt-6 border-t border-slate-200 pt-4">
+        <h2 className="text-2xl font-semibold text-slate-900" style={{fontFamily:'Montserrat-Thin'}}>
+          Product Details
+        </h2>
+        <ul className="mt-4 space-y-2 text-base text-slate-700">
+          <li>
+            <strong style={{fontFamily:'Montserrat'}}>Material:</strong> {product.material}
+          </li>
+          <li>
+            <strong style={{fontFamily:'Montserrat'}}>Fit:</strong> {product.fits}
+          </li>
+          <li>
+            <strong style={{fontFamily:'Montserrat'}}>Sleeve:</strong> {product.sleeves}
+          </li>
+          <li>
+            <strong style={{fontFamily:'Montserrat'}}>Color:</strong> {product.colors}
+          </li>
+          <li>
+            <strong style={{fontFamily:'Montserrat'}}>Description:</strong> {product.description}
+          </li>
+        </ul>
+      </div>
+
+      {/* Price */}
+      <div className="text-3xl sm:text-4xl mt-7 font-semibold text-red-600">
+        <i>₹ {product.price}</i>
+      </div>
+    </form>
+  </div>
+  <Footer />
+</div>
   );
 };
 
