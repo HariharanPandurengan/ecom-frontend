@@ -252,7 +252,7 @@ const AdminDashboard: React.FC = () => {
                     }
                 }
                 else{
-                    alert('Network issuse.product not added')
+                    alert('Network issuse. product not added')
                 }
             })
             .catch(err=>{
@@ -263,7 +263,20 @@ const AdminDashboard: React.FC = () => {
             alert(`${emptyField} field is empty`);
         }
     };
-
+    const handleChangeTrend = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target;
+        
+        let newValue: any = value;
+        if (type === "radio") {
+            newValue = value === "true"; // Convert string to boolean
+        }
+    
+        setProduct(prev => ({
+            ...prev,
+            [name]: newValue
+        }));
+    };
+    
     async function deleteProd(e){
         e.preventDefault();
         await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteProduct`,{product:product,id:delProdID})
@@ -366,6 +379,14 @@ const AdminDashboard: React.FC = () => {
                                 }
                             </div>
                         }
+                                <div className="form-group">
+            <label className="underline">Is this a trending product?</label>
+            <div>
+                <label>
+                    <input type="radio" name="trendingProd" value="true" checked={product.trendingProd === true} onChange={(e) => handleChangeTrend(e)} /> Yes
+                </label>
+            </div>
+        </div>
                         <button type="submit">Add Product</button>
                     </form>
                 </section>
