@@ -128,10 +128,10 @@ const Home: React.FC = () => {
     ]
     const [isCollapsed, setIsCollapsed] = useState(false);
     const sections = [
-        { title: "Trendings", imgSrc: "src/assets/Pictures/blue shirt.jpg", alt: "Trendings" },
-        { title: "Shirts", imgSrc: "src/assets/Pictures/pink shirt.jpg", alt: "Shirts" },
-        { title: "T-Shirts", imgSrc: "src/assets/Pictures/yellow shirt.jpg", alt: "T-Shirts" },
-        { title: "Pants", imgSrc: "src/assets/Pictures/purple shirt.jpg", alt: "Pants" },
+        { title: "Trendings", imgSrc: "assets/Pictures/blue shirt.jpg", alt: "Trendings" },
+        { title: "Shirts", imgSrc: "assets/Pictures/pink shirt.jpg", alt: "Shirts" },
+        { title: "T-Shirts", imgSrc: "assets/Pictures/yellow shirt.jpg", alt: "T-Shirts" },
+        { title: "Pants", imgSrc: "assets/Pictures/purple shirt.jpg", alt: "Pants" },
       ];
     const settings = {
         infinite: true,
