@@ -131,11 +131,11 @@ const Header: React.FC = () => {
         <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
             <div className="menu-container w-full relative flex items-center justify-start">
                 <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
-                    <img src='src\assets\Icons - SVG\hamburger.png'></img>
+                    <img src='.\assets\Icons - SVG\hamburger.png'></img>
                 </div>
                 <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
                     <div className="close-icon" onClick={toggleMenu}>
-                        <img src='src\assets\Icons - SVG\Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
+                        <img src='.\assets\Icons - SVG\Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
                     </div>
                     <ul className="menu-items list-none p-[20px] m-0">
                         <li className='my-[10px] text-base md:text-lg lg:text-xl'>
@@ -154,7 +154,7 @@ const Header: React.FC = () => {
                     </div>
                 </div>
                 <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
-                    <img className='w-[40px] h-[40px]' src='src\assets\Icons - SVG\Searchicon.svg' alt="Search Icon" />
+                    <img className='w-[40px] h-[40px]' src='.\assets\Icons - SVG\Searchicon.svg' alt="Search Icon" />
                 </div>
                 {showSearch && (
                     <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 right-0">
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
             <a href=''>H  C L O T H I N G</a>
         </div>
         <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px]'>
-            <img src='src\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
+            <img src='.\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
         </div>
     </section>
     {searchPopup && (
