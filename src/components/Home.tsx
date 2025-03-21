@@ -11,6 +11,10 @@ import { redirect, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Footer from "./Header,Footer/Footer";
+import TrendingSectionImage from "../assets/Pictures/blueShirt.jpg"
+import ShirtsSectionImage from "../assets/Pictures/pink shirt.jpg"
+import TShirtSectionImage from "../assets/Pictures/yellow shirt.jpg"
+import PantsSectionImage from "../assets/Pictures/purple shirt.jpg"
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -128,10 +132,10 @@ const Home: React.FC = () => {
     ]
     const [isCollapsed, setIsCollapsed] = useState(false);
     const sections = [
-        { title: "Trendings", imgSrc: "assets/Pictures/blue shirt.jpg", alt: "Trendings" },
-        { title: "Shirts", imgSrc: "assets/Pictures/pink shirt.jpg", alt: "Shirts" },
-        { title: "T-Shirts", imgSrc: "assets/Pictures/yellow shirt.jpg", alt: "T-Shirts" },
-        { title: "Pants", imgSrc: "assets/Pictures/purple shirt.jpg", alt: "Pants" },
+        { title: "Trendings", imgSrc: TrendingSectionImage, alt: "Trendings" },
+        { title: "Shirts", imgSrc: ShirtsSectionImage, alt: "Shirts" },
+        { title: "T-Shirts", imgSrc: TShirtSectionImage, alt: "T-Shirts" },
+        { title: "Pants", imgSrc: PantsSectionImage, alt: "Pants" },
       ];
     const settings = {
         infinite: true,

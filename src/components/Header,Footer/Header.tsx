@@ -11,6 +11,8 @@ import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-soli
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
+
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -131,7 +133,7 @@ const Header: React.FC = () => {
         <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
             <div className="menu-container w-full relative flex items-center justify-start">
                 <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
-                    <img src='./assets/Icons - SVG/hamburger.png'></img>
+                    <img src={hahaburgermenu}></img>
                 </div>
                 <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
                     <div className="close-icon" onClick={toggleMenu}>
