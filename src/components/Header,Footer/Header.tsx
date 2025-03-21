@@ -12,6 +12,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
+import searchIcon from "../../assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg"
 
 
 interface SizesOptions { 
@@ -137,7 +138,7 @@ const Header: React.FC = () => {
                 </div>
                 <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
                     <div className="close-icon" onClick={toggleMenu}>
-                        <img src='./assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
+                        <img src={searchIcon} alt="Close Icon" />
                     </div>
                     <ul className="menu-items list-none p-[20px] m-0">
                         <li className='my-[10px] text-base md:text-lg lg:text-xl'>
