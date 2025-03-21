@@ -14,6 +14,7 @@ import axios from "axios";
 import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
 import closeIcon from "../../assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg"
 import searchIcon from "../../assets/Icons - SVG/Searchicon.svg"
+import usericon from "../../assets/Icons - SVG/Usericon.svg"
 
 
 interface SizesOptions { 
@@ -177,7 +178,7 @@ const Header: React.FC = () => {
             <a href=''>H  C L O T H I N G</a>
         </div>
         <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px]'>
-            <img src='.\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
+            <img src={usericon} alt="User Icon" />
         </div>
     </section>
     {searchPopup && (
