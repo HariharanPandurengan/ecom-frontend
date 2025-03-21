@@ -660,6 +660,7 @@ const Home: React.FC = () => {
             </div>
         </section>
     </div>
+    <Footer></Footer>
 </div>
 
     );
