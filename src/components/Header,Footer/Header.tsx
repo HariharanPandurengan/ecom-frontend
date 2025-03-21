@@ -162,7 +162,7 @@ const Header: React.FC = () => {
                     <img className='w-[40px] h-[40px]' src={searchIcon} alt="Search Icon" />
                 </div>
                 {showSearch && (
-                    <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 right-0">
+                    <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12">
                         <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
                             onChange={e=>setSearch(e.target.value)} value={search} />
                         <FontAwesomeIcon className='text-black' onClick={(e)=>{
