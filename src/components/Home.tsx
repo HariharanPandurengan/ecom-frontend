@@ -641,7 +641,6 @@ const Home: React.FC = () => {
                                     </div>
                                     <div className="pl-[10px]">
                                         <h3 className="product-name text-sm md:text-base font-bold m-2">{prod.name}</h3>
-                                        <p className="product-description m-2 text-xs md:text-sm">{prod.description}</p>
                                         <p className="product-price">{'₹' + prod.price}</p>
                                     </div>
                                 </div>
