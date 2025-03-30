@@ -11,6 +11,11 @@ import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-soli
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
+import closeIcon from "../../assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg"
+import searchIcon from "../../assets/Icons - SVG/Searchicon.svg"
+import usericon from "../../assets/Icons - SVG/Usericon.svg"
+
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -131,11 +136,11 @@ const Header: React.FC = () => {
         <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
             <div className="menu-container w-full relative flex items-center justify-start">
                 <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
-                    <img src='./assets/Icons - SVG/hamburger.png'></img>
+                    <img src={hahaburgermenu}></img>
                 </div>
                 <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
                     <div className="close-icon" onClick={toggleMenu}>
-                        <img src='./assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg' alt="Close Icon" />
+                        <img src={closeIcon} alt="Close Icon" />
                     </div>
                     <ul className="menu-items list-none p-[20px] m-0">
                         <li className='my-[10px] text-base md:text-lg lg:text-xl'>
@@ -154,10 +159,10 @@ const Header: React.FC = () => {
                     </div>
                 </div>
                 <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
-                    <img className='w-[40px] h-[40px]' src='src\assets\Icons - SVG\Searchicon.svg' alt="Search Icon" />
+                    <img className='w-[40px] h-[40px]' src={searchIcon} alt="Search Icon" />
                 </div>
                 {showSearch && (
-                    <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 right-0">
+                    <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12">
                         <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
                             onChange={e=>setSearch(e.target.value)} value={search} />
                         <FontAwesomeIcon className='text-black' onClick={(e)=>{
@@ -173,7 +178,7 @@ const Header: React.FC = () => {
             <a href=''>H  C L O T H I N G</a>
         </div>
         <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px]'>
-            <img src='.\assets\Icons - SVG\Usericon.svg' alt="User Icon" />
+            <img src={usericon} alt="User Icon" />
         </div>
     </section>
     {searchPopup && (
