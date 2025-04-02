@@ -3,6 +3,7 @@
   src: url('./assets/Fonts/Montserrat/static/Montserrat-Black.ttf') format('truetype');
 }
 
+
 @font-face {
   font-family: 'Montserrat-Italic';
   src: url('./assets/Fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
