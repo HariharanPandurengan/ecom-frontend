@@ -3,6 +3,7 @@ import Header from "./Header,Footer/Header";
 import "../App.css";
 import axios from "axios";
 import Footer from "./Header,Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 const initialProductState = { 
   name: '', 
@@ -43,6 +44,7 @@ trendingProd: boolean;
 }
 
 const ProductCard = () => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState<Product>(initialProductState);
   const [selectedSize, setSelectedSize] = useState("xs");
   const [images, setSelectedImage] = useState("src/assets/Pictures/blue shirt.jpg")
@@ -54,6 +56,11 @@ const ProductCard = () => {
     setSelectedImage(e.target.value);
   }
 
+  const sendingProdData = (productID : any) => {
+    localStorage.setItem('current_product', productID)
+            console.log(productID)
+        navigate('/ProductCard')
+  }
   useEffect(() => {
     const fetchProduct = () => {
       axios.post(`${import.meta.env.VITE_REACT_API_URL}getProduct`,{product_id:localStorage.getItem('current_product')})
@@ -168,13 +175,16 @@ const ProductCard = () => {
           className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#C8A165] text-white"
           type="submit"
         >
-          Enquiry
+          Add to Cart
         </button>
         <button
           className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#000] text-stone-50 border border-slate-200 text-slate-900"
-          type="button"
+          type="button" 
+          onClick={() => {
+            sendingProdData(product._id)
+          }}
         >
-          Bulk Buy
+          Buy Now
         </button>
       </div>
 

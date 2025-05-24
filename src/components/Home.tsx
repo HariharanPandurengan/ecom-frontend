@@ -568,6 +568,80 @@ const Home: React.FC = () => {
 
     return (
 <div className="min-h-screen flex flex-col">
+    <style>
+        {`
+        @media (max-width: 768px) {
+            .landing-dashboard {
+                flex-direction: column !important;
+            }
+            .filter-column {
+                position: static !important;
+                top: unset !important;
+                height: auto !important;
+                max-height: none !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-bottom: 1rem;
+            }
+            .grid-container {
+                grid-template-columns: 1fr 1fr !important;
+                height: auto !important;
+                min-height: 60vh;
+            }
+            .product-card {
+                min-width: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .product-image-div img {
+                height: 180px !important;
+                min-height: 180px !important;
+                max-height: 180px !important;
+            }
+            .sections-container {
+                gap: 16px !important;
+            }
+            .div-section {
+                width: 120px !important;
+                height: 120px !important;
+            }
+            .carousel-container {
+                max-width: 100vw !important;
+                max-height: 220px !important;
+            }
+            .carousel-slide img {
+                max-height: 220px !important;
+                object-fit: cover !important;
+            }
+            .gender-button {
+                gap: 20px !important;
+                height: 50px !important;
+            }
+            .men-button, .women-button {
+                width: 100px !important;
+                height: 40px !important;
+                font-size: 14px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .sections-container {
+                gap: 8px !important;
+            }
+            .div-section {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            .product-image-div img {
+                height: 120px !important;
+                min-height: 120px !important;
+                max-height: 120px !important;
+            }
+            .grid-container {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        `}
+    </style>
     <div>
         <Header />
     </div>
@@ -614,8 +688,18 @@ const Home: React.FC = () => {
         </section>
         <section className="relative">
             <div id="product" className="landing-dashboard flex flex-wrap md:flex-nowrap justify-end overflow-y-hidden">
-                <section className="w-full md:w-[15%]">
-                    <div className={`sticky-div ${isSticky ? 'fixed top-16 w-full md:w-[15%]' : 'relative'} filter-column rounded-bl-[8px] pl-[10px] md:pl-[20px] h-[70vh] md:h-[90vh] overflow-y-auto`} id="stickyDiv">
+                <section className="w-full md:w-[15%] flex flex-col">
+                    <div
+                        className="filter-column rounded-bl-[8px] pl-[10px] md:pl-[20px]"
+                        id="stickyDiv"
+                        style={{
+                            position: "sticky",
+                            top: "60px",
+                            height: "calc(100vh - 60px - 64px)",
+                            maxHeight: "calc(100vh - 60px - 64px)",
+                            overflowY: "auto"
+                        }}
+                    >
                         {filterMet.map((item, index) => (
                             <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
                                 <div key={item.title}>
@@ -636,7 +720,7 @@ const Home: React.FC = () => {
                     </div>
                 </section>
                 <section className="w-full md:w-[85%]">
-                    <div className="grid-container w-full grid gap-[.250rem] h-[120vh] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
+                    <div className="grid-container w-full grid gap-[.250rem] h-[calc(100vh-60px-64px)] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
                         {filteredProducts.length !== 0 ? (
                             filteredProducts.map((prod, index) => (
                                 <div key={prod._id} className="product-card" onClick={() => sendingProdData(prod._id)}>
@@ -659,7 +743,7 @@ const Home: React.FC = () => {
             </div>
         </section>
     </div>
-    <Footer></Footer>
+    <Footer />
 </div>
 
     );

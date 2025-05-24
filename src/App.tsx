@@ -4,6 +4,7 @@ import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
 import ProductCard from './components/ProductCard'
 import Home from './components/Home'
+import CheckoutPage from './components/CheckoutPage'
 
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path='/AdminDashboard' element={<AdminDashboard />}></Route>
         <Route path='/Home' element={<Home />}></Route>
         <Route path='/ProductCard' element={<ProductCard />}></Route>
+        <Route path='/CheckoutPage' element={<CheckoutPage />}></Route>
       </Routes>
     </>
   )
