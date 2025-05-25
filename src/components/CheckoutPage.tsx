@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header,Footer/Header";
 import Footer from "./Header,Footer/Footer";
+import { Navigate } from "react-router-dom";
 
 const cartItems = [
 	{
@@ -51,7 +52,7 @@ const CheckoutPage = () => {
 			return;
 		}
 		const options = {
-			key: "rzp_test_YourKeyHere", // Replace with your Razorpay key
+			key: "rzp_test_6heE5AuL2imr7z", // Replace with your Razorpay key
 			amount: (orderDetails.cartTotal +
 				orderDetails.cartDiscount +
 				orderDetails.platformFee +
@@ -76,6 +77,27 @@ const CheckoutPage = () => {
 		rzp.open();
 	};
 
+    const handleStepChange = (step: "cart" | "address" | "payment") => {
+        if (step === "cart") {
+            setActiveStep("cart");
+        } else if (step === "address") {   
+            if (cartItems.length === 0) {
+                alert("Please add items to the cart before proceeding to address.");
+                return;
+            }
+            setActiveStep("address");
+        }
+        else if (step === "payment") {
+            if (activeStep !== "address") {
+                alert("Please complete the address step before proceeding to payment.");
+                return;
+            }
+            setActiveStep("payment");
+        }
+    }
+    if (cartItems.length === 0) {
+        return <Navigate to="/Home" />;
+    }
 	return (
 		<>
 			<style>
@@ -83,6 +105,114 @@ const CheckoutPage = () => {
 				button:hover, .hover\\:bg-black:hover {
 					background-color: #000 !important;
 					color: #fff !important;
+				}
+				@media (max-width: 1024px) {
+					.fixed.right-0, .absolute.right-0 {
+						width: 320px !important;
+						padding: 1.5rem !important;
+					}
+					[class*="right-[420px]"] {
+						right: 320px !important;
+					}
+				}
+				@media (max-width: 900px) {
+					.fixed.right-0, .absolute.right-0 {
+						width: 100vw !important;
+						position: static !important;
+						height: auto !important;
+						border-left: none !important;
+						box-shadow: none !important;
+						padding: 1rem !important;
+					}
+					[class*="right-[420px]"] {
+						right: 0 !important;
+					}
+					.pt-44 {
+						padding-top: 2rem !important;
+					}
+				}
+				@media (max-width: 768px) {
+					.fixed.right-0, .absolute.right-0 {
+						width: 100vw !important;
+						position: static !important;
+						height: auto !important;
+						border-left: none !important;
+						box-shadow: none !important;
+						padding: 1rem !important;
+					}
+					[class*="right-[420px]"] {
+						right: 0 !important;
+					}
+					.pt-44 {
+						padding-top: 1rem !important;
+					}
+					.max-w-xl {
+						max-width: 100vw !important;
+					}
+				}
+				@media (max-width: 600px) {
+					.fixed.right-0, .absolute.right-0 {
+						width: 100vw !important;
+						position: static !important;
+						height: auto !important;
+						border-left: none !important;
+						box-shadow: none !important;
+						padding: 0.5rem !important;
+					}
+					[class*="right-[420px]"] {
+						right: 0 !important;
+					}
+					.pt-44 {
+						padding-top: 0.5rem !important;
+					}
+					.max-w-xl {
+						max-width: 100vw !important;
+					}
+					.p-8 {
+						padding: 1rem !important;
+					}
+					.text-3xl, .text-2xl, .text-xl {
+						font-size: 1rem !important;
+					}
+					.text-lg, .text-base {
+						font-size: 0.95rem !important;
+					}
+					.text-sm {
+						font-size: 0.85rem !important;
+					}
+					.flex.flex-col.sm\\:flex-row {
+						flex-direction: column !important;
+					}
+					.w-\\[300px\\], .h-\\[300px\\], .min-w-\\[300px\\], .min-h-\\[300px\\], .max-w-\\[300px\\], .max-h-\\[300px\\] {
+						width: 100% !important;
+						height: 180px !important;
+						min-width: 0 !important;
+						min-height: 0 !important;
+						max-width: 100vw !important;
+						max-height: 180px !important;
+					}
+					.px-4 {
+						padding-left: 0.5rem !important;
+						padding-right: 0.5rem !important;
+					}
+				}
+				@media (max-width: 400px) {
+					.fixed.right-0, .absolute.right-0 {
+						width: 100vw !important;
+						padding: 0.1rem !important;
+					}
+					.p-8 {
+						padding: 0.25rem !important;
+					}
+					.text-3xl, .text-2xl, .text-xl {
+						font-size: 0.95rem !important;
+					}
+					.text-lg, .text-base {
+						font-size: 0.85rem !important;
+					}
+					.text-sm {
+						font-size: 0.75rem !important;
+					}
 				}
 				`}
 			</style>
