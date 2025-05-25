@@ -213,7 +213,7 @@ const Header: React.FC = () => {
                                 <circle cx="12" cy="8" r="4" fill="#000" />
                                 <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
                             </svg>
-                            <Link to="/profile" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                            <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
                                 Profile
                             </Link>
                         </li>
