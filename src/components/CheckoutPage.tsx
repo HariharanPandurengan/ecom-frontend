@@ -78,14 +78,22 @@ const CheckoutPage = () => {
 
 	return (
 		<>
+			<style>
+				{`
+				button:hover, .hover\\:bg-black:hover {
+					background-color: #000 !important;
+					color: #fff !important;
+				}
+				`}
+			</style>
 			<Header />
 			<div
-				className="flex bg-white min-h-screen"
+				className="flex bg-white min-h-screen pb-[300px]"
 				style={{ fontFamily: "Montserrat, sans-serif" }}
 			>
 				{/* Stepper */}
 				<div
-					className="fixed left-0 right-[420px] top-0 bg-white z-20 pt-8 pb-4"
+					className="fixed left-0 right-[420px] top-0 bg-white z-20 pt-8 pb-4 pl-[300px]"
 					style={{ marginTop: "72px" }}
 				>
 					<div className="flex justify-center gap-16">
@@ -222,7 +230,7 @@ const CheckoutPage = () => {
 									<div className="mb-6 text-black text-xl font-semibold">Pay securely with Razorpay</div>
 									<button
 										type="button"
-										className="bg-[#7B3F14] text-white px-8 py-3 rounded font-bold text-lg hover:bg-[#9B5D43] transition-colors"
+										className="bg-[#7B3F14] text-white px-8 py-3 rounded font-bold text-lg hover:bg-black transition-colors"
 										onClick={handleRazorpayPayment}
 									>
 										Pay Now
@@ -235,8 +243,8 @@ const CheckoutPage = () => {
 
 				{/* Right: Order Details */}
 				<div
-					className="right-0 top-0 h-full w-[420px] bg-[#FCFAF7] shadow-md border-l border-gray-200 p-8"
-					style={{ zIndex: 10 }}
+					className="absolute right-0 top-0 h-full w-[420px] bg-[#FCFAF7] shadow-md border-l border-gray-200 p-8"
+					style={{ zIndex: 10, top: "72px", height: "calc(100vh - 72px - 250px)" }}
 				>
 					<h2
 						className="text-3xl font-bold mb-6"
@@ -244,16 +252,16 @@ const CheckoutPage = () => {
 					>
 						Order Details
 					</h2>
-					<div className="text-lg mb-4 flex justify-between">
+					<div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Montserrat-Thin" }}>
 						<span>Cart total</span>
 						<span>{orderDetails.cartTotal}</span>
 					</div>
-					<div className="text-lg mb-4 flex justify-between">
+					<div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Montserrat-Thin" }}>
 						<span>Cart discount</span>
 						<span>{orderDetails.cartDiscount}</span>
 					</div>
-					<div className="mb-4">
-						<div className="text-lg">Convenience Fees</div>
+					<div className="mb-4" style={{ fontFamily: "Montserrat-Thin" }}>
+						<div className="text-lg" style={{ fontFamily: "Montserrat" }}>Convenience Fees</div>
 						<div className="flex justify-between text-base ml-4 mt-1">
 							<span>Platform Fee</span>
 							<span>{orderDetails.platformFee}</span>
@@ -273,7 +281,7 @@ const CheckoutPage = () => {
 								orderDetails.shippingFee}
 						</span>
 					</div>
-					<button className="w-full bg-[#7B3F14] text-white text-xl font-semibold py-4 rounded mt-2">
+					<button className="w-full bg-[#7B3F14] text-white text-xl font-semibold py-4 rounded mt-2 hover:bg-black">
 						PROCEED TO SHIPPING
 					</button>
 				</div>

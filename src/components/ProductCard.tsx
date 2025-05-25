@@ -171,14 +171,33 @@ const ProductCard = () => {
 
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6 pb-4 text-sm font-medium">
+        <style>
+          {`
+            .custom-btn {
+              background-color: #000;
+              color: #fff;
+              transition: background 0.2s, color 0.2s;
+            }
+            .custom-btn.add-to-cart:hover {
+              background-color: #fff !important;
+              color: #000 !important;
+              border: 2px solid #000 !important;
+            }
+            .custom-btn.buy-now:hover {
+              background-color: #fff !important;
+              color: #000 !important;
+              border: 2px solid #000 !important;
+            }
+          `}
+        </style>
         <button
-          className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#C8A165] text-white"
+          className="custom-btn add-to-cart h-10 w-full sm:w-40 px-6 font-semibold rounded-md border border-slate-200"
           type="submit"
         >
           Add to Cart
         </button>
         <button
-          className="h-10 w-full sm:w-40 px-6 font-semibold rounded-md bg-[#000] text-stone-50 border border-slate-200 text-slate-900"
+          className="custom-btn buy-now h-10 w-full sm:w-40 px-6 font-semibold rounded-md border border-slate-200"
           type="button" 
           onClick={() => {
             sendingProdData(product._id)

@@ -242,9 +242,8 @@ const Home: React.FC = () => {
 
 
     const sendingProdData = (productID : any) => {
-        localStorage.setItem('current_product',productID)
-        console.log(productID)
-        navigate('/ProductCard')
+        localStorage.setItem('current_product', productID);
+        navigate('/ProductCard');
     }
   
     useEffect(() => {
@@ -652,9 +651,62 @@ const Home: React.FC = () => {
                     {products.length !== 0 ? (
                         products.map((trendprod, index) =>
                             trendprod.trendingProd ? (
-                                <div key={index} className="carousel-slides flex">
-                                    <div className="carousel-slide min-w-full text-center">
-                                        <img className="block w-full" src={`${Object.values(trendprod.images)[0]}`} alt="promotion" />
+                                <div key={index} className="carousel-slides flex relative">
+                                    <div className="carousel-slide min-w-full text-center relative">
+                                        {/* Overlay for product info */}
+                                        <div
+                                            className="absolute top-0 right-0 w-auto h-auto flex flex-col items-end justify-start z-10 p-6"
+                                            style={{
+                                                background: "none",
+                                                color: "#fff",
+                                                pointerEvents: "none"
+                                            }}
+                                        >
+                                            <div
+                                                className="mb-1 text-2xl font-bold drop-shadow"
+                                                style={{
+                                                    fontFamily: "Montserrat",
+                                                    pointerEvents: "auto"
+                                                }}
+                                            >
+                                                {trendprod.name}
+                                            </div>
+                                            <div
+                                                className="mb-2 text-lg font-semibold drop-shadow"
+                                                style={{
+                                                    fontFamily: "Montserrat-Thin",
+                                                    pointerEvents: "auto"
+                                                }}
+                                            >
+                                                ₹{trendprod.price}
+                                            </div>
+                                            <button
+                                                className="px-4 py-1 rounded bg-[#7B3F14] text-white font-bold text-base transition-colors"
+                                                style={{
+                                                    opacity: 0.5,
+                                                    pointerEvents: "auto",
+                                                    cursor: "pointer",
+                                                    fontFamily: "Montserrat"
+                                                }}
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    sendingProdData(trendprod._id);
+                                                }}
+                                                onMouseOver={e => (e.currentTarget.style.backgroundColor = "#000")}
+                                                onMouseOut={e => (e.currentTarget.style.backgroundColor = "#7B3F14")}
+                                            >
+                                                Buy Now
+                                            </button>
+                                        </div>
+                                        {/* Graded out image */}
+                                        <img
+                                            className="block w-full"
+                                            src={`${Object.values(trendprod.images)[0]}`}
+                                            alt="promotion"
+                                            style={{
+                                                filter: "brightness(0.7) grayscale(0.2)"
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             ) : null

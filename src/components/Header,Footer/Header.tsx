@@ -224,7 +224,7 @@ const Header: React.FC = () => {
                                 <circle cx="20" cy="21" r="1" fill="#000"/>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            <Link to="/cart" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                            <Link to="/CheckoutPage" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
                                 Cart
                             </Link>
                         </li>
