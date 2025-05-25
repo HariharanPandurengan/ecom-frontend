@@ -428,6 +428,7 @@ const AdminDashboard: React.FC = () => {
                 </section> */}
             </div>
         </div>
+        
         <Footer></Footer>
         {
             editP &&    <div className="fixed top-0 bottom-0 w-full bgTrans flex justify-center">
