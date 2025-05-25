@@ -1,5 +1,4 @@
 import '../../App.css';
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import { User, Heart, ShoppingBag } from 'lucide-react';
@@ -45,10 +44,11 @@ const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [searchPopup,setSearchPopup] = useState(false)
-    const [searchFilter,setSearchFilter] = useState([])
+    const [searchFilter, setSearchFilter] = useState<Product[]>([])
     const [search,setSearch] = useState('')
     const [aSearch,setASearch] = useState('')
     const [products, setProducts] = useState<Product[]>([]);
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
     useEffect(()=>{
         fetchProducts()
@@ -177,8 +177,81 @@ const Header: React.FC = () => {
         <div className='companyname relative pt-2.5 text-xl md:text-2xl lg:text-3xl tracking-wider'>
             <a href=''>H  C L O T H I N G</a>
         </div>
-        <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px]'>
-            <img src={usericon} alt="User Icon" />
+        <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px] relative'>
+            <img
+                src={usericon}
+                alt="User Icon"
+                className="cursor-pointer"
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            />
+            {/* Profile Dropdown Menu */}
+            {isProfileMenuOpen && (
+                <div style={{
+                    position: "fixed",
+                    top: 0,
+                    right: 0,
+                    width: "250px",
+                    background: "#fff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                    zIndex: 50,
+                    borderRadius: "0 0 16px 16px",
+                    minHeight: "220px",
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
+                    <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px" }}>
+                        <img src={closeIcon} alt="Close Icon" style={{ cursor: "pointer", width: "28px", height: "28px" }} onClick={() => setIsProfileMenuOpen(false)} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0 0 0" }}>
+                        <img src={usericon} alt="Profile" style={{ width: "60px", height: "60px", borderRadius: "50%", marginBottom: "8px", border: "2px solid #C8A165" }} />
+                        <span style={{ fontWeight: 600, fontSize: "1.1rem", color: "#7B3F14", marginBottom: "16px", fontFamily: "Montserrat" }}>Your Account</span>
+                    </div>
+                    <ul style={{ listStyle: "none", padding: "20px", margin: 0 }}>
+                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                            {/* Profile SVG */}
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                <circle cx="12" cy="8" r="4" fill="#000" />
+                                <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
+                            </svg>
+                            <Link to="/profile" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                Profile
+                            </Link>
+                        </li>
+                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                            {/* Cart SVG */}
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                <circle cx="9" cy="21" r="1" fill="#000"/>
+                                <circle cx="20" cy="21" r="1" fill="#000"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <Link to="/cart" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                Cart
+                            </Link>
+                        </li>
+                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                            {/* Wishlist SVG */}
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#000"/>
+                            </svg>
+                            <Link to="/wishlist" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                Wishlists
+                            </Link>
+                        </li>
+                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                            {/* Logout SVG */}
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                <path d="M16 17l5-5-5-5M21 12H9M13 21a9 9 0 1 1 0-18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Montserrat" }} onClick={() => {
+                                // TODO: Add logout logic
+                                setIsProfileMenuOpen(false);
+                            }}>
+                                Logout
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            )}
         </div>
     </section>
     {searchPopup && (
