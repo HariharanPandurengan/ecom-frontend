@@ -65,7 +65,7 @@ const AdminDashboard: React.FC = () => {
         { name: 'sex', label: 'Sex', type: 'select', options: ['select','Male',
             'Female',
             'Unisex'] , multiple: false},
-        { name: 'category', label: 'Product Category', type: 'text' },
+        { name: 'category', label: 'Product Category', type: 'select', options: ['select', 'Shirts', 'T-Shirts', 'Trousers', 'Pants'], multiple: false },
         { name: 'subCategory', label: 'Product Sub Category', type: 'text' },
         { name: 'material', label: 'Product Material', type: 'select',options:[ 'select','Cotton',
             'Cotton Blend',

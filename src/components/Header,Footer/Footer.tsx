@@ -1,4 +1,5 @@
 import React from "react";
+import promoVideo from '.../assets/Pictures/Cyberpunk_ How to Master the Futuristic Style.gif';
 
 const Footer = () => {
   return (

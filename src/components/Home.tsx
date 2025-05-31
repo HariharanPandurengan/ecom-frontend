@@ -52,12 +52,21 @@ const Home: React.FC = () => {
     const [isSticky, setIsSticky] = useState(false)
     const [bagItemCount, setBagItemCount] = useState(0)
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
     const filterMet = [
         {
             title: 'sex',
             list : ['Male',
                 'Female',
                 'Unisex']
+        },
+        {
+            title: 'category',
+            list: ['Shirts',
+                'T-Shirts',
+                'Pants',
+                'Trousers']
         },
         {
             title: 'material',
@@ -245,6 +254,19 @@ const Home: React.FC = () => {
             })
             return filtered.length
         }
+        else if (title == 'category') {
+            const filtered = products.filter(items => {
+                // Normalize for plural/singular and case-insensitive
+                return (
+                    items.category &&
+                    (
+                        items.category.toLowerCase() === subCat.toLowerCase() ||
+                        items.category.toLowerCase().replace(/s$/, '') === subCat.toLowerCase().replace(/s$/, '')
+                    )
+                );
+            });
+            return filtered.length;
+        }
         else if (title == 'price') {
             let priceLimit: any = [];
             if (subCat.includes('-')) {
@@ -382,18 +404,32 @@ const Home: React.FC = () => {
             }
         }
 
-        let arr = []
+        let arr = [];
 
-        if(sex){
+        // Category filter logic
+        if (selectedCategory && selectedCategory !== "Trendings") {
+            arr = products.filter(list =>
+                list.category &&
+                (
+                    list.category.toLowerCase() === selectedCategory.toLowerCase() ||
+                    // handle plural/singular and case-insensitive
+                    list.category.toLowerCase().replace(/s$/, '') === selectedCategory.toLowerCase().replace(/s$/, '')
+                )
+            );
+            filteredOne = arr;
+        } else if (sex) {
             arr = products.filter(list => list.sex.toLowerCase().trim() == sexType.toLowerCase().trim())
             filteredOne = arr
         }
         else{
             arr = products
         }
-        if (AllFalse === true) {
+        if (AllFalse && !selectedCategory) {
             setFilteredProducts(products)
-        }
+        } 
+        else if (AllFalse && selectedCategory) {
+            setFilteredProducts(arr)
+        } 
         else {
             for (let key in currentFilters) {
                 for (let key2 in currentFilters[key]) {
@@ -406,7 +442,7 @@ const Home: React.FC = () => {
                         //     }
                         // }
                         if (key === 'material') {
-                            if(sex){
+                            if(sex || selectedCategory){
                                 for (let i = 0; i < filteredOne.length; i++) {
                                     if (filteredOne[i]['material'].toLocaleLowerCase().trim() !== key2.toLocaleLowerCase().trim()) {
                                         filteredOne.slice(i, 1);
@@ -625,7 +661,22 @@ const Home: React.FC = () => {
             }
             setFilteredProducts(filteredOne)
         }
-    }, [currentFilters])
+    }, [currentFilters, selectedCategory, products])
+    
+    // Add this function for category filtering
+    const handleSectionCategoryClick = (category: string) => {
+        setSelectedCategory(category);
+        // Also reset all other filters when a category is selected
+        setCurrentFilters(prev => {
+            const reset = { ...prev };
+            Object.keys(reset).forEach(key => {
+                Object.keys(reset[key]).forEach(k2 => {
+                    reset[key][k2] = false;
+                });
+            });
+            return reset;
+        });
+    };
 
     return (
 <div className="min-h-screen flex flex-col">
@@ -762,7 +813,7 @@ const Home: React.FC = () => {
                                         </div>
                                         {/* Graded out image */}
                                         <img
-                                            className="block w-full z-in-0"
+                                            className="block w-full"
                                             loading="lazy"
                                             height="100%"
                                             width="100%"
@@ -789,7 +840,13 @@ const Home: React.FC = () => {
                 <h1 className="text-lg md:text-xl lg:text-2xl">SHOP BY SECTION</h1>
                 <div className="sections-container flex justify-center flex-wrap gap-[30px] md:gap-[60px] p-[10px] md:p-[20px]">
                     {sections.map((section, index) => (
-                        <div className="div-section w-[150px] h-[150px] md:w-[250px] md:h-[250px] relative overflow-hidden rounded-lg" key={index}>
+                        <div
+                            className={`div-section w-[150px] h-[150px] md:w-[250px] md:h-[250px] relative overflow-hidden rounded-lg cursor-pointer ${
+                                selectedCategory === section.title ? "ring-1 ring-[#000]" : ""
+                            }`}
+                            key={index}
+                            onClick={() => handleSectionCategoryClick(section.title)}
+                        >
                             <img src={section.imgSrc} alt={section.alt} />
                             <div className="section-text absolute top-2/4 left-2/4 text-sm md:text-base lg:text-lg">{section.title}</div>
                         </div>
