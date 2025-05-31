@@ -145,7 +145,69 @@ const Home: React.FC = () => {
         autoplay: true,
         autoplaySpeed: 2000,
         arrows: true,
+        dots: false,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
     };
+
+    // Custom Arrow Components
+    function SampleNextArrow(props: any) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: "50%",
+                    right: "10px",
+                    zIndex: 30,
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    background: "#fff",
+                    borderRadius: "50%",
+                    width: "36px",
+                    height: "36px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
+                }}
+                onClick={onClick}
+            >
+                <span style={{ fontSize: "1.5rem", color: "#7B3F14", fontWeight: 700 }}>{'>'}</span>
+            </div>
+        );
+    }
+
+    function SamplePrevArrow(props: any) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{
+                    ...style,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    top: "50%",
+                    left: "10px",
+                    zIndex: 30,
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    background: "#fff",
+                    borderRadius: "50%",
+                    width: "36px",
+                    height: "36px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
+                }}
+                onClick={onClick}
+            >
+                <span style={{ fontSize: "1.5rem", color: "#7B3F14", fontWeight: 700 }}>{'<'}</span>
+            </div>
+        );
+    }
 
     useEffect(() => {
         fetchProducts()
@@ -700,7 +762,10 @@ const Home: React.FC = () => {
                                         </div>
                                         {/* Graded out image */}
                                         <img
-                                            className="block w-full"
+                                            className="block w-full z-in-0"
+                                            loading="lazy"
+                                            height="100%"
+                                            width="100%"
                                             src={`${Object.values(trendprod.images)[0]}`}
                                             alt="promotion"
                                             style={{

@@ -46,8 +46,10 @@ trendingProd: boolean;
 const ProductCard = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product>(initialProductState);
-  const [selectedSize, setSelectedSize] = useState("xs");
-  const [images, setSelectedImage] = useState("src/assets/Pictures/blue shirt.jpg")
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [images, setSelectedImage] = useState("src/assets/Pictures/blue shirt.jpg");
+  const [quantity, setQuantity] = useState(1);
   const image = "src/assets/Pictures/blue shirt.jpg";
   const handleSizeChange = (e : any) => {
     setSelectedSize(e.target.value);
@@ -67,14 +69,30 @@ const ProductCard = () => {
       .then(res => {
           if (res.data.status === true) {
               setProduct(res.data.product[0]);
-          }
+              // Set default color and size on load
+              const colorList = res.data.product[0].colors;
+              if (colorList && colorList.length > 0) {
+                setSelectedColor(colorList[0]);
+                const sizeList = Object.keys(res.data.product[0].sizes[colorList[0]] || {});
+                if (sizeList.length > 0) setSelectedSize(sizeList[0]);
+              }
+            }
       })
       .catch(err => {
           console.log(err)
       })
     }
     fetchProduct()
-  }, [])
+  }, []);
+
+  // When color changes, update size to first available for that color
+  useEffect(() => {
+    if (selectedColor && product.sizes && product.sizes[selectedColor]) {
+      const sizeList = Object.keys(product.sizes[selectedColor]);
+      if (sizeList.length > 0) setSelectedSize(sizeList[0]);
+      else setSelectedSize("");
+    }
+  }, [selectedColor, product.sizes]);
 
   console.log(product)
 
@@ -105,37 +123,25 @@ const ProductCard = () => {
         </h1>
       </div>
 
-      {/* Sizes */}
-      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-2">
-        Sizes Available:
-      </div>
-      <div className="flex flex-wrap gap-2 mt-4 pb-6">
-        {["xs", "s", "m", "l", "xl"].map((size) => (
-          <label key={size}>
-            <input
-              className="sr-only peer"
-              name="size"
-              type="radio"
-              value={size}
-              checked={selectedSize === size}
-              onChange={handleSizeChange}
-            />
-            <div className="w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 peer-checked:font-semibold peer-checked:bg-slate-900 peer-checked:text-white">
-              {size.toUpperCase()}
-            </div>
-          </label>
-        ))}
-      </div>
-
       {/* Colors */}
-      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-0">
+      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-2">
         Colors Available:
       </div>
       <div className="flex flex-wrap gap-2 mt-4 pb-6">
         {product.colors.map((color) => (
           <label key={color}>
+            <input
+              type="radio"
+              name="color"
+              value={color}
+              checked={selectedColor === color}
+              onChange={() => setSelectedColor(color)}
+              className="sr-only"
+            />
             <div
-              className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+              className={`w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer border-2 ${
+                selectedColor === color ? "border-[#fff]" : "border-transparent"
+              } ${
                 color === "Green"
                   ? "bg-green-500"
                   : color === "Red"
@@ -164,9 +170,65 @@ const ProductCard = () => {
                   ? "bg-red-900"
                   : "bg-black"
               }`}
+              style={{ outline: selectedColor === color ? "2px solid #C8A165" : "none" }}
             ></div>
           </label>
         ))}
+      </div>
+
+      {/* Sizes */}
+      <div className="w-full flex-none text-sm font-medium text-slate-700 mt-0">
+        Sizes Available:
+      </div>
+      <div className="flex flex-wrap gap-2 mt-4 pb-6">
+        {selectedColor &&
+          product.sizes &&
+          product.sizes[selectedColor] &&
+          Object.keys(product.sizes[selectedColor]).map((size) => (
+            <label key={size}>
+              <input
+                className="sr-only peer"
+                name="size"
+                type="radio"
+                value={size}
+                checked={selectedSize === size}
+                onChange={() => setSelectedSize(size)}
+              />
+              <div
+                className={`w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 cursor-pointer
+                  ${selectedSize === size ? "font-semibold bg-slate-900 text-white" : ""}
+                  ${Number(product.sizes[selectedColor][size]) === 0 ? "opacity-40 cursor-not-allowed" : ""}
+                `}
+                style={{
+                  pointerEvents: Number(product.sizes[selectedColor][size]) === 0 ? "none" : "auto"
+                }}
+              >
+                {size.toUpperCase()}
+              </div>
+            </label>
+          ))}
+      </div>
+
+      {/* Quantity */}
+      <div className="w-full flex-none text-sm text-slate-700 mt-0 mb-2" style={{ fontFamily: "Montserrat-Thin" }}>
+        Quantity:
+      </div>
+      <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center">
+          <button
+            type="button"
+            className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-lg"
+            style={{ fontFamily: "Montserrat" }}
+            onClick={() => setQuantity(q => Math.max(1, q - 1))}
+          >-</button>
+          <span className="mx-3 text-lg font-normal" style={{ fontFamily: "Montserrat" }}>{quantity}</span>
+          <button
+            type="button"
+            className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-lg"
+            style={{ fontFamily: "Montserrat" }}
+            onClick={() => setQuantity(q => q + 1)}
+          >+</button>
+        </div>
       </div>
 
       {/* Buttons */}
@@ -198,7 +260,7 @@ const ProductCard = () => {
         </button>
         <button
           className="custom-btn buy-now h-10 w-full sm:w-40 px-6 font-semibold rounded-md border border-slate-200"
-          type="button" 
+          type="button"
           onClick={() => {
             sendingProdData(product._id)
           }}

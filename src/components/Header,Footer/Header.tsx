@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import { User, Heart, ShoppingBag } from 'lucide-react';
 import React, { useState, useEffect } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate, useLocation } from "react-router-dom";
 import { Home, Import } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,7 @@ import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
 import closeIcon from "../../assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg"
 import searchIcon from "../../assets/Icons - SVG/Searchicon.svg"
 import usericon from "../../assets/Icons - SVG/Usericon.svg"
+import { ShoppingBag } from 'lucide-react';
 
 
 interface SizesOptions { 
@@ -49,6 +50,7 @@ const Header: React.FC = () => {
     const [aSearch,setASearch] = useState('')
     const [products, setProducts] = useState<Product[]>([]);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+    const location = useLocation();
 
     useEffect(()=>{
         fetchProducts()
@@ -132,161 +134,224 @@ const Header: React.FC = () => {
 
     return (
         <div className='fixed w-full top-0 z-50'>
-    <section className='sectionheader flex justify-between items-center p-[10px] h-[64px] md:h-[80px] lg:h-[100px]'>
-        <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
-            <div className="menu-container w-full relative flex items-center justify-start">
-                <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
-                    <img src={hahaburgermenu}></img>
-                </div>
-                <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
-                    <div className="close-icon" onClick={toggleMenu}>
-                        <img src={closeIcon} alt="Close Icon" />
-                    </div>
-                    <ul className="menu-items list-none p-[20px] m-0">
-                        <li className='my-[10px] text-base md:text-lg lg:text-xl'>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li className='my-[10px] text-base md:text-lg lg:text-xl'>
-                            <a href="#product">Products</a>
-                        </li>
-                        <li className='my-[10px] text-base md:text-lg lg:text-xl'>
-                            <a href="#footer">About Us</a>
-                        </li>
-                    </ul>
-                    <div className="contact mt-30 p-5 text-sm md:text-base">
-                        <p className='block'>Contact:</p>
-                        <a href="mailto:akashganeshaner@gmail.com">akh@gmail.com</a>
-                    </div>
-                </div>
-                <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
-                    <img className='w-[40px] h-[40px]' src={searchIcon} alt="Search Icon" />
-                </div>
-                {showSearch && (
-                    <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12">
-                        <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
-                            onChange={e=>setSearch(e.target.value)} value={search} />
-                        <FontAwesomeIcon className='text-black' onClick={(e)=>{
-                                setASearch(search)
-                                searchFun(e)
-                            }} icon={faSearch} 
-                        />
-                    </div>
-                )}
-            </div>
-        </div>
-        <div className='companyname relative pt-2.5 text-xl md:text-2xl lg:text-3xl tracking-wider'>
-            <a href=''>H  C L O T H I N G</a>
-        </div>
-        <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px] relative'>
-            <img
-                src={usericon}
-                alt="User Icon"
-                className="cursor-pointer"
-                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            />
-            {/* Profile Dropdown Menu */}
-            {isProfileMenuOpen && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    right: 0,
-                    width: "250px",
-                    background: "#fff",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                    zIndex: 50,
-                    borderRadius: "0 0 16px 16px",
-                    minHeight: "220px",
-                    display: "flex",
-                    flexDirection: "column"
-                }}>
-                    <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px" }}>
-                        <img src={closeIcon} alt="Close Icon" style={{ cursor: "pointer", width: "28px", height: "28px" }} onClick={() => setIsProfileMenuOpen(false)} />
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0 0 0" }}>
-                        <img src={usericon} alt="Profile" style={{ width: "60px", height: "60px", borderRadius: "50%", marginBottom: "8px", border: "2px solid #C8A165" }} />
-                        <span style={{ fontWeight: 600, fontSize: "1.1rem", color: "#7B3F14", marginBottom: "16px", fontFamily: "Montserrat" }}>Your Account</span>
-                    </div>
-                    <ul style={{ listStyle: "none", padding: "20px", margin: 0 }}>
-                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
-                            {/* Profile SVG */}
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
-                                <circle cx="12" cy="8" r="4" fill="#000" />
-                                <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
-                            </svg>
-                            <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
-                                Profile
-                            </Link>
-                        </li>
-                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
-                            {/* Cart SVG */}
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
-                                <circle cx="9" cy="21" r="1" fill="#000"/>
-                                <circle cx="20" cy="21" r="1" fill="#000"/>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <Link to="/CheckoutPage" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
-                                Cart
-                            </Link>
-                        </li>
-                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
-                            {/* Wishlist SVG */}
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#000"/>
-                            </svg>
-                            <Link to="/wishlist" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
-                                Wishlists
-                            </Link>
-                        </li>
-                        <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
-                            {/* Logout SVG */}
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
-                                <path d="M16 17l5-5-5-5M21 12H9M13 21a9 9 0 1 1 0-18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Montserrat" }} onClick={() => {
-                                // TODO: Add logout logic
-                                setIsProfileMenuOpen(false);
-                            }}>
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
+            {/* Floating Cart Icon */}
+            {location.pathname !== "/CheckoutPage" && (
+                <style>
+                    {`
+                    .floating-cart-icon {
+                        position: fixed;
+                        top: 90px;
+                        right: 32px;
+                        z-index: 100;
+                        background: #fff;
+                        border-radius: 50%;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                        width: 56px;
+                        height: 56px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: box-shadow 0.2s;
+                    }
+                    .floating-cart-icon:hover {
+                        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+                        background: #f5e9dd;
+                    }
+                    .cart-badge {
+                        position: absolute;
+                        top: 8px;
+                        right: 8px;
+                        background: #C8A165;
+                        color: #fff;
+                        border-radius: 9999px;
+                        font-size: 0.85rem;
+                        padding: 2px 8px;
+                        font-weight: bold;
+                    }
+                    @media (max-width: 600px) {
+                        .floating-cart-icon {
+                            top: 70px;
+                            right: 12px;
+                            width: 44px;
+                            height: 44px;
+                        }
+                        .cart-badge {
+                            top: 2px;
+                            right: 2px;
+                            font-size: 0.7rem;
+                            padding: 1px 6px;
+                        }
+                    }
+                    `}
+                </style>
+            )}
+            {location.pathname !== "/CheckoutPage" && (
+                <div
+                    className="floating-cart-icon"
+                    onClick={() => navigate('/CheckoutPage')}
+                    style={{ cursor: "pointer" }}
+                >
+                    <ShoppingBag size={28} color="#000" />  
+                    {bagItemCount > 0 && (
+                        <span className="cart-badge">{bagItemCount}</span>
+                    )}
                 </div>
             )}
-        </div>
-    </section>
-    {searchPopup && (
-        <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
-            <div className="relative bg-white p-2 pe-5 w-full">
-                <h3 className="text-center text-3xl font-['Montserrat-Thin'] pb-[10px]">"{searchFilter.length}" Results found for "{aSearch}"</h3>
-                <div className="grid-container w-full grid gap-[.250rem] h-[75vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
-                    {searchFilter.length !== 0 ? searchFilter.map((prod,index) => (
-                        <div key={prod} onClick={()=>sendingProdData(prod._id)} className="product-card border">
-                            <div className="product-image-div w-full pt-2.5">
-                                <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+            <section className='sectionheader flex justify-between items-center p-[10px] h-[64px] md:h-[80px] lg:h-[100px]'>
+                <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
+                    <div className="menu-container w-full relative flex items-center justify-start">
+                        <div className='hahamburgermenu me-2 flex items-center h-[40px]' onClick={toggleMenu}>
+                            <img src={hahaburgermenu}></img>
+                        </div>
+                        <div className={`dropdown-menu ${isMenuOpen ? "active top-[50px] left-[60px]" : ""} fixed top-0 left-0 w-[250px] md:w-[300px] lg:w-[350px] rounded-30`}>
+                            <div className="close-icon" onClick={toggleMenu}>
+                                <img src={closeIcon} alt="Close Icon" />
                             </div>
-                            <div className="pl-[10px] flex items-center">
-                                <div>
-                                    <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
-                                    <p className="product-price">{'Rs.'+prod.price}</p>
-                                </div>
+                            <ul className="menu-items list-none p-[20px] m-0">
+                                <li className='my-[10px] text-base md:text-lg lg:text-xl'>
+                                    <Link to="/">Home</Link>
+                                </li>
+                                <li className='my-[10px] text-base md:text-lg lg:text-xl'>
+                                    <a href="#product">Products</a>
+                                </li>
+                                <li className='my-[10px] text-base md:text-lg lg:text-xl'>
+                                    <a href="#footer">About Us</a>
+                                </li>
+                            </ul>
+                            <div className="contact mt-30 p-5 text-sm md:text-base">
+                                <p className='block'>Contact:</p>
+                                <a href="mailto:akashganeshaner@gmail.com">akh@gmail.com</a>
                             </div>
                         </div>
-                    )) : (
-                        <div>
-                            <p className="text-center">--- No products to show ---</p>
+                        <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
+                            <img className='w-[40px] h-[40px]' src={searchIcon} alt="Search Icon" />
+                        </div>
+                        {showSearch && (
+                            <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12">
+                                <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
+                                    onChange={e=>setSearch(e.target.value)} value={search} />
+                                <FontAwesomeIcon className='text-black' onClick={(e)=>{
+                                        setASearch(search)
+                                        searchFun(e)
+                                    }} icon={faSearch} 
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className='companyname relative pt-2.5 text-xl md:text-2xl lg:text-3xl tracking-wider'>
+                    <a href='/Home'>H  C L O T H I N G</a>
+                </div>
+                <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px] relative'>
+                    <img
+                        src={usericon}
+                        alt="User Icon"
+                        className="cursor-pointer"
+                        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                    />
+                    {/* Profile Dropdown Menu */}
+                    {isProfileMenuOpen && (
+                        <div style={{
+                            position: "fixed",
+                            top: 0,
+                            right: 0,
+                            width: "250px",
+                            background: "#fff",
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                            zIndex: 50,
+                            borderRadius: "0 0 16px 16px",
+                            minHeight: "220px",
+                            display: "flex",
+                            flexDirection: "column"
+                        }}>
+                            <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px" }}>
+                                <img src={closeIcon} alt="Close Icon" style={{ cursor: "pointer", width: "28px", height: "28px" }} onClick={() => setIsProfileMenuOpen(false)} />
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0 0 0" }}>
+                                <img src={usericon} alt="Profile" style={{ width: "60px", height: "60px", borderRadius: "50%", marginBottom: "8px", border: "2px solid #C8A165" }} />
+                                <span style={{ fontWeight: 600, fontSize: "1.1rem", color: "#7B3F14", marginBottom: "16px", fontFamily: "Montserrat" }}>Your Account</span>
+                            </div>
+                            <ul style={{ listStyle: "none", padding: "20px", margin: 0 }}>
+                                <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                                    {/* Profile SVG */}
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                        <circle cx="12" cy="8" r="4" fill="#000" />
+                                        <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
+                                    </svg>
+                                    <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                        Profile
+                                    </Link>
+                                </li>
+                                <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                                    {/* Cart SVG */}
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                        <circle cx="9" cy="21" r="1" fill="#000"/>
+                                        <circle cx="20" cy="21" r="1" fill="#000"/>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                    <Link to="/CheckoutPage" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                        Cart
+                                    </Link>
+                                </li>
+                                <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                                    {/* Wishlist SVG */}
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#000"/>
+                                    </svg>
+                                    <Link to="/wishlist" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                        Wishlists
+                                    </Link>
+                                </li>
+                                <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                                    {/* Logout SVG */}
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                        <path d="M16 17l5-5-5-5M21 12H9M13 21a9 9 0 1 1 0-18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                    <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Montserrat" }} onClick={() => {
+                                        // TODO: Add logout logic
+                                        setIsProfileMenuOpen(false);
+                                    }}>
+                                        Logout
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     )}
                 </div>
-                <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
-                    setSearchPopup(false)
-                    setSearchFilter([])
-                }}>
-                    <FontAwesomeIcon icon={faXmark}/>
+            </section>
+            {searchPopup && (
+                <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
+                    <div className="relative bg-white p-2 pe-5 w-full">
+                        <h3 className="text-center text-3xl font-['Montserrat-Thin'] pb-[10px]">"{searchFilter.length}" Results found for "{aSearch}"</h3>
+                        <div className="grid-container w-full grid gap-[.250rem] h-[75vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
+                            {searchFilter.length !== 0 ? searchFilter.map((prod,index) => (
+                                <div key={prod} onClick={()=>sendingProdData(prod._id)} className="product-card border">
+                                    <div className="product-image-div w-full pt-2.5">
+                                        <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                    </div>
+                                    <div className="pl-[10px] flex items-center">
+                                        <div>
+                                            <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
+                                            <p className="product-price">{'Rs.'+prod.price}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )) : (
+                                <div>
+                                    <p className="text-center">--- No products to show ---</p>
+                                </div>
+                            )}
+                        </div>
+                        <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
+                            setSearchPopup(false)
+                            setSearchFilter([])
+                        }}>
+                            <FontAwesomeIcon icon={faXmark}/>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
-    )}
-</div>
     );
 }
 

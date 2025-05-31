@@ -29,6 +29,16 @@ const orderDetails = {
 
 const CheckoutPage = () => {
 	const [activeStep, setActiveStep] = useState<"cart" | "address" | "payment">("cart");
+	const [cartQuantities, setCartQuantities] = useState<{ [id: number]: number }>(
+		() => Object.fromEntries(cartItems.map(item => [item.id, 1]))
+	);
+
+	const handleQuantityChange = (id: number, delta: number) => {
+		setCartQuantities(qty => ({
+			...qty,
+			[id]: Math.max(1, (qty[id] || 1) + delta)
+		}));
+	};
 
 	// Razorpay handler
 	const loadRazorpayScript = () => {
@@ -276,13 +286,30 @@ const CheckoutPage = () => {
 												alt={item.name}
 												className="w-[300px] h-[300px] min-w-[300px] min-h-[300px] max-w-[300px] max-h-[300px] object-cover rounded-md shadow"
 											/>
-											<div className="ml-6 flex flex-col justify-between">
+											<div className="ml-6 flex flex-col justify-between w-full">
 												<div>
 													<h2 className="text-2xl font-bold text-[#9B5D43] mb-1" style={{ fontFamily: "Montserrat" }}>
 														{item.name}
 													</h2>
 													<p className="text-lg text-gray-700 mb-2">{item.desc}</p>
 													<div className="text-xl font-semibold mt-2">₹{item.price}</div>
+													{/* Quantity Counter */}
+													<div className="flex items-center gap-2 mt-4">
+														<div className="text-sm" style={{ fontFamily: "Montserrat-Thin" }}>Quantity:</div>
+														<button
+															type="button"
+															className="w-8 h-8 rounded bg-[#C8A165] text-white font-bold text-lg flex items-center justify-center"
+															onClick={() => handleQuantityChange(item.id, -1)}
+														>-</button>
+														<span className="mx-2 text-lg font-normal" style={{ fontFamily: "Montserrat" }}>
+															{cartQuantities[item.id] || 1}
+														</span>
+														<button
+															type="button"
+															className="w-8 h-8 rounded bg-[#C8A165] text-white font-bold text-lg flex items-center justify-center"
+															onClick={() => handleQuantityChange(item.id, 1)}
+														>+</button>
+													</div>
 												</div>
 												{/* Remove button */}
 												<button className="self-end mt-4 w-10 h-10 flex items-center justify-center group bg-[#F5E9DD] rounded-full border-2 border-[#C8A165] hover:bg-[#C8A165] transition-colors">
