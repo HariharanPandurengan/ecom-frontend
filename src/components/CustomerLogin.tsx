@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import "../App.css";
 import Header from "./Header,Footer/Header";
 import axios from "axios";
@@ -9,7 +9,7 @@ const accentColor = "#C8A165";
 const fontFamily = "Montserrat, sans-serif";
 
 const CustomerLogin: React.FC = () => {
-        const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [isSignup, setIsSignup] = useState(false);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -29,10 +29,69 @@ const CustomerLogin: React.FC = () => {
     setSignupData({ ...signupData, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    alert("Login submitted!");
+    try {
+      // Call getUser API with email and password as payload
+      const userRes = await axios.post(
+        `${import.meta.env.VITE_REACT_API_URL}getUser`,
+        {
+          email: loginData.email,
+          password: loginData.password,
+        }
+      );
+      if (userRes.data && userRes.data.user) {
+        sessionStorage.setItem("user", JSON.stringify(userRes.data.user));
+        // Store user id separately
+        sessionStorage.setItem("userId", userRes.data.user._id || userRes.data.user.id);
+        navigate('/Home');
+        alert('Login successful! Redirecting to home page...');
+      } else {
+        alert(userRes.data?.message || 'Login failed. Please check your credentials and try again.');
+      }
+    } catch (error: any) {
+      console.error("Error during login:", error);
+      alert(
+        error?.response?.data?.message ||
+        'An error occurred during login. Please try again later.'
+      );
+    }
+  };
+
+  const addUser = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Update userData state before sending
+
+    // Use a callback to ensure latest state is used
+    const newUser = {
+      name: signupData.name,
+      username: signupData.email, // or signupData.phone if you want phone as username
+      email: signupData.email,
+      password: signupData.password,
+      phone: signupData.phone,
+      addresses: [],
+      wishlist: [],
+      cart: [],
+      orders: []
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_API_URL}addUser`,
+        newUser
+      );
+      if (response.data.status === true) {
+        navigate('/Home');
+        alert('Signup successful! Redirecting to home page...');
+      }
+      else {
+        alert('Signup failed. Please check your details and try again.');
+      }
+    }
+    catch (error) {
+      console.error("Error during signup:", error);
+      alert('An error occurred during signup. Please try again later.');
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -81,7 +140,7 @@ const CustomerLogin: React.FC = () => {
         >
           {isSignup ? "Sign Up" : ""}
         </h1>
-        <form onSubmit={isSignup ? handleSignup : handleLogin}>
+        <form onSubmit={isSignup ?(e)=>addUser(e) : handleLogin}>
           {isSignup && (
             <>
               <div className="mb-4">
