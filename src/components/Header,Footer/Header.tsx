@@ -3,10 +3,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 // import { User, Heart, ShoppingBag } from 'lucide-react';
 import React, { useEffect, useState } from "react";
-import { Link, redirect, useNavigate, useLocation } from "react-router-dom";
-import { Home, Import } from 'lucide-react';
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookOpen, faSearchDollar, faSearchPlus } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -14,7 +12,6 @@ import hahaburgermenu from "../../assets/Icons - SVG/hamburger.png";
 import closeIcon from "../../assets/Icons - SVG/Close-Circle--Streamline-Ionic-Filled.svg"
 import searchIcon from "../../assets/Icons - SVG/Searchicon.svg"
 import usericon from "../../assets/Icons - SVG/Usericon.svg"
-import { ShoppingBag } from 'lucide-react';
 
 
 interface SizesOptions { 
@@ -82,12 +79,6 @@ const Header: React.FC = () => {
   const sendingProdData = (productID : any) => {
       navigate('/ProductCard')
   }
-  const navigatetoHome = () => {
-      navigate('/')
-  }
-  const navigatetoFooter = () => {
-      navigate('/Footer')
-  }
 
   useEffect(() => {
       setBagItemCount(3);
@@ -150,69 +141,7 @@ const Header: React.FC = () => {
 
   return (
     <div className='fixed w-full top-0 z-50'>
-        {/* Floating Cart Icon */}
-        {location.pathname !== "/CheckoutPage" && (
-            <style>
-                {`
-                .floating-cart-icon {
-                    position: fixed;
-                    top: 90px;
-                    right: 32px;
-                    z-index: 100;
-                    background: #fff;
-                    border-radius: 50%;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-                    width: 56px;
-                    height: 56px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: box-shadow 0.2s;
-                }
-                .floating-cart-icon:hover {
-                    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-                    background: #f5e9dd;
-                }
-                .cart-badge {
-                    position: absolute;
-                    top: 8px;
-                    right: 8px;
-                    background: #C8A165;
-                    color: #fff;
-                    border-radius: 9999px;
-                    font-size: 0.85rem;
-                    padding: 2px 8px;
-                    font-weight: bold;
-                }
-                @media (max-width: 600px) {
-                    .floating-cart-icon {
-                        top: 70px;
-                        right: 12px;
-                        width: 44px;
-                        height: 44px;
-                    }
-                    .cart-badge {
-                        top: 2px;
-                        right: 2px;
-                        font-size: 0.7rem;
-                        padding: 1px 6px;
-                    }
-                }
-                `}
-            </style>
-        )}
-        {location.pathname !== "/CheckoutPage" && (
-            <div
-                className="floating-cart-icon"
-                onClick={() => navigate('/CheckoutPage')}
-                style={{ cursor: "pointer" }}
-            >
-                <ShoppingBag size={28} color="#000" />  
-                {bagItemCount > 0 && (
-                    <span className="cart-badge">{bagItemCount}</span>
-                )}
-            </div>
-        )}
+        {/* Floating Cart Icon removed from header */}
         <section className='sectionheader flex justify-between items-center p-[10px] h-[64px] md:h-[80px] lg:h-[100px]'>
             <div className='left-icons relative flex items-center gap-[20px] w-[24%] md:w-[20%] lg:w-[15%]'>
                 <div className="menu-container w-full relative flex items-center justify-start">
@@ -243,13 +172,29 @@ const Header: React.FC = () => {
                         <img className='w-[40px] h-[40px]' src={searchIcon} alt="Search Icon" />
                     </div>
                     {showSearch && (
-                        <div className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12">
-                            <input className='w-full px-3 py-2 text-base border-b border-gray-700' type="text" placeholder="Search here..." 
-                                onChange={e=>setSearch(e.target.value)} value={search} />
-                            <FontAwesomeIcon className='text-black' onClick={(e)=>{
+                        <div
+                            className="search-box flex items-center text-center w-[250px] md:w-[300px] lg:w-[350px] absolute top-0 z-50 left-12"
+                            tabIndex={-1}
+                        >
+                            <input
+                                className='w-full px-3 py-2 text-base border-b border-gray-700'
+                                type="text"
+                                placeholder="Search here..."
+                                onChange={e=>setSearch(e.target.value)}
+                                value={search}
+                                autoFocus
+                                onBlur={e => setShowSearch(false)}
+                                // Prevent blur when clicking the search icon
+                                onMouseDown={e => e.stopPropagation()}
+                            />
+                            <FontAwesomeIcon
+                                className='text-black'
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={e=>{
                                     setASearch(search)
                                     searchFun(e)
-                                }} icon={faSearch} 
+                                }}
+                                icon={faSearch}
                             />
                         </div>
                     )}
@@ -336,27 +281,119 @@ const Header: React.FC = () => {
             </div>
         </section>
         {searchPopup && (
-            <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5" style={{zIndex:'999'}}>
-                <div className="relative bg-white p-2 pe-5 w-full">
-                    <h3 className="text-center text-3xl font-['Montserrat-Thin'] pb-[10px]">"{searchFilter.length}" Results found for "{aSearch}"</h3>
-                    <div className="grid-container w-full grid gap-[.250rem] h-[75vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
-                        {searchFilter.length !== 0 ? searchFilter.map((prod,index) => (
-                            <div key={prod} onClick={()=>sendingProdData(prod._id)} className="product-card border">
-                                <div className="product-image-div w-full pt-2.5">
-                                    <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
-                                </div>
-                                <div className="pl-[10px] flex items-center">
-                                    <div>
-                                        <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
-                                        <p className="product-price">{'Rs.'+prod.price}</p>
+            <>
+            <style>
+                {`
+                @media (max-width: 600px) {
+                    .search-popup-modal {
+                        width: 98vw !important;
+                        left: 1vw !important;
+                        right: 1vw !important;
+                        padding: 0.5rem !important;
+                        max-width: 98vw !important;
+                    }
+                    .search-popup-content {
+                        padding: 0.5rem !important;
+                        max-width: 98vw !important;
+                    }
+                    .search-popup-title {
+                        font-size: 1.1rem !important;
+                        padding-bottom: 0.5rem !important;
+                    }
+                    .search-popup-slider {
+                        height: 320px !important;
+                        min-height: 220px !important;
+                        max-height: 340px !important;
+                    }
+                    .product-card img,
+                    .product-image-div img {
+                        max-width: 120px !important;
+                        min-width: 80px !important;
+                        max-height: 120px !important;
+                        min-height: 80px !important;
+                    }
+                    .w-10, .h-10, .w-6, .h-6, .w-5, .h-5, .w-4, .h-4 {
+                        width: 1.5rem !important;
+                        height: 1.5rem !important;
+                    }
+                    .searchicon img,
+                    .usericon img,
+                    .hahamburgermenu img {
+                        width: 1.5rem !important;
+                        height: 1.5rem !important;
+                    }
+                    .close-icon img {
+                        width: 1.2rem !important;
+                        height: 1.2rem !important;
+                    }
+                    .product-card .product-name,
+                    .product-card .product-price {
+                        font-size: 0.9rem !important;
+                    }
+                    .search-popup-modal svg,
+                    .footer-right svg {
+                        width: 1.2rem !important;
+                        height: 1.2rem !important;
+                    }
+                }
+                `}
+            </style>
+            <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5 flex justify-center items-start z-[999]">
+                <div className="search-popup-modal relative bg-white p-2 pe-5 w-full max-w-2xl rounded-md search-popup-content">
+                    <h3 className="search-popup-title text-center text-3xl font-['Montserrat-Thin'] pb-[10px]">
+                        "{searchFilter.length}" Results found for "{aSearch}"
+                    </h3>
+                    {/* Mobile: slider, Desktop: grid */}
+                    <div className="w-full">
+                        <div className="block md:hidden search-popup-slider">
+                            {/* Mobile: horizontal scroll/slider */}
+                            <div className="flex overflow-x-auto gap-3 pb-2" style={{scrollSnapType: "x mandatory"}}>
+                                {searchFilter.length !== 0 ? searchFilter.map((prod, index) => (
+                                    <div
+                                        key={prod._id || index}
+                                        onClick={() => sendingProdData(prod._id)}
+                                        className="product-card border min-w-[220px] max-w-[240px] flex-shrink-0"
+                                        style={{scrollSnapAlign: "center"}}
+                                    >
+                                        <div className="product-image-div w-full pt-2.5">
+                                            <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                        </div>
+                                        <div className="pl-[10px] flex items-center">
+                                            <div>
+                                                <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
+                                                <p className="product-price">{'Rs.'+prod.price}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                )) : (
+                                    <div>
+                                        <p className="text-center">--- No products to show ---</p>
+                                    </div>
+                                )}
                             </div>
-                        )) : (
-                            <div>
-                                <p className="text-center">--- No products to show ---</p>
+                        </div>
+                        <div className="hidden md:block">
+                            {/* Desktop: grid */}
+                            <div className="grid-container w-full grid gap-[.250rem] h-[75vh] overflow-y-auto pt-0 pr-4 pb-4 pl-0">
+                                {searchFilter.length !== 0 ? searchFilter.map((prod, index) => (
+                                    <div key={prod._id || index} onClick={() => sendingProdData(prod._id)} className="product-card border">
+                                        <div className="product-image-div w-full pt-2.5">
+                                            <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                        </div>
+                                        <div className="pl-[10px] flex items-center">
+                                            <div>
+                                                <h3 className="product-name text-base font-bold m-2">{prod.name}</h3>
+                                                <p className="product-price">{'Rs.'+prod.price}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div>
+                                        <p className="text-center">--- No products to show ---</p>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                     <div className="absolute top-1 right-2 rounded-full bg-red-500 text-white font-bold px-1.5 py-0" onClick={()=>{
                         setSearchPopup(false)
@@ -366,6 +403,7 @@ const Header: React.FC = () => {
                     </div>
                 </div>
             </div>
+            </>
         )}
     </div>
   );

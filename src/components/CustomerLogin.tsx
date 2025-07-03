@@ -94,52 +94,84 @@ const CustomerLogin: React.FC = () => {
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // await axios.post(`${import.meta.env.VITE_REACT_API_URL}UserRegister`,{
-    // name: "",
-    // email: "",
-    // phone: "",
-    // password: ""}) 
-    //     .then(res=>{
-    //         if(res.data.status === true){
-    //             navigate('/Home')
-    //             alert('Signup successful! Redirecting to home page...')
-    //         }
-    //         else{
-    //             alert('wrong username or password')
-    //         }
-    //     })
-    //     .catch(err=>{
-    //         console.log(err)
-    //         alert('An error occurred during signup. Please try again later.')
-    //     })
-  };
 
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center bg-[#FCFAF7]"
       style={{ fontFamily }}
     >
+      <style>
+        {`
+        @media (max-width: 600px) {
+          .customer-login-card {
+            max-width: 95vw !important;
+            padding: 1.25rem !important;
+          }
+          .customer-login-card h1 {
+            font-size: 1.3rem !important;
+            margin-bottom: 1rem !important;
+          }
+          .customer-login-card label {
+            font-size: 0.95rem !important;
+          }
+          .customer-login-card input {
+            font-size: 0.95rem !important;
+            padding: 0.65rem !important;
+          }
+          .customer-login-card button[type="submit"] {
+            font-size: 1.1rem !important;
+            padding: 0.7rem !important;
+            background: #7B3F14 !important;
+            color: #fff !important;
+            font-family: Montserrat, sans-serif !important;
+            font-weight: bold !important;
+            border-radius: 0.25rem !important;
+            letter-spacing: 1px !important;
+            margin-top: 0.5rem !important;
+          }
+          .customer-login-card .mt-6 {
+            margin-top: 1rem !important;
+          }
+          .customer-login-card .text-xs {
+            font-size: 0.8rem !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .customer-login-card {
+            padding: 0.5rem !important;
+          }
+          .customer-login-card h1 {
+            font-size: 1.1rem !important;
+          }
+          .customer-login-card label {
+            font-size: 0.85rem !important;
+          }
+          .customer-login-card input {
+            font-size: 0.85rem !important;
+            padding: 0.5rem !important;
+          }
+          .customer-login-card button[type="submit"] {
+            font-size: 1rem !important;
+            padding: 0.5rem !important;
+            background: #7B3F14 !important;
+            color: #fff !important;
+            font-family: Montserrat, sans-serif !important;
+            font-weight: bold !important;
+            border-radius: 0.25rem !important;
+            letter-spacing: 1px !important;
+            margin-top: 0.5rem !important;
+          }
+        }
+        `}
+      </style>
       <Header />
       <div
-        className="w-full max-w-md p-8 rounded shadow mt-8"
+        className="customer-login-card w-full max-w-md p-8 rounded shadow mt-8"
         style={{
           background: "#fff",
           border: `1px solid ${accentColor}`,
         }}
       >
-        <h1
-          className="text-3xl font-bold mb-6 text-center"
-          style={{
-            color: primaryColor,
-            fontFamily,
-            letterSpacing: isSignup ? "0.05em" : "normal",
-            fontWeight: isSignup ? 700 : 700,
-          }}
-        >
-          {isSignup ? "Sign Up" : ""}
-        </h1>
         <form onSubmit={isSignup ?(e)=>addUser(e) : handleLogin}>
           {isSignup && (
             <>
@@ -283,7 +315,7 @@ const CustomerLogin: React.FC = () => {
               : "Don't have an account?"}
           </div>
           <button
-            className="bg-black text-white underline font-semibold"
+            className="bg-black text-white font-semibold"
             style={{ fontFamily }}
             onClick={() => setIsSignup((prev) => !prev)}
           >

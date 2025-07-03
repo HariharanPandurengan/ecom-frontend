@@ -1,20 +1,19 @@
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { User, Heart, ShoppingBag } from 'lucide-react';
 import Header from "./Header,Footer/Header";
-import ProductCard from "./ProductCard";
-import { redirect, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 import Footer from "./Header,Footer/Footer";
 import TrendingSectionImage from "../assets/Pictures/blueShirt.jpg"
 import ShirtsSectionImage from "../assets/Pictures/pink shirt.jpg"
 import TShirtSectionImage from "../assets/Pictures/yellow shirt.jpg"
 import PantsSectionImage from "../assets/Pictures/purple shirt.jpg"
+import { FaFilter } from "react-icons/fa"; // Add this import at the top with other imports
+import { FaTimes } from "react-icons/fa"; // Add this import for the x-mark icon
+import { ShoppingBag } from 'lucide-react';
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -153,70 +152,9 @@ const Home: React.FC = () => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 2000,
-        arrows: true,
-        dots: false,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
+        arrows: false, // Remove arrows
+        dots: true,    // Show dots navigation
     };
-
-    // Custom Arrow Components
-    function SampleNextArrow(props: any) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{
-                    ...style,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: "50%",
-                    right: "10px",
-                    zIndex: 30,
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                    background: "#fff",
-                    borderRadius: "50%",
-                    width: "36px",
-                    height: "36px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
-                }}
-                onClick={onClick}
-            >
-                <span style={{ fontSize: "1.5rem", color: "#7B3F14", fontWeight: 700 }}>{'>'}</span>
-            </div>
-        );
-    }
-
-    function SamplePrevArrow(props: any) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{
-                    ...style,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: "50%",
-                    left: "10px",
-                    zIndex: 30,
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                    background: "#fff",
-                    borderRadius: "50%",
-                    width: "36px",
-                    height: "36px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)"
-                }}
-                onClick={onClick}
-            >
-                <span style={{ fontSize: "1.5rem", color: "#7B3F14", fontWeight: 700 }}>{'<'}</span>
-            </div>
-        );
-    }
 
     useEffect(() => {
         fetchProducts()
@@ -351,7 +289,7 @@ const Home: React.FC = () => {
     }); 
 
     useEffect(() => {
-        let filteredOne = [];
+        let filteredOne: any[] | ((prevState: Product[]) => Product[]) = [];
         let AllFalse = true;
         let material = false;
         let price = false;
@@ -678,6 +616,73 @@ const Home: React.FC = () => {
         });
     };
 
+    // For draggable cart icon
+    const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 32, y: 90 });
+    const [dragging, setDragging] = useState(false);
+    const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+    const [dragMoved, setDragMoved] = useState(false);
+
+    // Mouse/touch event handlers for drag
+    const handleCartMouseDown = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+        setDragging(true);
+        setDragMoved(false);
+        let clientX = 0, clientY = 0;
+        if ('touches' in e) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        setDragOffset({
+            x: clientX - cartIconPos.x,
+            y: clientY - cartIconPos.y,
+        });
+        e.stopPropagation();
+    };
+
+    React.useEffect(() => {
+        const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+            if (!dragging) return;
+            let clientX = 0, clientY = 0;
+            if ('touches' in e) {
+                // @ts-ignore
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                // @ts-ignore
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            setCartIconPos({
+                x: clientX - dragOffset.x,
+                y: clientY - dragOffset.y,
+            });
+            setDragMoved(true);
+        };
+        const handleMouseUp = () => setDragging(false);
+
+        if (dragging) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('touchmove', handleMouseMove);
+            window.addEventListener('touchend', handleMouseUp);
+        }
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('touchmove', handleMouseMove);
+            window.removeEventListener('touchend', handleMouseUp);
+        };
+    }, [dragging, dragOffset]);
+
+    // Cart icon click handler: only navigate if not dragging
+    const handleCartClick = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!dragMoved) {
+            navigate('/CheckoutPage');
+        }
+    };
+
     return (
 <div className="min-h-screen flex flex-col">
     <style>
@@ -696,6 +701,7 @@ const Home: React.FC = () => {
                 margin-bottom: 1rem;
             }
             .grid-container {
+                display: grid !important;
                 grid-template-columns: 1fr 1fr !important;
                 height: auto !important;
                 min-height: 60vh;
@@ -706,9 +712,8 @@ const Home: React.FC = () => {
                 margin: 0 !important;
             }
             .product-image-div img {
-                height: 180px !important;
-                min-height: 180px !important;
-                max-height: 180px !important;
+                min-height: 200px !important;
+                // max-height: 180px !important;
             }
             .sections-container {
                 gap: 16px !important;
@@ -744,16 +749,78 @@ const Home: React.FC = () => {
                 height: 90px !important;
             }
             .product-image-div img {
-                height: 120px !important;
-                min-height: 120px !important;
-                max-height: 120px !important;
+                min-height: 200px !important;
+                // max-height: 120px !important;
             }
             .grid-container {
-                grid-template-columns: 1fr !important;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+        .floating-cart-icon {
+            position: fixed;
+            z-index: 100;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.2s;
+            cursor: grab;
+            user-select: none;
+        }
+        .floating-cart-icon:active {
+            cursor: grabbing;
+        }
+        .floating-cart-icon:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            background: #f5e9dd;
+        }
+        .cart-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #C8A165;
+            color: #fff;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            padding: 2px 8px;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            .floating-cart-icon {
+                width: 44px;
+                height: 44px;
+            }
+            .cart-badge {
+                top: 2px;
+                right: 2px;
+                font-size: 0.7rem;
+                padding: 1px 6px;
             }
         }
         `}
     </style>
+    {/* Draggable Floating Cart Icon */}
+    <div
+        className="floating-cart-icon"
+        style={{
+            left: cartIconPos.x,
+            top: cartIconPos.y,
+            position: "fixed",
+        }}
+        onMouseDown={handleCartMouseDown}
+        onTouchStart={handleCartMouseDown}
+        onClick={handleCartClick}
+    >
+        <ShoppingBag size={28} color="#000" />
+        {bagItemCount > 0 && (
+            <span className="cart-badge">{bagItemCount}</span>
+        )}
+    </div>
     <div>
         <Header />
     </div>
@@ -837,7 +904,16 @@ const Home: React.FC = () => {
         </section>
         <section>
             <div className="shop-by-section m-0 p-0 text-center">
-                <h1 className="text-lg md:text-xl lg:text-2xl">SHOP BY SECTION</h1>
+                <h1
+                    className="text-base sm:text-lg md:text-xl lg:text-2xl"
+                    style={{
+                        fontFamily: "Montserrat-Thin, sans-serif",
+                        fontSize: "2rem",
+                        marginBottom: "0.5rem"
+                    }}
+                >
+                    SHOP BY SECTION
+                </h1>
                 <div className="sections-container flex justify-center flex-wrap gap-[30px] md:gap-[60px] p-[10px] md:p-[20px]">
                     {sections.map((section, index) => (
                         <div
@@ -863,6 +939,52 @@ const Home: React.FC = () => {
         <section className="relative">
             <div id="product" className="landing-dashboard flex flex-wrap md:flex-nowrap justify-end overflow-y-hidden">
                 <section className="w-full md:w-[15%] flex flex-col">
+                    {/* Filter icon and text for all screens */}
+                    <div
+                        className="mb-2 flex items-center select-none relative"
+                        style={{
+                            width: "100%",
+                            fontFamily: "Montserrat-Thin",
+                            fontSize: "0.95rem",
+                            fontWeight: 400,
+                            letterSpacing: "0.5px",
+                            color: "#000",
+                            userSelect: "none"
+                        }}
+                    >
+                        <div
+                            className="cursor-pointer flex items-center gap-2"
+                            onClick={() => setIsCollapsed((prev) => !prev)}
+                        >
+                            <FaFilter size={18} />
+                            <span>Filter</span>
+                            <span style={{ fontSize: "0.9em", marginLeft: 4 }}>
+                                {isCollapsed ? "(Show)" : "(Hide)"}
+                            </span>
+                        </div>
+                        {/* X-mark icon to clear all filters, absolutely positioned to the right */}
+                        <span
+                            className="absolute right-0 top-1/2 -translate-y-1/2"
+                            style={{ cursor: "pointer", color: "#7B3F14", paddingRight: 8 }}
+                            onClick={e => {
+                                e.stopPropagation();
+                                setCurrentFilters(prev => {
+                                    const reset = { ...prev };
+                                    Object.keys(reset).forEach(key => {
+                                        Object.keys(reset[key]).forEach(k2 => {
+                                            reset[key][k2] = false;
+                                        });
+                                    });
+                                    return reset;
+                                });
+                                setSelectedCategory(null);
+                            }}
+                            title="Clear all filters"
+                        >
+                            <FaTimes size={16} />
+                        </span>
+                    </div>
+                    {/* Filter column, hidden on mobile if collapsed */}
                     <div
                         className="filter-column rounded-bl-[8px] pl-[10px] md:pl-[20px]"
                         id="stickyDiv"
@@ -871,17 +993,18 @@ const Home: React.FC = () => {
                             top: "60px",
                             height: "calc(100vh - 60px - 64px)",
                             maxHeight: "calc(100vh - 60px - 64px)",
-                            overflowY: "auto"
+                            overflowY: "auto",
+                            display: isCollapsed ? "none" : "block"
                         }}
                     >
                         {filterMet.map((item, index) => (
                             <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
                                 <div key={item.title}>
-                                    <p className={isCollapsed ? "m-0 items-center flex" : "collapsed m-0 items-center flex text-sm md:text-base"}><strong>{item.title}</strong></p>
+                                    <p className="m-0 items-center flex text-sm md:text-base"><strong>{item.title}</strong></p>
                                     <div className="collections p-[5px] md:p-[10px] max-h-[300px] md:max-h-[400px] overflow-y-auto">
                                         <ul className="list-none p-0 m-0">
-                                            {!isCollapsed && item.list.map((list, index) => (
-                                                <li key={index} className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}` }}>
+                                            {!isCollapsed && item.list.map((list, idx) => (
+                                                <li key={idx} className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}` }}>
                                                     <label className="flex items-center mb-[3px] md:mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
                                                     <span className="ml-auto text-xs md:text-sm">{'(' + fetchCount(item.title, list) + ')'}</span>
                                                 </li>
@@ -896,7 +1019,7 @@ const Home: React.FC = () => {
                 <section className="w-full md:w-[85%]">
                     <div className="grid-container w-full grid gap-[.250rem] h-[calc(100vh-60px-64px)] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
                         {filteredProducts.length !== 0 ? (
-                            filteredProducts.map((prod, index) => (
+                            filteredProducts.map((prod, _index) => (
                                 <div key={prod._id} className="product-card" onClick={() => sendingProdData(prod._id)}>
                                     <div className="product-image-div mb-3 w-full pt-2.5">
                                         <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />

@@ -291,7 +291,7 @@ header .spacer {
   left: 50%;
   transform: translate(-50%, -50%);
   color: black;
-  font-size: 1.5em;
+  font-size: 0.75em;
 }
 .div-section:hover {
   transform: scale(1.05);
