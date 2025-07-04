@@ -24,6 +24,7 @@
   src: url('./assets/Fonts/avenir-lt-pro/AvenirLTProLight.otf') format('opentype');
 }
 
+
 ::-webkit-scrollbar {
   width: 10px; /* Width of the scrollbar */
 }
