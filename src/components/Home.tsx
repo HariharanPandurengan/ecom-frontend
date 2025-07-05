@@ -817,9 +817,9 @@ const Home: React.FC = () => {
         onClick={handleCartClick}
     >
         <ShoppingBag size={28} color="#000" />
-        {bagItemCount > 0 && (
+        {/* {bagItemCount > 0 && (
             <span className="cart-badge">{bagItemCount}</span>
-        )}
+        )} */}
     </div>
     <div>
         <Header />

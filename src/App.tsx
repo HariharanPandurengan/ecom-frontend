@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
 import PageNotFound from './components/PageNotFound'
-import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
 import ProductCard from './components/ProductCard'
 import Home from './components/Home'
@@ -20,6 +19,7 @@ const App: React.FC = () => {
         <Route path='/ProductCard' element={<ProductCard />}></Route>
         <Route path='/CheckoutPage' element={<CheckoutPage />}></Route>
         <Route path='/CustomerLogin' element={<CustomerLogin/>}></Route>
+        <Route path='/OrderList' element={<CustomerLogin/>}></Route>
       </Routes>
     </>
   )

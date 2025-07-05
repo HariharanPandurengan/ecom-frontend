@@ -255,12 +255,15 @@ const Header: React.FC = () => {
                                 </Link>
                             </li>
                             <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
-                                {/* Wishlist SVG */}
+                                {/* Order SVG */}
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#000"/>
+                                    <rect x="4" y="4" width="16" height="16" rx="2" fill="#000"/>
+                                    <rect x="7" y="7" width="10" height="2" rx="1" fill="#fff"/>
+                                    <rect x="7" y="11" width="10" height="2" rx="1" fill="#fff"/>
+                                    <rect x="7" y="15" width="6" height="2" rx="1" fill="#fff"/>
                                 </svg>
-                                <Link to="/wishlist" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
-                                    Wishlists
+                                <Link to="/OrderList" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                    Orders
                                 </Link>
                             </li>
                             <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
@@ -270,6 +273,8 @@ const Header: React.FC = () => {
                                 </svg>
                                 <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Montserrat" }} onClick={() => {
                                     // TODO: Add logout logic
+                                    sessionStorage.removeItem("user");
+                                    sessionStorage.removeItem("userId");
                                     setIsProfileMenuOpen(false);
                                 }}>
                                     Logout
