@@ -3,13 +3,33 @@ import "../App.css";
 import axios from 'axios';
 import Header from "./Header,Footer/Header";
 import Footer from "./Header,Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
 }
 
 interface Image { 
-    [key: string]:  string ; 
+    [key: string]:  File ; 
+}
+
+interface Product {
+  name: string;
+  price: string;
+  sex: string;
+  category: string;
+  subCategory: string;
+  material: string;
+  totalQuantity: string;
+  description: string;
+  colors: string[];
+  sizes: SizesOptions;
+  images: Image;
+  fits: string,
+  sleeves: string,
+  occasion: string,
+  pattern:  string,
+  trendingProd: boolean;
 }
 
 const initialProductState = { 
@@ -31,25 +51,6 @@ const initialProductState = {
     trendingProd: false,
 };
 
-interface Product {
-  name: string;
-  price: string;
-  sex: string;
-  category: string;
-  subCategory: string;
-  material: string;
-  totalQuantity: string;
-  description: string;
-  colors: string[];
-  sizes: SizesOptions;
-  images: Image;
-  fits: string,
-  sleeves: string,
-  occasion: string,
-  pattern:  string,
-  trendingProd: boolean;
-}
-
 const AdminDashboard: React.FC = () => {
     const [product, setProduct] = useState<Product>(initialProductState);
     const [editProdID,setEditProdID] = useState('')
@@ -59,6 +60,7 @@ const AdminDashboard: React.FC = () => {
     const [editP,setEditP] = useState(false)
     const [deleteP,setDeleteP] = useState(false)
     const sizes = ['select','S', 'M', 'L', 'XL'];
+    const navigate = useNavigate()
     const fields = [
         { name: 'name', label: 'Product Name', type: 'text' },
         { name: 'price', label: 'Product Price', type: 'text' },
@@ -116,7 +118,12 @@ const AdminDashboard: React.FC = () => {
     ];
 
     useEffect(()=>{
-        fetchProducts()
+        if(localStorage.getItem('AdminLogin') === 'true'){
+            fetchProducts()
+        }
+        else{
+            navigate('/AdminLogin')
+        }
     },[])
 
     const fetchProducts = () => {
@@ -161,6 +168,19 @@ const AdminDashboard: React.FC = () => {
                 }));
             };
             reader.readAsDataURL(file);
+        }
+    };
+
+    const handleFileChange2 = (e: ChangeEvent<HTMLInputElement>,color:any) => {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            setProduct(prevState => ({
+                ...prevState,
+                images: {
+                    ...prevState.images,
+                    [color]: file
+                } 
+            }));
         }
     };
 
@@ -217,31 +237,43 @@ const AdminDashboard: React.FC = () => {
         e.preventDefault();
         let emptyField = '';
         Object.keys(product).map(val => {
-        const key = val as keyof Product;
-        if (Array.isArray(product[key])) {
-            if (product[key] == null || (product[key] as string[]).length === 0) {
-                emptyField = val;
+            const key = val as keyof Product;
+            if (Array.isArray(product[key])) {
+                if (product[key] == null || (product[key] as string[]).length === 0) {
+                    emptyField = val;
+                }
+            } else {
+                if (product[key] === '' || product[key] == null) {
+                    emptyField = val;
+                }
             }
-        } else {
-            if (product[key] === '' || product[key] == null) {
-                emptyField = val;
-            }
-        }
         });
-        let ff = true;
-        if (emptyField === '' && ff) {
+        if (emptyField === '') {
+            const formData = new FormData();
+            const { images, ...productDataWithoutImages } = product;
+            formData.append('product', JSON.stringify(productDataWithoutImages));
+
+            Object.entries(images).forEach(([key, file]) => {
+                if (file) {
+                    formData.append(`images[${key}]`, file);
+                }
+            });
+
             let link = '';
             if(type == 'add'){
                 link = `${import.meta.env.VITE_REACT_API_URL}addProduct` 
             }
             else if(type == 'edit'){
                 link = `${import.meta.env.VITE_REACT_API_URL}editProduct`
+                formData.append('id', editProdID);
             }
-            await axios.post(link,{product:product,id:editProdID})
+            
+            await axios.post(link,formData,{ headers: {
+                'Content-Type': 'multipart/form-data'
+            }})
             .then(res=>{
                 if(res.data.status === true){
                     setProduct(initialProductState);
-                    ff = false
                     fetchProducts()
                     if(type == 'add'){
                         alert('Product Added') 
@@ -373,20 +405,20 @@ const AdminDashboard: React.FC = () => {
                                     product.colors.map(item => {
                                         return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
                                                     <p style={{marginRight:'10px'}}>{item}</p>
-                                                    <input required type="file" onChange={(e) => handleFileChange(e,item)}/>
+                                                    <input required type="file" onChange={(e) => handleFileChange2(e,item)}/>
                                                 </div>
                                     })
                                 }
                             </div>
                         }
                                 <div className="form-group">
-            <label className="underline">Is this a trending product?</label>
-            <div>
-                <label>
-                    <input type="radio" name="trendingProd" value="true" checked={product.trendingProd === true} onChange={(e) => handleChangeTrend(e)} /> Yes
-                </label>
-            </div>
-        </div>
+                                    <label className="underline">Is this a trending product?</label>
+                                    <div>
+                                        <label>
+                                            <input type="radio" name="trendingProd" value="true" checked={product.trendingProd === true} onChange={(e) => handleChangeTrend(e)} /> Yes
+                                        </label>
+                                    </div>
+                                </div>
                         <button type="submit">Add Product</button>
                     </form>
                 </section>
@@ -397,7 +429,7 @@ const AdminDashboard: React.FC = () => {
                             products.length !== 0 ? products.map((prod,index) => {
                                                         return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
                                                                     <div style={{width:'30%',overflow:"hidden"}}>
-                                                                        <img style={{width:'100%'}} src={`${Object.values(prod.images)[0]}`} />
+                                                                        <img style={{width:'100%'}} src={`../${Object.values(prod.images)[0].split('/public')[1]}`} />
                                                                     </div>
                                                                     <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
                                                                         <h3>{(index+1)+'. '}</h3>
@@ -407,9 +439,9 @@ const AdminDashboard: React.FC = () => {
                                                                             <p>{prod.material} |</p>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="absolute top-1 right-1 w-[10%] h-[20%] flex items-center justify-between">
-                                                                        <button className="w-[45%] h-[100%] b-e" onClick={()=>{setEditP(true);setEditProdID(prod._id);editProd(prod._id)}}>Edit</button>
-                                                                        <button className="w-[45%] h-[100%] bg-red-500 b-d" onClick={()=>{setDeleteP(true);setDelProdID(prod._id);setDelProdName(prod.name)}}>Delete</button>
+                                                                    <div className="absolute top-0 right-1 w-[10%] h-[100%] flex items-center justify-between">
+                                                                        <button className="w-[45%] h-auto b-e" onClick={()=>{setEditP(true);setEditProdID(prod._id);editProd(prod._id)}}>Edit</button>
+                                                                        <button className="w-[45%] h-auto bg-red-500 b-d" onClick={()=>{setDeleteP(true);setDelProdID(prod._id);setDelProdName(prod.name)}}>Delete</button>
                                                                     </div>
                                                                 </div>
                                                     })

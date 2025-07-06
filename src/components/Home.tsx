@@ -157,7 +157,10 @@ const Home: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchProducts()
+        async function fp() {
+          await fetchProducts()
+        }
+        fp();
         const initialState: Record<string, Record<string, boolean>> = {}
         for (let i = 0; i < filterMet.length; i++) {
             const title = filterMet[i]['title'];
@@ -171,8 +174,9 @@ const Home: React.FC = () => {
         setBagItemCount(3)
     }, [])
 
-    const fetchProducts = () => {
-        axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`)
+    const fetchProducts = async () => {
+        console.log('123')
+        await axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`)
             .then(res => {
                 if (res.data.status === true) {
                     setProducts(res.data.products);

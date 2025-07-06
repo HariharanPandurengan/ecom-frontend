@@ -12,6 +12,7 @@ const AdminLogin: React.FC = () => {
         await axios.post(`${import.meta.env.VITE_REACT_API_URL}AdminLogin`,{username:username,password:password})
         .then(res=>{
             if(res.data.status === true){
+                localStorage.setItem('AdminLogin','true')
                 navigate('/AdminDashboard')
             }
             else{

@@ -93,7 +93,7 @@ const ProductCard = () => {
       if (sizeList.length > 0) setSelectedSize(sizeList[0]);
       else setSelectedSize("");
     }
-  }, [selectedColor, product.sizes]);
+  }, [selectedColor, product]);
 
   // Floating cart icon logic (same as Home)
   const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 32, y: 90 });
