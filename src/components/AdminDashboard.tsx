@@ -118,12 +118,12 @@ const AdminDashboard: React.FC = () => {
     ];
 
     useEffect(()=>{
-        if(localStorage.getItem('AdminLogin') === 'true'){
-            fetchProducts()
-        }
-        else{
-            navigate('/AdminLogin')
-        }
+        // if(localStorage.getItem('AdminLogin') === 'true'){
+        //     fetchProducts()
+        // }
+        // else{
+        //     navigate('/AdminLogin')
+        // }
     },[])
 
     const fetchProducts = () => {
@@ -148,7 +148,7 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    function editProd(e_id){
+    function editProd(e_id: any){
         setProduct(initialProductState)
         const prod = products.filter(list=>list._id == e_id)
         setProduct(prod[0])

@@ -43,7 +43,7 @@ const OrderList: React.FC = () => {
                             <div className="flex justify-between items-center mb-4">
                                 <div>
                                     <span className="font-bold text-lg" style={{ fontFamily: "Montserrat" }}>Order ID:</span>
-                                    <span className="ml-2 text-base" style={{ fontFamily: "Montserrat-Thin" }}>{order._id}</span>
+                                    <span className="ml-2 text-base" style={{ fontFamily: "Montserrat-Thin" }}>{order.orderId}</span>
                                 </div>
                                 <span className={`px-4 py-1 rounded-full text-sm font-semibold ${order.status === "Delivered" ? "bg-green-200 text-green-800" : order.status === "Pending" ? "bg-yellow-200 text-yellow-800" : "bg-gray-200 text-gray-800"}`}>
                                     {order.status || "Pending"}

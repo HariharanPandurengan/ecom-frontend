@@ -3,6 +3,10 @@
   src: url('./assets/Fonts/Montserrat/static/Montserrat-Black.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Didot';
+  src: url('./assets/Fonts/didot-2/Didot.otf') format('opentype');
+}
 
 @font-face {
   font-family: 'Montserrat-Italic';
@@ -69,9 +73,9 @@ body{
   height: 64px;
 }
 .companyname{
-  font-family: 'Avenir' !important;   
+  font-family: 'Didot' !important;   
   padding-top: 10px;
-  font-size: 20px;
+  font-size: 24px;
   letter-spacing: 1px;
   color: #000; /* Black text color */
   text-transform: uppercase;

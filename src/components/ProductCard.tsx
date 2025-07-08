@@ -49,9 +49,10 @@ const ProductCard = () => {
   const [product, setProduct] = useState<Product>(initialProductState);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
-  const [images, setSelectedImage] = useState("src/assets/Pictures/blue shirt.jpg");
+  const [images, setSelectedImage] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const image = "src/assets/Pictures/blue shirt.jpg";
+
   const handleSizeChange = (e : any) => {
     setSelectedSize(e.target.value);
   };
@@ -75,6 +76,8 @@ const ProductCard = () => {
               if (colorList && colorList.length > 0) {
                 setSelectedColor(colorList[0]);
                 const sizeList = Object.keys(res.data.product[0].sizes[colorList[0]] || {});
+                // const imageList = Object.values(res.data.product[0].images);
+                // setSelectedImage(imageList);
                 if (sizeList.length > 0) setSelectedSize(sizeList[0]);
               }
             }
@@ -90,6 +93,9 @@ const ProductCard = () => {
   useEffect(() => {
     if (selectedColor && product.sizes && product.sizes[selectedColor]) {
       const sizeList = Object.keys(product.sizes[selectedColor]);
+      const imageList = [product.images[selectedColor]];
+      setSelectedImage(imageList);
+      // If there are sizes available for the selected color, set the first one as default
       if (sizeList.length > 0) setSelectedSize(sizeList[0]);
       else setSelectedSize("");
     }
@@ -243,8 +249,8 @@ const ProductCard = () => {
         {/* Image Section */}
         <div className="flex-none h-[60vh] sm:h-[100vh] w-full sm:w-[40rem] relative">
           <img
-            src={`${Object.values(product.images)[0]}`}
-            alt="Classic Utility Jacket"
+            src={`${images}`}
+            alt={`${images}`}
             className="absolute inset-0 w-full h-full object-cover p-5"
           />
         </div>

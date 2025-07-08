@@ -165,7 +165,7 @@ const Header: React.FC = () => {
                         </ul>
                         <div className="contact mt-30 p-5 text-sm md:text-base">
                             <p className='block'>Contact:</p>
-                            <a href="mailto:akashganeshaner@gmail.com">akh@gmail.com</a>
+                            <a href="mailto:akashganeshaner@gmail.com">thenirah@gmail.com</a>
                         </div>
                     </div>
                     <div className='searchicon flex w-10 h-10 relative justify-center items-center cursor-pointer' onClick={toggleSearchBox}>
@@ -201,7 +201,7 @@ const Header: React.FC = () => {
                 </div>
             </div>
             <div className='companyname relative pt-2.5 text-xl md:text-2xl lg:text-3xl tracking-wider'>
-                <a href='/Home'>H  C L O T H I N G</a>
+                <a href='/Home'> N I R A H</a>
             </div>
             <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px] relative'>
                 <img

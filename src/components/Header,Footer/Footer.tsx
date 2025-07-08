@@ -54,14 +54,23 @@ const Footer = () => {
             className="object-cover w-full h-full"
           />
         </div> */}
+            {/* <div className="footer-left w-1/2 h-full flex flex-col justify-center px-6">
+      <h2 className="text-lg font-semibold text-gray-800 font-['Didot'] mb-2">The Nirah</h2>
+      <p className="text-sm text-gray-600 font-['Montserrat-Thin'] leading-relaxed">
+        From “Niram,” Tamil for colour.<br />
+        Crafted to simplify a man’s wardrobe, not complicate it.<br />
+        Essentials that build confidence, not confusion.<br />
+        Thoughtfully made across India.<br />
+        Because real style starts with the right basics.
+      </p>
+    </div> */}
 
         {/* Right Side (Contact Info and Social Links) */}
         <div className="footer-right w-full flex flex-col items-center pl-6">
           {/* Business Name */}
-          <h1 className="text-2xl text-black-900 font-['Avenir']">H C L O T H I N G</h1>
-          <p className="text-gray-600 font-['Montserrat-Thin']">Times Square, New York, America</p>      
+          <h1 className="text-2xl text-black-900 font-['Didot']">N I R A H</h1>
           {/* Social Media Icons */}
-          <div className="flex flex-col items-center mt-4 space-y-1">
+          <div className="flex flex-col items-center space-y-1">
             {/* WhatsApp Text Link - darker WhatsApp gradient, no white tone */}
             <a
               href="https://wa.me/918976543210"
@@ -102,7 +111,7 @@ const Footer = () => {
           {/* Copyright bottom center and below icons */}
           <div className="w-full flex justify-center mt-2">
             <p className="text-[10px] text-gray-500 font-['Montserrat-Thin'] text-center m-0">
-              COPYRIGHT © 2025 H C L O T H I N G.
+              COPYRIGHT © 2025 NIRAH.
               ALL RIGHTS RESERVED
             </p>
           </div>

@@ -69,10 +69,6 @@ const CustomerLogin: React.FC = () => {
       email: signupData.email,
       password: signupData.password,
       phone: signupData.phone,
-      addresses: [],
-      wishlist: [],
-      cart: [],
-      orders: []
     };
 
     try {
@@ -81,8 +77,18 @@ const CustomerLogin: React.FC = () => {
         newUser
       );
       if (response.data.status === true) {
-        navigate('/Home');
-        alert('Signup successful! Redirecting to home page...');
+        const loginres = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getUser`, {
+          email: newUser.email,
+          password: newUser.password,
+        });
+        if (loginres.data && loginres.data.user) {
+          sessionStorage.setItem("user", JSON.stringify(loginres.data.user));
+          // Store user id separately
+          sessionStorage.setItem("userId", loginres.data.user._id || loginres.data.user.id);
+          
+          navigate('/Home');
+          alert('Signup successful! Redirecting to home page...');
+        }
       }
       else {
         alert('Signup failed. Please check your details and try again.');

@@ -4,10 +4,13 @@ import Footer from "./Header,Footer/Footer";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaClipboardList } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const CheckoutPage = () => {
 	const navigate = useNavigate();
 	const [activeStep, setActiveStep] = useState<"cart" | "address" | "payment">("cart");
+	const [cartId, setCartId] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 	const [cartItems, setCartItems] = useState<any[]>([]);
 	const [cartProducts, setCartProducts] = useState<any[]>([]);
 	const [cartQuantities, setCartQuantities] = useState<{ [id: string]: number }>({});
@@ -41,6 +44,7 @@ const CheckoutPage = () => {
 		(async () => {
 			try {
 				const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId });
+				setCartId(res.data.cart._id);
 				const cartArr = res.data.cart.products;
 				console.log("Cart items:", cartArr);
 				setCartItems(cartArr);
@@ -101,14 +105,103 @@ const CheckoutPage = () => {
 		})();
 	}, []);
 
-	const handleQuantityChange = (cartId: string, delta: number) => {
-		setCartQuantities(qty => {
-			const newQty = Math.max(1, (qty[cartId] || 1) + delta);
-			const updated = { ...qty, [cartId]: newQty };
-			// Optionally update backend here
-			return updated;
-		});
-	};
+
+	const handleQuantityChange = async (cartId: string, delta: number) => {
+  const newQty = Math.max(1, (cartQuantities[cartId] || 1) + delta);
+
+  // Show loading state
+  setIsLoading(true);
+
+  // Update state values
+  setCartQuantities(qty => ({ ...qty, [cartId]: newQty }));
+
+  setCartProducts(products =>
+    products.map(prod =>
+      prod.cartId === cartId ? { ...prod, cartQuantity: newQty } : prod
+    )
+  );
+
+  setCartItems(items =>
+    items.map(item =>
+      item._id === cartId ? { ...item, quantity: newQty } : item
+    )
+  );
+
+  setCartColor(color => ({ ...color }));
+  setCartSize(size => ({ ...size }));
+
+  const userId = sessionStorage.getItem("userId");
+
+  try {
+    await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateCart`, {
+      userId,
+      products: cartProducts.map(prod => ({
+        productId: prod._id,
+        quantity: prod.cartId === cartId ? newQty : prod.cartQuantity,
+        colorSelected: prod.cartColor,
+        sizeSelected: prod.cartSize,
+      })),
+      cartId
+    });
+
+    const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId });
+    const cartArr = res.data.cart.products;
+    setCartItems(cartArr);
+
+    const productDetails = [];
+    for (const item of cartArr) {
+      try {
+        const prodRes = await axios.post(
+          `${import.meta.env.VITE_REACT_API_URL}getProduct`,
+          { product_id: item.productId }
+        );
+        if (
+          prodRes.data.status === true &&
+          Array.isArray(prodRes.data.product) &&
+          prodRes.data.product.length > 0
+        ) {
+          productDetails.push({
+            ...prodRes.data.product[0],
+            cartQuantity: item.quantity || 1,
+            cartColor: item.colorSelected || "",
+            cartSize: item.sizeSelected || "",
+            cartId: item._id,
+          });
+        }
+      } catch {
+        // skip on error
+      }
+    }
+    setCartProducts(productDetails);
+
+    const qtyObj = {};
+    const colorObj = {};
+    const sizeObj = {};
+    let total = 0;
+    productDetails.forEach(prod => {
+      qtyObj[prod.cartId] = prod.cartQuantity;
+      colorObj[prod.cartId] = prod.cartColor || "";
+      sizeObj[prod.cartId] = prod.cartSize || "";
+      total += (Number(prod.price) || 0) * (prod.cartQuantity || 1);
+    });
+    setCartQuantities(qtyObj);
+    setCartColor(colorObj);
+    setCartSize(sizeObj);
+    setOrderDetails(od => ({
+      ...od,
+      cartTotal: total,
+      cartDiscount: res.data.cartDiscount || 0,
+    }));
+  } catch {
+    setCartItems([]);
+    setCartProducts([]);
+  } finally {
+    setIsLoading(false); // Hide loading state
+  }
+};
+
+
+
 
 	// Update shipping address state from form
 	const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,7 +261,7 @@ const CheckoutPage = () => {
 			key: "rzp_test_6heE5AuL2imr7z", // Replace with your Razorpay key
 			amount: totalAmount * 100, // in paise
 			currency: "INR",
-			name: "H CLOTHING",
+			name: "The Nirah",
 			description: "Order Payment",
 			handler: async function (response: any) {
 				if (response.razorpay_payment_id) {
@@ -186,6 +279,7 @@ const CheckoutPage = () => {
 					} catch {
 						alert("Order creation failed.");
 					}
+					handleClearCart();
 				}
 			},
 			prefill: {
@@ -207,10 +301,19 @@ const CheckoutPage = () => {
         navigate('/ProductCard');
     }
 
-    const handleStepChange = (step: "cart" | "address" | "payment") => {
+    const handleStepChange = async (step: "cart" | "address" | "payment") => {
         if (step === "cart") {
             setActiveStep("cart");
-        } else if (step === "address") {   
+        } else if (step === "address") {
+			try {
+				await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateUser`, {
+					userId: sessionStorage.getItem("userId"),
+					cartId : cartItems._id
+				});
+			}   
+			catch {
+				alert("Failed to update user data.");
+			}
             if (cartItems.length === 0) {
                 alert("Please add items to the cart before proceeding to address.");
                 return;
@@ -260,10 +363,31 @@ const CheckoutPage = () => {
 		}
 	};
 
+	const validateAndProceed = () => {
+  const requiredFields = [
+    "name",
+    "phonenumber",
+    "postalcode",
+    "house",
+    "area",
+    "city",
+    "state",
+    "email",
+  ];
+
+  for (const field of requiredFields) {
+    if (!shippingAddress[field] || shippingAddress[field].trim() === "") {
+      alert(`Please enter your ${field}`);
+      return;
+    }
+  }
+
+  handleStepChange("payment");
+};
+
 	const handleClearCart = async () => {
 		const userId = sessionStorage.getItem("userId");
 		if (!userId || !cartItems.length) return;
-		const cartId = cartItems[0]?.cartId || cartItems[0]?._id || cartItems[0]?.cart_id || cartItems[0]?.cartid || cartItems[0]?.id;
 		try {
 			await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteCart`, { cartId });
 			setCartProducts([]);
@@ -410,6 +534,18 @@ const CheckoutPage = () => {
 				`}
 			</style>
 			<Header />
+
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+          <motion.div
+            className="w-16 h-16 border-4 border-t-transparent border-white rounded-full animate-spin"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ duration: 0.7 }}
+          />
+        </div>
+      )}
 			<div className="checkout-stepper">
                 <span
                     className={activeStep === "cart" ? "active" : ""}
@@ -419,13 +555,13 @@ const CheckoutPage = () => {
                 </span>
                 <span
                     className={activeStep === "address" ? "active" : ""}
-                    onClick={() => setActiveStep("address")}
+                    onClick={() => handleStepChange("address")}
                 >
                     ADDRESS
                 </span>
                 <span
                     className={activeStep === "payment" ? "active" : ""}
-                    onClick={() => setActiveStep("payment")}
+                    onClick={() => validateAndProceed()}
                 >
                     PAYMENT
                 </span>
@@ -481,7 +617,7 @@ const CheckoutPage = () => {
 										title="Add new product"
 										onClick={() => navigate("/Home")}
 									>
-										+
+										+	
 									</button>
 									<span className="mt-4 text-xl text-gray-500 font-semibold" style={{ fontFamily: "Montserrat-Thin" }}>
 										CART IS EMPTY
@@ -502,13 +638,14 @@ const CheckoutPage = () => {
 									<div
 										key={prod.cartId}
 										className="flex mb-8 flex-col sm:flex-row items-center sm:items-start relative cursor-pointer"
-										onClick={() => sendingProdData(prod._id)}
+										
 										style={{ transition: "box-shadow 0.2s" }}
 									>
 										<img
 											src={prod.images ? Object.values(prod.images)[0] : ""}
 											alt={prod.name}
 											className="object-cover"
+											onClick={() => sendingProdData(prod._id)}
 											style={{
 												width: "300px",
 												height: "260px",
@@ -522,54 +659,54 @@ const CheckoutPage = () => {
 										/>
 										<div className="sm:ml-6 flex flex-col justify-between w-full">
 											<div>
-												<h2 className="text-xl font-bold text-[#000] mb-1" style={{ fontFamily: "Montserrat" }}>
+												<h2 className="text-xl font-bold text-[#000] mb-1" style={{ fontFamily: "Montserrat" }} onClick={() => sendingProdData(prod._id)}>
 													{prod.name}
 												</h2>
 												<p className="text-base text-gray-700 mb-2" style={{fontFamily : "Montserrat-thin"}}>{prod.description}</p>
-												<div className="text-lg font-semibold mt-2" style={{fontFamily : "Montserrat-thin"}}>₹{prod.price}</div>
 												{/* Color, Size, Quantity and Remove X button on consecutive lines */}
 												<div className="flex flex-col gap-2 mt-2">
 													<div className="flex items-center">
+														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Color :</span>
 														<div
 															className={`w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer border-2 ${
-																cartItems[idx]?.selectedColor ? "border-[#fff]" : "border-transparent"
+																cartColor[prod.cartId] ? "border-[#fff]" : "border-transparent"
 															} ${
-																cartItems[idx]?.selectedColor === "Green"
+																cartColor[prod.cartId] === "Green"
 																	? "bg-green-500"
-																	: cartItems[idx]?.selectedColor === "Red"
+																	: cartColor[prod.cartId] === "Red"
 																	? "bg-red-500"
-																	: cartItems[idx]?.selectedColor === "Pink"
+																	: cartColor[prod.cartId] === "Pink"
 																	? "bg-pink-500"
-																	: cartItems[idx]?.selectedColor === "Blue"
+																	: cartColor[prod.cartId] === "Blue"
 																	? "bg-blue-500"
-																	: cartItems[idx]?.selectedColor === "White"
+																	: cartColor[prod.cartId] === "White"
 																	? "bg-gray-100"
-																	: cartItems[idx]?.selectedColor === "Yellow"
+																	: cartColor[prod.cartId] === "Yellow"
 																	? "bg-yellow-500"
-																	: cartItems[idx]?.selectedColor === "Orange"
+																	: cartColor[prod.cartId] === "Orange"
 																	? "bg-orange-500"
-																	: cartItems[idx]?.selectedColor === "Purple"
+																	: cartColor[prod.cartId] === "Purple"
 																	? "bg-purple-500"
-																	: cartItems[idx]?.selectedColor === "Brown"
+																	: cartColor[prod.cartId] === "Brown"
 																	? "bg-amber-700"
-																	: cartItems[idx]?.selectedColor === "Grey"
+																	: cartColor[prod.cartId] === "Grey"
 																	? "bg-gray-500"
-																	: cartItems[idx]?.selectedColor === "Navy"
+																	: cartColor[prod.cartId] === "Navy"
 																	? "bg-blue-900"
-																	: cartItems[idx]?.selectedColor === "Teal"
+																	: cartColor[prod.cartId] === "Teal"
 																	? "bg-teal-500"
-																	: cartItems[idx]?.selectedColor === "Maroon"
+																	: cartColor[prod.cartId] === "Maroon"
 																	? "bg-red-900"
 																	: "bg-black"
 															}`}
 															style={{ outline: prod.color ? "2px solid #C8A165" : "none" }}
 														></div>
-														<span className="ml-2 text-sm" style={{ fontFamily: "Montserrat-Thin" }}>
-															{cartItems[idx]?.selectedColor || prod.color}
-														</span>
+														{/* <span className="ml-2 text-sm" style={{ fontFamily: "Montserrat-Thin" }}>
+															{cartColor[prod.cartId] || prod.color}
+														</span> */}
 													</div>
 													<div className="flex items-center">
-														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Size:</span>
+														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Size :</span>
 														<div
 															className={`w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 cursor-pointer
 																${cartSize[prod.cartId] ? "font-semibold bg-slate-900 text-white" : ""}
@@ -582,7 +719,7 @@ const CheckoutPage = () => {
 														</div>
 													</div>
 													<div className="flex items-center">
-														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Qty:</span>
+														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Quantity :</span>
 														<div className="flex items-center">
 															<button
 																type="button"
@@ -600,6 +737,9 @@ const CheckoutPage = () => {
 																onClick={() => handleQuantityChange(prod.cartId, 1)}
 															>+</button>
 														</div>
+													</div>
+													<div className="flex items-center">
+														<span className="text-xl sm:text-2xl mt-9 font-semibold text-red-600" style={{ fontFamily: "Montserrat-Thin" }}> <i> ₹ {prod.price * (cartQuantities[prod.cartId] || 1)} </i></span>
 													</div>
 												</div>
 											</div>
@@ -713,7 +853,7 @@ const CheckoutPage = () => {
                                 <button
                                     className="w-full bg-[#7B3F14] text-white text-base font-semibold py-3 rounded mt-6 hover:bg-black"
                                     type="button"
-                                    onClick={() => handleStepChange("payment")}
+                                    onClick={() => validateAndProceed()}
 									style={{ fontFamily: "Montserrat" }}
                                 >
                                     PROCEED TO PAYMENT
@@ -743,3 +883,4 @@ const CheckoutPage = () => {
 };
 
 export default CheckoutPage;
+
