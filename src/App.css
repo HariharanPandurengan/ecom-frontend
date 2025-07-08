@@ -48,6 +48,13 @@
   background-color: #f0f0f0; /* For scrollbars on both axes */
 }
 
+body{
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+  width: 100%;
+}
+
 .h-clothingpage{
   max-width: fit-content;
   align-items: center;

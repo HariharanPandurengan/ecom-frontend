@@ -429,7 +429,7 @@ const AdminDashboard: React.FC = () => {
                             products.length !== 0 ? products.map((prod,index) => {
                                                         return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
                                                                     <div style={{width:'30%',overflow:"hidden"}}>
-                                                                        <img style={{width:'100%'}} src={`../${Object.values(prod.images)[0].split('/public')[1]}`} />
+                                                                        <img style={{width:'100%'}} src={Object.values(prod.images)[0] || ""} />
                                                                     </div>
                                                                     <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
                                                                         <h3>{(index+1)+'. '}</h3>

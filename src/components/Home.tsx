@@ -688,126 +688,126 @@ const Home: React.FC = () => {
     };
 
     return (
-<div className="min-h-screen flex flex-col">
-    <style>
-        {`
-        @media (max-width: 768px) {
-            .landing-dashboard {
-                flex-direction: column !important;
-            }
-            .filter-column {
-                position: static !important;
-                top: unset !important;
-                height: auto !important;
-                max-height: none !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-                margin-bottom: 1rem;
-            }
-            .grid-container {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                height: auto !important;
-                min-height: 60vh;
-            }
-            .product-card {
-                min-width: 0 !important;
-                width: 100% !important;
-                margin: 0 !important;
-            }
-            .product-image-div img {
-                min-height: 200px !important;
-                // max-height: 180px !important;
-            }
-            .sections-container {
-                gap: 16px !important;
-            }
-            .div-section {
-                width: 120px !important;
-                height: 120px !important;
-            }
-            .carousel-container {
-                max-width: 100vw !important;
-                max-height: 220px !important;
-            }
-            .carousel-slide img {
-                max-height: 220px !important;
-                object-fit: cover !important;
-            }
-            .gender-button {
-                gap: 20px !important;
-                height: 50px !important;
-            }
-            .men-button, .women-button {
-                width: 100px !important;
-                height: 40px !important;
-                font-size: 14px !important;
-            }
-        }
-        @media (max-width: 480px) {
-            .sections-container {
-                gap: 8px !important;
-            }
-            .div-section {
-                width: 90px !important;
-                height: 90px !important;
-            }
-            .product-image-div img {
-                min-height: 200px !important;
-                // max-height: 120px !important;
-            }
-            .grid-container {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-            }
-        }
-        .floating-cart-icon {
-            position: fixed;
-            z-index: 100;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: box-shadow 0.2s;
-            cursor: grab;
-            user-select: none;
-        }
-        .floating-cart-icon:active {
-            cursor: grabbing;
-        }
-        .floating-cart-icon:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-            background: #f5e9dd;
-        }
-        .cart-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #C8A165;
-            color: #fff;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            padding: 2px 8px;
-            font-weight: bold;
-        }
-        @media (max-width: 600px) {
-            .floating-cart-icon {
-                width: 44px;
-                height: 44px;
-            }
-            .cart-badge {
-                top: 2px;
-                right: 2px;
-                font-size: 0.7rem;
-                padding: 1px 6px;
-            }
-        }
-        `}
-    </style>
+        <div className="min-h-screen w-full overflow-hidden flex flex-col">
+            <style>
+                {`
+                @media (max-width: 768px) {
+                    .landing-dashboard {
+                        flex-direction: column !important;
+                    }
+                    .filter-column {
+                        position: static !important;
+                        top: unset !important;
+                        height: auto !important;
+                        max-height: none !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        margin-bottom: 1rem;
+                    }
+                    .grid-container {
+                        display: grid !important;
+                        grid-template-columns: 1fr 1fr !important;
+                        height: auto !important;
+                        min-height: 60vh;
+                    }
+                    .product-card {
+                        min-width: 0 !important;
+                        width: 100% !important;
+                        margin: 0 !important;
+                    }
+                    .product-image-div img {
+                        min-height: 200px !important;
+                        // max-height: 180px !important;
+                    }
+                    .sections-container {
+                        gap: 16px !important;
+                    }
+                    .div-section {
+                        width: 120px !important;
+                        height: 120px !important;
+                    }
+                    .carousel-container {
+                        max-width: 100vw !important;
+                        max-height: 220px !important;
+                    }
+                    .carousel-slide img {
+                        max-height: 220px !important;
+                        object-fit: cover !important;
+                    }
+                    .gender-button {
+                        gap: 20px !important;
+                        height: 50px !important;
+                    }
+                    .men-button, .women-button {
+                        width: 100px !important;
+                        height: 40px !important;
+                        font-size: 14px !important;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .sections-container {
+                        gap: 8px !important;
+                    }
+                    .div-section {
+                        width: 90px !important;
+                        height: 90px !important;
+                    }
+                    .product-image-div img {
+                        min-height: 200px !important;
+                        // max-height: 120px !important;
+                    }
+                    .grid-container {
+                        display: grid !important;
+                        grid-template-columns: 1fr 1fr !important;
+                    }
+                }
+                .floating-cart-icon {
+                    position: fixed;
+                    z-index: 100;
+                    background: #fff;
+                    border-radius: 50%;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                    width: 56px;
+                    height: 56px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: box-shadow 0.2s;
+                    cursor: grab;
+                    user-select: none;
+                }
+                .floating-cart-icon:active {
+                    cursor: grabbing;
+                }
+                .floating-cart-icon:hover {
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+                    background: #f5e9dd;
+                }
+                .cart-badge {
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    background: #C8A165;
+                    color: #fff;
+                    border-radius: 9999px;
+                    font-size: 0.85rem;
+                    padding: 2px 8px;
+                    font-weight: bold;
+                }
+                @media (max-width: 600px) {
+                    .floating-cart-icon {
+                        width: 44px;
+                        height: 44px;
+                    }
+                    .cart-badge {
+                        top: 2px;
+                        right: 2px;
+                        font-size: 0.7rem;
+                        padding: 1px 6px;
+                    }
+                }
+                `}
+            </style>
     {/* Draggable Floating Cart Icon */}
     <div
         className="floating-cart-icon"
