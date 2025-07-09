@@ -118,12 +118,12 @@ const AdminDashboard: React.FC = () => {
     ];
 
     useEffect(()=>{
-        // if(localStorage.getItem('AdminLogin') === 'true'){
-        //     fetchProducts()
-        // }
-        // else{
-        //     navigate('/AdminLogin')
-        // }
+        if(localStorage.getItem('AdminLogin') === 'true'){
+            fetchProducts()
+        }
+        else{
+            navigate('/AdminLogin')
+        }
     },[])
 
     const fetchProducts = () => {
