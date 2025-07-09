@@ -11,9 +11,11 @@ import TrendingSectionImage from "../assets/Pictures/blueShirt.jpg"
 import ShirtsSectionImage from "../assets/Pictures/pink shirt.jpg"
 import TShirtSectionImage from "../assets/Pictures/yellow shirt.jpg"
 import PantsSectionImage from "../assets/Pictures/purple shirt.jpg"
+import PromoVideo from "../assets/Pictures/promo-video.gif"
 import { FaFilter } from "react-icons/fa"; // Add this import at the top with other imports
 import { FaTimes } from "react-icons/fa"; // Add this import for the x-mark icon
 import { ShoppingBag } from 'lucide-react';
+import { image } from "framer-motion/client";
 
 interface SizesOptions { 
     [key: string]: { [key: string]: string }; 
@@ -43,9 +45,15 @@ interface Product {
     trendingProd: boolean;
   }
 
+  interface trendings {
+    name: string;
+    price: string;
+    images: Image;
+  }
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const [products, setProducts] = useState<Product[]>([]);
+    const [trendings, setTrendings] = useState<trendings[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
@@ -138,6 +146,11 @@ const Home: React.FC = () => {
                     "Floral"]
         },
     ]
+    const promoVideo = {
+        name : "The Nirah",
+        price : "The Nirah — from “Niram,” Tamil for colour. Crafted to simplify a man’s wardrobe, not complicate it. Essentials that build confidence, not confusion. Thoughtfully made across India. Because real style starts with the right basics.",
+        image : {PromoVideo}
+    }
     const [isCollapsed, setIsCollapsed] = useState(false);
     const sections = [
         { title: "Trendings", imgSrc: TrendingSectionImage, alt: "Trendings" },
@@ -180,6 +193,17 @@ const Home: React.FC = () => {
             .then(res => {
                 if (res.data.status === true) {
                     setProducts(res.data.products);
+                    const trend = res.data.products.filter((item: Product) => item.trendingProd === true) ;
+                    setTrendings([{
+                                name : "The Nirah",
+                                price : "The Nirah — from “Niram,” Tamil for colour. Crafted to simplify a man’s wardrobe, not complicate it. Essentials that build confidence, not confusion. Thoughtfully made across India. Because real style starts with the right basics.",
+                                images : {PromoVideo}
+                    }])
+                    setTrendings(prev => [...prev, ...trend.map((item: Product) => ({
+                        name: item.name,
+                        price: item.price,
+                        images: item.images
+                    }))])
                     setFilteredProducts(res.data.products)
                 }
             })
@@ -829,41 +853,46 @@ const Home: React.FC = () => {
         <Header />
     </div>
     <div className="h-clothingpage mt-[60px] max-w-fit items-center flex-grow">
-        <section>
-            <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
-                <Slider {...settings}>
-                    {products.length !== 0 ? (
-                        products.map((trendprod, index) =>
-                            trendprod.trendingProd ? (
-                                <div key={index} className="carousel-slides flex relative">
-                                    <div className="carousel-slide min-w-full text-center relative">
-                                        {/* Overlay for product info */}
+    <section>
+        <div className="carousel-container relative w-full max-h-[700px] max-w-[800px] m-auto overflow-hidden">
+            <Slider {...settings}>
+                {products.length !== 0 ? (
+                    trendings.map((trendprod, index) =>
+                        trendprod ? (
+                            <div key={index} className="carousel-slides flex relative">
+                                <div className="carousel-slide min-w-full text-center relative">
+                                    {/* Overlay for product info */}
+                                    <div
+                                        className="absolute top-0 right-0 w-auto h-auto flex flex-col items-end justify-right z-10 p-6"
+                                        style={{
+                                            background: "none",
+                                            color: "#fff",
+                                            pointerEvents: "none"
+                                        }}
+                                    >
                                         <div
-                                            className="absolute top-0 right-0 w-auto h-auto flex flex-col items-end justify-start z-10 p-6"
+                                            className="mb-1 text-2xl font-bold drop-shadow"
                                             style={{
-                                                background: "none",
-                                                color: "#fff",
-                                                pointerEvents: "none"
+                                                fontFamily: trendprod.name === "The Nirah" ? "Didot" : "Montserrat",
+                                                pointerEvents: "auto"
                                             }}
                                         >
-                                            <div
-                                                className="mb-1 text-2xl font-bold drop-shadow"
-                                                style={{
-                                                    fontFamily: "Montserrat",
-                                                    pointerEvents: "auto"
-                                                }}
-                                            >
-                                                {trendprod.name}
-                                            </div>
-                                            <div
-                                                className="mb-2 text-lg font-semibold drop-shadow"
-                                                style={{
-                                                    fontFamily: "Montserrat-Thin",
-                                                    pointerEvents: "auto"
-                                                }}
-                                            >
-                                                ₹{trendprod.price}
-                                            </div>
+                                            {trendprod.name}
+                                        </div>
+
+                                        <div
+                                            className="mb-2 drop-shadow"
+                                            style={{
+                                                fontFamily: "Montserrat-Thin",
+                                                fontSize: trendprod.name === "The Nirah" ? "0.9rem" : "1.125rem", // text-sm
+                                                textAlign: "right",
+                                                pointerEvents: "auto",
+                                            }}
+                                        >
+                                                { !isNaN(Number(trendprod.price)) && <span>₹</span> }{trendprod.price}
+                                        </div>
+
+                                        {trendprod.name !== "The Nirah" && (
                                             <button
                                                 className="px-4 py-1 rounded bg-[#7B3F14] text-white font-bold text-base transition-colors"
                                                 style={{
@@ -881,31 +910,34 @@ const Home: React.FC = () => {
                                             >
                                                 Buy Now
                                             </button>
-                                        </div>
-                                        {/* Graded out image */}
-                                        <img
-                                            className="block w-full"
-                                            loading="lazy"
-                                            height="100%"
-                                            width="100%"
-                                            src={`${Object.values(trendprod.images)[0]}`}
-                                            alt="promotion"
-                                            style={{
-                                                filter: "brightness(0.7) grayscale(0.2)"
-                                            }}
-                                        />
+                                        )}
                                     </div>
+
+                                    {/* Graded out image */}
+                                    <img
+                                        className="block w-full"
+                                        loading="lazy"
+                                        height="100%"
+                                        width="100%"
+                                        src={`${Object.values(trendprod.images)[0]}`}
+                                        alt="promotion"
+                                        style={{
+                                            filter: "brightness(0.7) grayscale(0.2)"
+                                        }}
+                                    />
                                 </div>
-                            ) : null
-                        )
-                    ) : (
-                        <div>
-                            <p className="text-center">--- No products to show ---</p>
-                        </div>
-                    )}
-                </Slider>
-            </div>
-        </section>
+                            </div>
+                        ) : null
+                    )
+                ) : (
+                    <div>
+                        <p className="text-center">--- No products to show ---</p>
+                    </div>
+                )}
+            </Slider>
+        </div>
+    </section>
+
         <section>
             <div className="shop-by-section m-0 p-0 text-center">
                 <h1

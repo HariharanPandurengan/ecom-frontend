@@ -240,7 +240,7 @@ const Header: React.FC = () => {
                                     <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
                                 </svg>
                                 <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
-                                    Profile
+                                    Login
                                 </Link>
                             </li>
                             <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
@@ -276,6 +276,10 @@ const Header: React.FC = () => {
                                     sessionStorage.removeItem("user");
                                     sessionStorage.removeItem("userId");
                                     setIsProfileMenuOpen(false);
+                                    alert("Logged out successfully");
+                                    setUserName(null);
+                                    window.location.reload();
+
                                 }}>
                                     Logout
                                 </button>

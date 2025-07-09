@@ -68,7 +68,7 @@ const CustomerLogin: React.FC = () => {
       username: signupData.email, // or signupData.phone if you want phone as username
       email: signupData.email,
       password: signupData.password,
-      phone: signupData.phone,
+      phone: signupData.phone
     };
 
     try {

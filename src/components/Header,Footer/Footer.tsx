@@ -3,75 +3,64 @@ import promoVideo from '.../assets/Pictures/Cyberpunk_ How to Master the Futuris
 
 const Footer = () => {
   return (
-    <>
+        <>
       <style>
         {`
+        .footer-root {
+          display: flex;
+          flex-wrap: nowrap;
+          min-height: 280px;
+        }
+
         @media (max-width: 900px) {
           .footer-root {
-            flex-wrap: wrap !important;
-            height: auto !important;
-            min-height: 220px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 1rem 1.5rem !important;
+            min-height: 320px !important;
           }
-          .footer-left {
-            min-width: 180px !important;
-            height: 140px !important;
+          .footer-left, .footer-right {
+            width: 100% !important;
+            padding: 0.5rem 0 !important;
           }
-          .footer-right {
-            padding-left: 1rem !important;
-            padding-top: 1rem !important;
+          .footer-left p {
+            font-size: 0.85rem !important;
           }
         }
+
         @media (max-width: 600px) {
-          .footer-root {
-            flex-wrap: wrap !important;
-            height: auto !important;
-            min-height: 120px !important;
-            padding: 0 !important;
-          }
-          .footer-left {
-            min-width: 100px !important;
-            height: 80px !important;
+          .footer-left p {
+            font-size: 0.75rem !important;
           }
           .footer-right h1 {
-            font-size: 1rem !important;
-          }
-          .footer-right p {
-            font-size: 0.8rem !important;
-          }
-          .footer-right .w-10, .footer-right .h-10 {
-            width: 1.8rem !important;
-            height: 1.8rem !important;
+            font-size: 1.25rem !important;
           }
         }
         `}
       </style>
-      <div className="footer-root w-full h-[200px] flex items-center justify-between m-4 relative">
-        {/* Left Side (Video Preview or Image) */}
-        {/* <div className="footer-left relative w-1/2 h-full bg-gray-200 overflow-hidden">
-          <img
-            src="src\assets\Pictures\Cyberpunk_ How to Master the Futuristic Style.gif"
-            alt="Preview"
-            className="object-cover w-full h-full"
-          />
-        </div> */}
-            {/* <div className="footer-left w-1/2 h-full flex flex-col justify-center px-6">
-      <h2 className="text-lg font-semibold text-gray-800 font-['Didot'] mb-2">The Nirah</h2>
-      <p className="text-sm text-gray-600 font-['Montserrat-Thin'] leading-relaxed">
-        From “Niram,” Tamil for colour.<br />
-        Crafted to simplify a man’s wardrobe, not complicate it.<br />
-        Essentials that build confidence, not confusion.<br />
-        Thoughtfully made across India.<br />
-        Because real style starts with the right basics.
-      </p>
-    </div> */}
+
+      <div className="footer-root w-full h-auto items-center justify-between m-4 relative px-8">
+        {/* Left Side (Brand Description) */}
+        <div className="footer-left w-1/2 flex flex-col justify-center">
+          <h2 className="text-2xl font-semibold text-gray-800 font-['Didot'] mb-2">Brand Story</h2>
+          <p className="text-xs text-gray-600 font-['Montserrat-Thin'] leading-relaxed max-w-[420px]">
+            In a world overflowing with options, men's fashion has become cluttered. Too many patterns. Too many silhouettes.<br/>
+            Too little thought. At The Nirah, we believe beauty lies in simplicity — and that essentials <br/>
+            make or break a man’s style. Our name comes from the Tamil word “Niram” — meaning colour. Crafted to <br/>
+            simplify a man’s wardrobe, not complicate it. <br/>
+            <br/>
+            We’re from Erode, a town known for its textile legacy — and we carry that quiet heritage forward in <br/>
+            everything we do. We build timeless menswear for those coming into their own. A man who’s <br/>
+            discovering that style isn’t about standing out, but standing sure. <br/>
+            <br/>
+            Every Nirah piece is essential. Every silhouette, thoughtful. Every product is made in India.<br/>
+          </p>
+        </div>
 
         {/* Right Side (Contact Info and Social Links) */}
-        <div className="footer-right w-full flex flex-col items-center pl-6">
-          {/* Business Name */}
+        <div className="footer-right w-1/2 flex flex-col items-center pl-6">
           <h1 className="text-2xl text-black-900 font-['Didot']">N I R A H</h1>
-          {/* Social Media Icons */}
-          <div className="flex flex-col items-center space-y-1">
-            {/* WhatsApp Text Link - darker WhatsApp gradient, no white tone */}
+          <div className="flex flex-col items-center space-y-1 mt-2">
             <a
               href="https://wa.me/918976543210"
               target="_blank"
@@ -89,7 +78,6 @@ const Footer = () => {
             >
               +91 9876543210
             </a>
-            {/* Instagram Text Link - subtle gradient, lighter font weight */}
             <a
               href="https://instagram.com"
               target="_blank"
@@ -108,19 +96,11 @@ const Footer = () => {
               INSTAGRAM
             </a>
           </div>
-          {/* Copyright bottom center and below icons */}
-          <div className="w-full flex justify-center mt-2">
+          <div className="w-full flex justify-center mt-3">
             <p className="text-[10px] text-gray-500 font-['Montserrat-Thin'] text-center m-0">
-              COPYRIGHT © 2025 NIRAH.
-              ALL RIGHTS RESERVED
+              COPYRIGHT © 2025 NIRAH. ALL RIGHTS RESERVED
             </p>
           </div>
-        </div>
-        {/* Copyright absolutely bottom center for desktop */}
-        <div
-          className="w-full absolute left-1/2 bottom-2 -translate-x-1/2 flex justify-center"
-          style={{ pointerEvents: "none" }}
-        >
         </div>
       </div>
     </>

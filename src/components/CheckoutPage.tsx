@@ -19,8 +19,8 @@ const CheckoutPage = () => {
 	const [orderDetails, setOrderDetails] = useState({
 		cartTotal: 0,
 		cartDiscount: 0,
-		platformFee: 29,
-		shippingFee: 29,
+		platformFee: 0,
+		convenienceFee: 0
 	});
 	const [shippingAddress, setShippingAddress] = useState({
 		name: "",
@@ -236,9 +236,9 @@ const CheckoutPage = () => {
 		const userId = sessionStorage.getItem("userId");
 		const totalAmount =
 			orderDetails.cartTotal +
-			orderDetails.cartDiscount +
-			orderDetails.platformFee +
-			orderDetails.shippingFee;
+			orderDetails.cartDiscount 
+			// orderDetails.platformFee + 
+			// orderDetails.convenienceFee;
 		const products = cartProducts.map((prod: any) => ({
 			productId: prod._id,
 			quantity: prod.cartQuantity,
@@ -582,7 +582,7 @@ const CheckoutPage = () => {
                     <span>Cart discount</span>
                     <span>{orderDetails.cartDiscount}</span>
                 </div>
-                <div className="mb-4" style={{ fontFamily: "Montserrat-Thin" }}>
+                {/* <div className="mb-4" style={{ fontFamily: "Montserrat-Thin" }}>
                     <div className="text-lg" style={{ fontFamily: "Montserrat" }}>Convenience Fees</div>
                     <div className="flex justify-between text-base ml-4 mt-1">
                         <span>Platform Fee</span>
@@ -592,15 +592,13 @@ const CheckoutPage = () => {
                         <span>Shipping Fee</span>
                         <span>{orderDetails.shippingFee}</span>
                     </div>
-                </div>
+                </div> */}
                 <hr className="my-4 border-[#C8A165]" />
                 <div className="flex justify-between items-center text-2xl font-bold mb-6">
                     <span style={{fontFamily:"Montserrat"}}>Order Total</span>
                     <span>
                         {orderDetails.cartTotal +
-                            orderDetails.cartDiscount +
-                            orderDetails.platformFee +
-                            orderDetails.shippingFee}
+						orderDetails.cartDiscount}
                     </span>
                 </div>
             </div>
