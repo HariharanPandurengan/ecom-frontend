@@ -109,9 +109,16 @@ const ProductCard = () => {
   const [bagItemCount, setBagItemCount] = useState(0);
 
   useEffect(() => {
-    setBagItemCount(3);
-  }, []);
-
+        if (product.sizes[selectedColor] && product.sizes[selectedColor][selectedSize]) {
+            const availableQuantity = parseInt(product.sizes[selectedColor][selectedSize], 10);
+            console.log("Available Quantity:", availableQuantity);
+            if(quantity > availableQuantity) {
+                console.warn(`Only ${availableQuantity} items available in this size.`);
+                alert(`Only ${availableQuantity} items available in this size.`);
+                setQuantity(availableQuantity);
+            }
+        }
+  });
   const handleCartMouseDown = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     setDragging(true);
     setDragMoved(false);
@@ -168,6 +175,24 @@ const ProductCard = () => {
   const handleCartClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (!dragMoved) {
       navigate('/CheckoutPage');
+    }
+  };
+
+  const increaseQuantity = (count : any) => {
+    if (product.sizes[selectedColor] && product.sizes[selectedColor][selectedSize]) {
+      const availableQuantity = parseInt(product.sizes[selectedColor][selectedSize], 10);
+      console.log("Available Quantity:", availableQuantity);
+      if (count > availableQuantity) {
+        console.warn(`Only ${availableQuantity} items available in this size.`);
+        alert(`Only ${availableQuantity} items available in this size.`);
+        return;
+      }
+      else{
+        setQuantity(count);
+      }
+    } else {
+      alert("Please select a valid size.");
+      setQuantity(1);
     }
   };
 

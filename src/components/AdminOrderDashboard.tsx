@@ -25,22 +25,40 @@ const AdminOrdersDashboard = () => {
     fetchOrders();
   }, []);
 
-  const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
-    const newStatus = prompt("Update order status:", currentStatus);
-    if (!newStatus || newStatus === currentStatus) return;
+const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
+  const newStatus = prompt("Update order status:", currentStatus);
+  if (!newStatus || newStatus === currentStatus) return;
 
-    try {
-      await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateOrderStatus`, {
-        orderId,
-        status: newStatus
-      });
-      alert("Status updated successfully!");
-      fetchOrders(); // Refresh the list
-    } catch (error) {
-      console.error("Failed to update order status:", error);
-      alert("Failed to update status.");
-    }
-  };
+  try {
+    await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateOrderStatus`, {
+      orderId,
+      status: newStatus
+    });
+
+    alert("Status updated successfully!");
+
+    // Only update quantities if transitioning from 'Pending' to 'Accepted'
+    // if (currentStatus === "Pending" && newStatus === "Accepted") {
+    //   const order = orders.find(o => o.orderId === orderId);
+    //   if (order) {
+    //     // Ensure order.products contains sizeSelected and colorSelected
+    //     await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateQuantityforProduct`, {
+    //       products: order.products
+    //     });
+    //     alert("Product quantities updated successfully!");
+    //   } else {
+    //     console.error("Order not found for updating product quantities");
+    //     alert("Order not found for updating product quantities.");
+    //   }
+    // }
+
+    fetchOrders(); // Refresh the list
+  } catch (error) {
+    console.error("Failed to update order status:", error);
+    alert("Failed to update status.");
+  }
+};
+
 
   return (
     <div className="p-6 space-y-6">

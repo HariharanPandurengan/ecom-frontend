@@ -279,6 +279,7 @@ const CheckoutPage = () => {
 					} catch {
 						alert("Order creation failed.");
 					}
+					handleProductCount(products);
 					handleClearCart();
 				}
 			},
@@ -385,11 +386,25 @@ const CheckoutPage = () => {
   handleStepChange("payment");
 };
 
+const handleProductCount = async (order) => {
+
+	try {
+	await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateQuantityforProduct`, {
+			products : order
+	});
+	alert("Product quantities updated successfully.");
+}
+catch (error) {
+	console.error("Failed to update product quantities:", error);
+	alert("Failed to update product quantities.");
+}
+}
+
 	const handleClearCart = async () => {
 		const userId = sessionStorage.getItem("userId");
 		if (!userId || !cartItems.length) return;
 		try {
-			await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteCart`, { cartId });
+			await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteCart`, { _id : cartId });
 			setCartProducts([]);
 			setCartItems([]);
 			setCartQuantities({});

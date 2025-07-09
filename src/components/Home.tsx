@@ -164,7 +164,7 @@ const Home: React.FC = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 2000,
+        autoplaySpeed: 5000,
         arrows: false, // Remove arrows
         dots: true,    // Show dots navigation
     };
@@ -1054,23 +1054,25 @@ const Home: React.FC = () => {
                 </section>
                 <section className="w-full md:w-[85%]">
                     <div className="grid-container w-full grid gap-[.250rem] h-[calc(100vh-60px-64px)] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
-                        {filteredProducts.length !== 0 ? (
-                            filteredProducts.map((prod, _index) => (
-                                <div key={prod._id} className="product-card" onClick={() => sendingProdData(prod._id)}>
-                                    <div className="product-image-div mb-3 w-full pt-2.5">
-                                        <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
-                                    </div>
-                                    <div className="pl-[10px]">
-                                        <h3 className="product-name text-sm md:text-base font-bold m-2">{prod.name}</h3>
-                                        <p className="product-price">{'₹' + prod.price}</p>
-                                    </div>
+                        {filteredProducts
+                        .filter(prod => {
+                            // Check if any color/size has quantity < 5
+                            return Object.entries(prod.sizes || {}).every(([color, sizeMap]) => {
+                            return Object.values(sizeMap).every(qty => parseInt(qty, 10) >= 2);
+                            });
+                        })
+                        .map((prod, _index) => (
+                            <div key={prod._id} className="product-card" onClick={() => sendingProdData(prod._id)}>
+                                <div className="product-image-div mb-3 w-full pt-2.5">
+                                    <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
                                 </div>
-                            ))
-                        ) : (
-                            <div>
-                                <p className="text-center">--- No products to show ---</p>
+                                <div className="pl-[10px]">
+                                    <h3 className="product-name text-sm md:text-base font-bold m-2">{prod.name}</h3>
+                                    <p className="product-price">{'₹' + prod.price}</p>
+                                </div>
                             </div>
-                        )}
+                        ))
+                        }
                     </div>
                 </section>
             </div>
