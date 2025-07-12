@@ -52,8 +52,7 @@ const CustomerLogin: React.FC = () => {
     } catch (error: any) {
       console.error("Error during login:", error);
       alert(
-        error?.response?.data?.message ||
-        'An error occurred during login. Please try again later.'
+       "User Not Found"
       );
     }
   };
