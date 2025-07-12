@@ -151,7 +151,7 @@ const Home: React.FC = () => {
         price : "The Nirah — from “Niram,” Tamil for colour. Crafted to simplify a man’s wardrobe, not complicate it. Essentials that build confidence, not confusion. Thoughtfully made across India. Because real style starts with the right basics.",
         image : {PromoVideo}
     }
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
     const sections = [
         { title: "Trendings", imgSrc: TrendingSectionImage, alt: "Trendings" },
         { title: "Shirts", imgSrc: ShirtsSectionImage, alt: "Shirts" },
