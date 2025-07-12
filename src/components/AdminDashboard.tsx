@@ -252,7 +252,7 @@ const AdminDashboard: React.FC = () => {
         if (emptyField === '') {
             const formData = new FormData();
             const { images, ...productDataWithoutImages } = product;
-            formData.append('product', JSON.stringify(productDataWithoutImages));
+            formData.append('product', JSON.stringify(product));
 
             Object.entries(images).forEach(([key, file]) => {
                 if (file) {
@@ -268,6 +268,8 @@ const AdminDashboard: React.FC = () => {
                 link = `${import.meta.env.VITE_REACT_API_URL}editProduct`
                 formData.append('id', editProdID);
             }
+
+            console.log(formData.images)
             
             await axios.post(link,formData,{ headers: {
                 'Content-Type': 'multipart/form-data'
@@ -430,7 +432,7 @@ const AdminDashboard: React.FC = () => {
                             products.length !== 0 ? products.map((prod,index) => {
                                                         return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
                                                                     <div style={{width:'30%',overflow:"hidden"}}>
-                                                                        <img style={{width:'100%'}} src={Object.values(prod.images)[0] || ""} />
+                                                                        <img style={{width:'100%'}} src={((prod.images && Object.values(prod.images).length !== 0) && Object.values(prod.images)[0]) || ""} />
                                                                     </div>
                                                                     <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
                                                                         <h3>{(index+1)+'. '}</h3>
@@ -539,10 +541,10 @@ const AdminDashboard: React.FC = () => {
                                                     return  <div key={item} style={{border:'1px solid gray',boxShadow:'0px 0px 1px 1px',margin:'5px',padding:'5px'}}>
                                                                 <p style={{marginRight:'10px'}}>{item}</p>
                                                                 <div className="flex items-center">
-                                                                    <input type="file" onChange={(e) => handleFileChange(e,item)}/>
+                                                                    <input type="file" onChange={(e) => handleFileChange2(e,item)}/>
                                                                     <div className="h-[200px] flex items-center">
                                                                         <p>Current Image :</p>
-                                                                        <img className="w-[50%] h-full ms-2" src={product.images[item]}/>
+                                                                        <img className="w-[50%] h-full ms-2" src={product.images && product.images[item]}/>
                                                                     </div>
                                                                 </div>
                                                             </div>

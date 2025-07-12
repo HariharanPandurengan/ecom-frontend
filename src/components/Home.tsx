@@ -188,7 +188,6 @@ const Home: React.FC = () => {
     }, [])
 
     const fetchProducts = async () => {
-        console.log('123')
         await axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`)
             .then(res => {
                 if (res.data.status === true) {
@@ -919,7 +918,7 @@ const Home: React.FC = () => {
                                         loading="lazy"
                                         height="100%"
                                         width="100%"
-                                        src={`${Object.values(trendprod.images)[0]}`}
+                                        src={`${trendprod.images && Object.values(trendprod.images)[0]}`}
                                         alt="promotion"
                                         style={{
                                             filter: "brightness(0.7) grayscale(0.2)"
@@ -1064,7 +1063,7 @@ const Home: React.FC = () => {
                         .map((prod, _index) => (
                             <div key={prod._id} className="product-card" onClick={() => sendingProdData(prod._id)}>
                                 <div className="product-image-div mb-3 w-full pt-2.5">
-                                    <img className="h-full w-full object-cover product-image" src={`${Object.values(prod.images)[0]}`} />
+                                    <img className="h-full w-full object-cover product-image" src={`${(prod.images && Object.values(prod.images).length !== 0) && Object.values(prod.images)[0]}`} />
                                 </div>
                                 <div className="pl-[10px]">
                                     <h3 className="product-name text-sm md:text-base font-bold m-2">{prod.name}</h3>
