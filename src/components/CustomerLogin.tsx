@@ -44,6 +44,7 @@ const CustomerLogin: React.FC = () => {
         sessionStorage.setItem("user", JSON.stringify(userRes.data.user));
         // Store user id separately
         sessionStorage.setItem("userId", userRes.data.user._id || userRes.data.user.id);
+        sessionStorage.setItem("cartId", userRes.data.user.cartId || "");
         navigate('/Home');
         alert('Login successful! Redirecting to home page...');
       } else {
@@ -57,17 +58,16 @@ const CustomerLogin: React.FC = () => {
     }
   };
 
-  const addUser = async (e: FormEvent<HTMLFormElement>) => {
+    const addUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Update userData state before sending
 
-    // Use a callback to ensure latest state is used
     const newUser = {
       name: signupData.name,
-      username: signupData.email, // or signupData.phone if you want phone as username
+      username: signupData.email,
       email: signupData.email,
       password: signupData.password,
-      phone: signupData.phone
+      phone: signupData.phone,
+      cartId: sessionStorage.getItem("cartId") || "",
     };
 
     try {
@@ -82,7 +82,6 @@ const CustomerLogin: React.FC = () => {
         });
         if (loginres.data && loginres.data.user) {
           sessionStorage.setItem("user", JSON.stringify(loginres.data.user));
-          // Store user id separately
           sessionStorage.setItem("userId", loginres.data.user._id || loginres.data.user.id);
           
           navigate('/Home');

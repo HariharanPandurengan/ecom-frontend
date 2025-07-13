@@ -629,6 +629,9 @@ li {
   cursor: pointer;
 }
 
+.size-chart{
+  font-family: 'Montserrat-Thin';
+}
 /* product-card page */
 .showproduct{
   background-color: white;

@@ -284,6 +284,7 @@ const handleClick = () => {
                                     // TODO: Add logout logic
                                     sessionStorage.removeItem("user");
                                     sessionStorage.removeItem("userId");
+                                    sessionStorage.removeItem("cartId");
                                     setIsProfileMenuOpen(false);
                                     alert("Logged out successfully");
                                     setUserName(null);

@@ -309,9 +309,9 @@ const CheckoutPage = () => {
 			try {
 				await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateUser`, {
 					userId: sessionStorage.getItem("userId"),
-					cartId : cartItems._id
+					cartId : cartId
 				});
-			}   
+			}
 			catch {
 				alert("Failed to update user data.");
 			}

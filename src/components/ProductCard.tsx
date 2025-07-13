@@ -67,6 +67,12 @@ const ProductCard = () => {
         navigate('/ProductCard')
   }
   useEffect(() => {
+    if(sessionStorage.getItem("cartId") === null || sessionStorage.getItem("cartId") === "" || sessionStorage.getItem("cartId") === undefined){
+            setBagItemCount(false)
+        }
+        else{
+            setBagItemCount(true)
+        }
     const fetchProduct = () => {
       axios.post(`${import.meta.env.VITE_REACT_API_URL}getProduct`,{product_id:localStorage.getItem('current_product')})
       .then(res => {
@@ -107,7 +113,7 @@ const ProductCard = () => {
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [dragMoved, setDragMoved] = useState(false);
-  const [bagItemCount, setBagItemCount] = useState(0);
+  const [bagItemCount, setBagItemCount] = useState(false);
 
   useEffect(() => {
         if (product.sizes[selectedColor] && product.sizes[selectedColor][selectedSize]) {
@@ -262,10 +268,19 @@ const ProductCard = () => {
         onTouchStart={handleCartMouseDown}
         onClick={handleCartClick}
       >
+      <div className="relative">
         <ShoppingBag size={28} color="#000" />
-        {bagItemCount > 0 && (
-          <span className="cart-badge">{bagItemCount}</span>
+        
+        {/* Red dot indicator */}
+        {bagItemCount === false && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-white" />
         )}
+
+        {/* Optional: show count badge */}
+        {bagItemCount && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-600 rounded-full border-2 border-white" />
+        )}
+      </div>
       </div>
       <Header />
       <div
@@ -453,7 +468,8 @@ const ProductCard = () => {
                     }
                   );
                   alert("Added to cart!");
-                  setBagItemCount(prevCount => prevCount + quantity);
+                  sessionStorage.setItem("cartId", localStorage.getItem("current_product") || "");
+                  setBagItemCount(true);
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }
@@ -486,7 +502,7 @@ const ProductCard = () => {
                     }
                   );
                   navigate("/CheckoutPage");
-                  setBagItemCount(prevCount => prevCount + quantity);
+                  setBagItemCount(false); 
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }
@@ -527,7 +543,7 @@ const ProductCard = () => {
         </form>
       </div>
       {showSizeChart && (
-  <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center">
+  <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center size-chart">
     <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-md relative">
       <div
         onClick={() => setShowSizeChart(false)}
@@ -560,9 +576,9 @@ const ProductCard = () => {
           <tr><td className="border px-3 py-1">XL</td><td className="border">17"-17.5"</td><td className="border">48"</td><td className="border">46.5"-50"</td></tr>
           <tr><td className="border px-3 py-1">2X</td><td className="border">18"-18.5"</td><td className="border">51.5"</td><td className="border">50.5"-53"</td></tr>
           <tr><td className="border px-3 py-1">3X</td><td className="border">19"-19.5"</td><td className="border">56"</td><td className="border">53.5"-55"</td></tr>
-          <tr><td className="border px-3 py-1">4X</td><td className="border">20"-20.5"</td><td className="border">58.5"</td><td className="border">55.5"-56.5"</td></tr>
+          {/* <tr><td className="border px-3 py-1">4X</td><td className="border">20"-20.5"</td><td className="border">58.5"</td><td className="border">55.5"-56.5"</td></tr>
           <tr><td className="border px-3 py-1">5X</td><td className="border">21"-21.5"</td><td className="border">62"</td><td className="border">56.5"-59"</td></tr>
-          <tr><td className="border px-3 py-1">6X</td><td className="border">22"-22.5"</td><td className="border">65.5"</td><td className="border">62.5"-65"</td></tr>
+          <tr><td className="border px-3 py-1">6X</td><td className="border">22"-22.5"</td><td className="border">65.5"</td><td className="border">62.5"-65"</td></tr> */}
         </tbody>
       </table>
 

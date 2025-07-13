@@ -57,7 +57,7 @@ const Home: React.FC = () => {
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [currentFilters, setCurrentFilters] = useState<Record<string, Record<string, boolean>>>({});
     const [isSticky, setIsSticky] = useState(false)
-    const [bagItemCount, setBagItemCount] = useState(0)
+    const [bagItemCount, setBagItemCount] = useState(false)
     const [scrollPosition, setScrollPosition] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     
@@ -185,7 +185,12 @@ const Home: React.FC = () => {
             }
         }
         setCurrentFilters(initialState)
-        setBagItemCount(3)
+        if(sessionStorage.getItem("cartId") === null || sessionStorage.getItem("cartId") === "" || sessionStorage.getItem("cartId") === undefined){
+            setBagItemCount(false)
+        }
+        else{
+            setBagItemCount(true)
+        }
     }, [])
 
     const fetchProducts = async () => {
@@ -844,10 +849,19 @@ const Home: React.FC = () => {
         onTouchStart={handleCartMouseDown}
         onClick={handleCartClick}
     >
+      <div className="relative">
         <ShoppingBag size={28} color="#000" />
-        {bagItemCount > 0 && (
-            <span className="cart-badge">{bagItemCount}</span>
+        
+        {/* Red dot indicator */}
+        {bagItemCount === false && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-white" />
         )}
+
+        {/* Optional: show count badge */}
+        {bagItemCount && (
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-600 rounded-full border-2 border-white" />
+        )}
+      </div>
     </div>
     <div>
         <Header />
