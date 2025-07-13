@@ -76,6 +76,14 @@ const Header: React.FC = () => {
 
   const navigate = useNavigate();
   
+const handleClick = () => {
+    navigate("/", { state: { scrollTo: "productSection" } }); // pass the target section name
+  };
+
+  const handleFooterClick = () => {
+    navigate("/", { state: { scrollTo: "footer" } }); // pass the target section name
+  };
+
   const sendingProdData = (productID : any) => {
       navigate('/ProductCard')
   }
@@ -157,10 +165,10 @@ const Header: React.FC = () => {
                                 <Link to="/">Home</Link>
                             </li>
                             <li className='my-[10px] text-base md:text-lg lg:text-xl'>
-                                <a href="#product">Products</a>
+                                <a onClick={handleClick}>Products</a>
                             </li>
                             <li className='my-[10px] text-base md:text-lg lg:text-xl'>
-                                <a href="#footer">About Us</a>
+                                <a onClick={handleFooterClick}>About us</a>
                             </li>
                         </ul>
                         <div className="contact mt-30 p-5 text-sm md:text-base">
@@ -196,12 +204,13 @@ const Header: React.FC = () => {
                                 }}
                                 icon={faSearch}
                             />
+                            +
                         </div>
                     )}
                 </div>
             </div>
             <div className='companyname relative pt-2.5 text-xl md:text-2xl lg:text-3xl tracking-wider'>
-                <a href='/Home'> N I R A H</a>
+                <a href='/Home'>T H E &nbsp;&nbsp; N I R A H</a>
             </div>
             <div className='usericon w-[24%] md:w-[20%] lg:w-[15%] flex items-center justify-end h-[40px] relative'>
                 <img

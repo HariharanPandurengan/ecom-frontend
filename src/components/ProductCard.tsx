@@ -51,6 +51,7 @@ const ProductCard = () => {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [images, setSelectedImage] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
+  const [showSizeChart, setShowSizeChart] = useState(false);
   const image = "src/assets/Pictures/blue shirt.jpg";
 
   const handleSizeChange = (e : any) => {
@@ -102,7 +103,7 @@ const ProductCard = () => {
   }, [selectedColor, product]);
 
   // Floating cart icon logic (same as Home)
-  const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 32, y: 90 });
+  const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 1400, y: 5 });
   const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [dragMoved, setDragMoved] = useState(false);
@@ -262,9 +263,9 @@ const ProductCard = () => {
         onClick={handleCartClick}
       >
         <ShoppingBag size={28} color="#000" />
-        {/* {bagItemCount > 0 && (
+        {bagItemCount > 0 && (
           <span className="cart-badge">{bagItemCount}</span>
-        )} */}
+        )}
       </div>
       <Header />
       <div
@@ -345,9 +346,16 @@ const ProductCard = () => {
           </div>
 
           {/* Sizes */}
-          <div className="w-full flex-none text-sm font-medium text-slate-700 mt-0">
+          <div className="w-full flex items-center gap-2 text-sm font-medium text-slate-700 mt-0">
             Sizes Available:
+            <a style={{ fontSize: "0.8rem", color: "blue", cursor: "pointer" }}
+              onClick={() => setShowSizeChart(true)}
+            >
+              Size Chart
+            </a>
           </div>
+
+
           <div className="flex flex-wrap gap-2 mt-4 pb-6">
             {selectedColor &&
               product.sizes &&
@@ -445,6 +453,7 @@ const ProductCard = () => {
                     }
                   );
                   alert("Added to cart!");
+                  setBagItemCount(prevCount => prevCount + quantity);
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }
@@ -477,6 +486,7 @@ const ProductCard = () => {
                     }
                   );
                   navigate("/CheckoutPage");
+                  setBagItemCount(prevCount => prevCount + quantity);
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }
@@ -516,6 +526,50 @@ const ProductCard = () => {
           </div>
         </form>
       </div>
+      {showSizeChart && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center">
+    <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-md relative">
+      <div
+        onClick={() => setShowSizeChart(false)}
+        className="absolute text-xl font-bold text-gray-500 hover:text-black">   
+        &times;
+      </div>
+      <h3 className="text-lg font-semibold mb-4 text-center">Size Chart</h3>
+
+      {/* Example chart — replace with actual image or table */}
+      {/* <img
+        src="/assets/size-chart-example.png" // ✅ replace with your real image path
+        alt="Size Chart"
+        className="w-full h-auto rounded"
+      /> */}
+
+      OR — use a table instead of image:
+      <table className="w-full text-sm text-left border border-gray-300 text-gray-800">
+        <thead className="bg-gray-100 text-center">
+          <tr>
+            <th className="border px-3 py-2">Size</th>
+            <th className="border px-3 py-2 text-green-600">Neck (in)</th>
+            <th className="border px-3 py-2 text-blue-600">Max Waist (in)</th>
+            <th className="border px-3 py-2 text-red-600">Chest (in)</th>
+          </tr>
+        </thead>
+        <tbody className="text-center">
+          <tr><td className="border px-3 py-1">S</td><td className="border">14"-14.5"</td><td className="border">36"</td><td className="border">34.5"-38"</td></tr>
+          <tr><td className="border px-3 py-1">M</td><td className="border">15"-15.5"</td><td className="border">40"</td><td className="border">38.5"-42"</td></tr>
+          <tr><td className="border px-3 py-1">L</td><td className="border">16"-16.5"</td><td className="border">42"</td><td className="border">42.5"-46"</td></tr>
+          <tr><td className="border px-3 py-1">XL</td><td className="border">17"-17.5"</td><td className="border">48"</td><td className="border">46.5"-50"</td></tr>
+          <tr><td className="border px-3 py-1">2X</td><td className="border">18"-18.5"</td><td className="border">51.5"</td><td className="border">50.5"-53"</td></tr>
+          <tr><td className="border px-3 py-1">3X</td><td className="border">19"-19.5"</td><td className="border">56"</td><td className="border">53.5"-55"</td></tr>
+          <tr><td className="border px-3 py-1">4X</td><td className="border">20"-20.5"</td><td className="border">58.5"</td><td className="border">55.5"-56.5"</td></tr>
+          <tr><td className="border px-3 py-1">5X</td><td className="border">21"-21.5"</td><td className="border">62"</td><td className="border">56.5"-59"</td></tr>
+          <tr><td className="border px-3 py-1">6X</td><td className="border">22"-22.5"</td><td className="border">65.5"</td><td className="border">62.5"-65"</td></tr>
+        </tbody>
+      </table>
+
+     
+    </div>
+  </div>
+)}
       <Footer />
     </div>
   );

@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import promoVideo from '.../assets/Pictures/Cyberpunk_ How to Master the Futuristic Style.gif';
+import { FiChevronDown } from 'react-icons/fi';
 
 const Footer = () => {
+  const [showStory, setShowStory] = useState(false);
+
   return (
-        <>
+    <>
       <style>
         {`
         .footer-root {
           display: flex;
           flex-wrap: nowrap;
-          min-height: 280px;
+          min-height: 200px;
         }
 
         @media (max-width: 900px) {
@@ -17,7 +20,7 @@ const Footer = () => {
             flex-direction: column !important;
             align-items: flex-start !important;
             padding: 1rem 1.5rem !important;
-            min-height: 320px !important;
+            min-height: auto !important;
           }
           .footer-left, .footer-right {
             width: 100% !important;
@@ -39,27 +42,37 @@ const Footer = () => {
         `}
       </style>
 
-      <div className="footer-root w-full h-auto items-center justify-between m-4 relative px-8">
-        {/* Left Side (Brand Description) */}
-        <div className="footer-left w-1/2 flex flex-col justify-center">
-          <h2 className="text-2xl font-semibold text-gray-800 font-['Didot'] mb-2">Brand Story</h2>
-          <p className="text-xs text-gray-600 font-['Montserrat-Thin'] leading-relaxed max-w-[420px]">
-            In a world overflowing with options, men's fashion has become cluttered. Too many patterns. Too many silhouettes.<br/>
-            Too little thought. At The Nirah, we believe beauty lies in simplicity — and that essentials <br/>
-            make or break a man’s style. Our name comes from the Tamil word “Niram” — meaning colour. Crafted to <br/>
-            simplify a man’s wardrobe, not complicate it. <br/>
-            <br/>
-            We’re from Erode, a town known for its textile legacy — and we carry that quiet heritage forward in <br/>
-            everything we do. We build timeless menswear for those coming into their own. A man who’s <br/>
-            discovering that style isn’t about standing out, but standing sure. <br/>
-            <br/>
-            Every Nirah piece is essential. Every silhouette, thoughtful. Every product is made in India.<br/>
-          </p>
+      <div className="footer-root w-full h-auto items-start justify-between m-4 relative px-8">
+        {/* Left Side (Brand Description with dropdown) */}
+        <div className="footer-left w-1/2 flex flex-col justify-start">
+          <div className="flex justify-between items-center mb-2 cursor-pointer px-4 py-1 bg-gray-50 hover:bg-gray-200 transition-colors duration-200" onClick={() => setShowStory(!showStory)}>
+            <h2 className="text-2xl font-semibold text-gray-800 font-['Didot']">Brand Story</h2>
+                <FiChevronDown
+      className={`text-xl text-gray-600 transition-transform duration-300 ${
+        showStory ? 'rotate-180' : 'rotate-0'
+      }`}
+    />
+          </div>
+
+          {showStory && (
+            <p className="text-xs text-gray-600 font-['Montserrat-Thin'] leading-relaxed max-w-[420px] transition-opacity duration-300 ease-in-out">
+              In a world overflowing with options, men's fashion has become cluttered. Too many patterns. Too many silhouettes.<br/>
+              Too little thought. At The Nirah, we believe beauty lies in simplicity — and that essentials <br/>
+              make or break a man’s style. Our name comes from the Tamil word “Niram” — meaning colour. Crafted to <br/>
+              simplify a man’s wardrobe, not complicate it. <br/>
+              <br/>
+              We’re from Erode, a town known for its textile legacy — and we carry that quiet heritage forward in <br/>
+              everything we do. We build timeless menswear for those coming into their own. A man who’s <br/>
+              discovering that style isn’t about standing out, but standing sure. <br/>
+              <br/>
+              Every Nirah piece is essential. Every silhouette, thoughtful. Every product is made in India.<br/>
+            </p>
+          )}
         </div>
 
         {/* Right Side (Contact Info and Social Links) */}
         <div className="footer-right w-1/2 flex flex-col items-center pl-6">
-          <h1 className="text-2xl text-black-900 font-['Didot']">N I R A H</h1>
+          <h1 className="text-2xl text-black-900 font-['Didot']">T H E &nbsp;&nbsp; N I R A H</h1>
           <div className="flex flex-col items-center space-y-1 mt-2">
             <a
               href="https://wa.me/918976543210"

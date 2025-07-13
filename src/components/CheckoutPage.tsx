@@ -675,7 +675,7 @@ catch (error) {
 												<h2 className="text-xl font-bold text-[#000] mb-1" style={{ fontFamily: "Montserrat" }} onClick={() => sendingProdData(prod._id)}>
 													{prod.name}
 												</h2>
-												<p className="text-base text-gray-700 mb-2" style={{fontFamily : "Montserrat-thin"}}>{prod.description}</p>
+												{/* <p className="text-base text-gray-700 mb-2" style={{fontFamily : "Montserrat-thin"}}>{prod.description}</p> */}
 												{/* Color, Size, Quantity and Remove X button on consecutive lines */}
 												<div className="flex flex-col gap-2 mt-2">
 													<div className="flex items-center">

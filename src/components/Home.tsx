@@ -60,6 +60,7 @@ const Home: React.FC = () => {
     const [bagItemCount, setBagItemCount] = useState(0)
     const [scrollPosition, setScrollPosition] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    
 
     const filterMet = [
         {
@@ -199,8 +200,8 @@ const Home: React.FC = () => {
                                 images : {PromoVideo}
                     }])
                     setTrendings(prev => [...prev, ...trend.map((item: Product) => ({
-                        name: item.name,
-                        price: item.price,
+                        name: "",
+                        price: "",
                         images: item.images
                     }))])
                     setFilteredProducts(res.data.products)
@@ -644,7 +645,7 @@ const Home: React.FC = () => {
     };
 
     // For draggable cart icon
-    const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 32, y: 90 });
+    const [cartIconPos, setCartIconPos] = useState<{ x: number; y: number }>({ x: 1400, y: 5 });
     const [dragging, setDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
     const [dragMoved, setDragMoved] = useState(false);
@@ -844,9 +845,9 @@ const Home: React.FC = () => {
         onClick={handleCartClick}
     >
         <ShoppingBag size={28} color="#000" />
-        {/* {bagItemCount > 0 && (
+        {bagItemCount > 0 && (
             <span className="cart-badge">{bagItemCount}</span>
-        )} */}
+        )}
     </div>
     <div>
         <Header />
@@ -888,7 +889,7 @@ const Home: React.FC = () => {
                                                 pointerEvents: "auto",
                                             }}
                                         >
-                                                { !isNaN(Number(trendprod.price)) && <span>₹</span> }{trendprod.price}
+                                                {trendprod.price}
                                         </div>
 
                                         {trendprod.name !== "The Nirah" && (
@@ -965,12 +966,12 @@ const Home: React.FC = () => {
                 </div>
             </div>
         </section>
-        <section>
+        {/* <section>
             <div className="gender-button flex gap-[50px] md:gap-[100px] justify-center items-center h-[60px] md:h-[80px]">
                 <button className="men-button items-center h-[50px] w-[150px] md:h-[60px] md:w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Male')}>Men</button>
                 <button className="women-button items-center h-[50px] w-[150px] md:h-[60px] md:w-[200px]" onClick={e => ChangeCurrentFilters(e, 'sex', 'Female')}>Women</button>
             </div>  
-        </section>
+        </section> */}
         <section className="relative">
             <div id="product" className="landing-dashboard flex flex-wrap md:flex-nowrap justify-end overflow-y-hidden">
                 <section className="w-full md:w-[15%] flex flex-col">
@@ -1040,8 +1041,8 @@ const Home: React.FC = () => {
                                         <ul className="list-none p-0 m-0">
                                             {!isCollapsed && item.list.map((list, idx) => (
                                                 <li key={idx} className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}` }}>
-                                                    <label className="flex items-center mb-[3px] md:mb-[5px]" key={list} value={list} onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>
-                                                    <span className="ml-auto text-xs md:text-sm">{'(' + fetchCount(item.title, list) + ')'}</span>
+                                                    {fetchCount(item.title, list) > 0 && (<label className="flex items-center mb-[3px] md:mb-[5px]" key={list} value={list}onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>)}
+                                                    {fetchCount(item.title, list) > 0 && (<span className="ml-auto text-xs md:text-sm">({fetchCount(item.title, list)})</span>)}                                                
                                                 </li>
                                             ))}
                                         </ul>
@@ -1051,7 +1052,7 @@ const Home: React.FC = () => {
                         ))}
                     </div>
                 </section>
-                <section className="w-full md:w-[85%]">
+                <section className="w-full md:w-[85%]" id="productSection">
                     <div className="grid-container w-full grid gap-[.250rem] h-[calc(100vh-60px-64px)] overflow-y-auto pt-0 pr-2 pb-2 pl-0">
                         {filteredProducts
                         .filter(prod => {
@@ -1077,7 +1078,9 @@ const Home: React.FC = () => {
             </div>
         </section>
     </div>
+    <section id="footer" className="mt-4">
     <Footer />
+    </section>
 </div>
 
     );
