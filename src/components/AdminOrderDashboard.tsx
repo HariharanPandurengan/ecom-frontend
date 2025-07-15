@@ -25,6 +25,19 @@ const AdminOrdersDashboard = () => {
     fetchOrders();
   }, []);
 
+  const updateDeliveryId = async ({ orderId, deliveryId }) => {
+  try {
+    await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateDeliveryId`, {
+      orderId,
+      deliveryId,
+    });
+    alert("Shipment ID updated successfully");
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
   const newStatus = prompt("Update order status:", currentStatus);
   if (!newStatus || newStatus === currentStatus) return;
@@ -107,12 +120,36 @@ const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
                   <td className="px-4 py-2">{order.status}</td>
                   <td className="px-4 py-2">{new Date(order.orderDate).toLocaleString()}</td>
                   <td className="px-4 py-2">
-                    <button
-                      onClick={() => handleStatusUpdate(order.orderId, order.status)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs"
-                    >
-                      Edit
-                    </button>
+                  <select
+                    className="border rounded px-2 py-1 text-xs"
+                    value={order.status}
+                    onChange={async (e) => {
+                      const newStatus = e.target.value;
+
+                      if (newStatus === "Shipped") {
+                        const deliveryId = prompt("Enter Shipment/Delivery ID:");
+                        if (!deliveryId) return;
+
+                        try {
+                          await updateDeliveryId({
+                            orderId: order.orderId,
+                            deliveryId: deliveryId.trim(),
+                          });
+                          await handleStatusUpdate(order.orderId, newStatus); // Update status after successful deliveryId update
+                        } catch (error) {
+                          console.error("Failed to update delivery ID:", error);
+                          alert("Failed to update delivery ID");
+                        }
+                      } else {
+                        await handleStatusUpdate(order.orderId, newStatus);
+                      }
+                    }}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                  </select>
                   </td>
                 </tr>
               ))}
