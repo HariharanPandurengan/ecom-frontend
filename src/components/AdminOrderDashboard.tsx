@@ -39,13 +39,13 @@ const AdminOrdersDashboard = () => {
 
 
 const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
-  const newStatus = prompt("Update order status:", currentStatus);
-  if (!newStatus || newStatus === currentStatus) return;
+  // const newStatus = prompt("Update order status:", currentStatus);
+  // if (!newStatus || newStatus === currentStatus) return;
 
   try {
     await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateOrderStatus`, {
       orderId,
-      status: newStatus
+      status: currentStatus
     });
 
     alert("Status updated successfully!");
