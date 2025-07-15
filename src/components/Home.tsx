@@ -60,6 +60,7 @@ const Home: React.FC = () => {
     const [bagItemCount, setBagItemCount] = useState(false)
     const [scrollPosition, setScrollPosition] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [collapsedItems, setCollapsedItems] = useState({});
     
 
     const filterMet = [
@@ -716,6 +717,14 @@ const Home: React.FC = () => {
         }
     };
 
+    const toggleCollapse = (title) => {
+        setCollapsedItems(prev => ({
+            ...prev,
+            [title]: !prev[title]
+        }));
+    };
+
+
     return (
         <div className="min-h-screen w-full overflow-hidden flex flex-col">
             <style>
@@ -999,40 +1008,42 @@ const Home: React.FC = () => {
                             fontWeight: 400,
                             letterSpacing: "0.5px",
                             color: "#000",
-                            userSelect: "none"
+                            userSelect: "none",
                         }}
-                    >
-                        <div
-                            className="cursor-pointer flex items-center gap-2"
-                            onClick={() => setIsCollapsed((prev) => !prev)}
                         >
-                            <FaFilter size={18} />
-                            <span>Filter</span>
-                            <span style={{ fontSize: "0.9em", marginLeft: 4 }}>
-                                {isCollapsed ? "(Show)" : "(Hide)"}
-                            </span>
-                        </div>
-                        {/* X-mark icon to clear all filters, absolutely positioned to the right */}
+                        {/* X-mark icon moved to left */}
                         <span
-                            className="absolute right-0 top-1/2 -translate-y-1/2"
-                            style={{ cursor: "pointer", color: "#7B3F14", paddingRight: 8 }}
-                            onClick={e => {
-                                e.stopPropagation();
-                                setCurrentFilters(prev => {
-                                    const reset = { ...prev };
-                                    Object.keys(reset).forEach(key => {
-                                        Object.keys(reset[key]).forEach(k2 => {
-                                            reset[key][k2] = false;
-                                        });
-                                    });
-                                    return reset;
+                            className="flex items-center cursor-pointer"
+                            style={{ color: "#7B3F14", paddingLeft: 8 }}
+                            onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentFilters((prev) => {
+                                const reset = { ...prev };
+                                Object.keys(reset).forEach((key) => {
+                                Object.keys(reset[key]).forEach((k2) => {
+                                    reset[key][k2] = false;
                                 });
-                                setSelectedCategory(null);
+                                });
+                                return reset;
+                            });
+                            setSelectedCategory(null);
                             }}
                             title="Clear all filters"
                         >
                             <FaTimes size={16} />
                         </span>
+
+                        {/* Filter toggle now on the right */}
+                        <div
+                            className="cursor-pointer flex items-center gap-2 ml-auto"
+                            onClick={() => setIsCollapsed((prev) => !prev)}
+                        >
+                            <FaFilter size={18} />
+                            <span>Filter</span>
+                            <span style={{ fontSize: "0.9em", marginLeft: 4 }}>
+                            {isCollapsed ? "(Show)" : "(Hide)"}
+                            </span>
+                        </div>
                     </div>
                     {/* Filter column, hidden on mobile if collapsed */}
                     <div
@@ -1047,22 +1058,64 @@ const Home: React.FC = () => {
                             display: isCollapsed ? "none" : "block"
                         }}
                     >
-                        {filterMet.map((item, index) => (
-                            <div key={index} className="filter-dropdown max-w-full max-h-[500px] rounded-sm">
-                                <div key={item.title}>
-                                    <p className="m-0 items-center flex text-sm md:text-base"><strong>{item.title}</strong></p>
-                                    <div className="collections p-[5px] md:p-[10px] max-h-[300px] md:max-h-[400px] overflow-y-auto">
-                                        <ul className="list-none p-0 m-0">
-                                            {!isCollapsed && item.list.map((list, idx) => (
-                                                <li key={idx} className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer" style={{ backgroundColor: `${currentFilters[item.title]?.[list] ? '#D3D3D3' : ''}` }}>
-                                                    {fetchCount(item.title, list) > 0 && (<label className="flex items-center mb-[3px] md:mb-[5px]" key={list} value={list}onClick={e => ChangeCurrentFilters(e, item.title, list)}>{list}</label>)}
-                                                    {fetchCount(item.title, list) > 0 && (<span className="ml-auto text-xs md:text-sm">({fetchCount(item.title, list)})</span>)}                                                
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                    {filterMet.map((item, index) => (
+                        <div
+                            key={index}
+                            className="filter-dropdown max-w-full max-h-[500px] rounded-sm"
+                        >
+                            <div key={item.title}>
+                            <div
+                                className="flex items-center justify-between cursor-pointer text-sm md:text-base px-[5px] md:px-[10px] py-[5px]"
+                                onClick={() => toggleCollapse(item.title)}
+                            > <p>
+                                <strong>{item.title}</strong>
+                                </p>
+                                <span
+                                className={`transition-transform duration-300 ${
+                                    collapsedItems[item.title] ? 'rotate-180' : ''
+                                }`}
+                                >
+                                ▼
+                                </span>
+                            </div>
+
+                            {!collapsedItems[item.title] && (
+                                <div className="collections p-[5px] md:p-[10px] max-h-[300px] md:max-h-[400px] overflow-y-auto">
+                                <ul className="list-none p-0 m-0">
+                                    {item.list.map((list, idx) => (
+                                    <li
+                                        key={idx}
+                                        className="filter-options mt-[5px] max-h-[150px] md:max-h-[200px] overflow-y-auto pr-[5px] cursor-pointer flex justify-between items-center"
+                                        style={{
+                                        backgroundColor: currentFilters[item.title]?.[list]
+                                            ? '#D3D3D3'
+                                            : '',
+                                        }}
+                                    >
+                                        {fetchCount(item.title, list) > 0 && (
+                                        <label
+                                            className="mb-[3px] md:mb-[5px] cursor-pointer"
+                                            key={list}
+                                            value={list}
+                                            onClick={(e) =>
+                                            ChangeCurrentFilters(e, item.title, list)
+                                            }
+                                        >
+                                            {list}
+                                        </label>
+                                        )}
+                                        {fetchCount(item.title, list) > 0 && (
+                                        <span className="text-xs md:text-sm">
+                                            ({fetchCount(item.title, list)})
+                                        </span>
+                                        )}
+                                    </li>
+                                    ))}
+                                </ul>
                                 </div>
-                            </div>  
+                            )}
+                            </div>
+                        </div>
                         ))}
                     </div>
                 </section>
