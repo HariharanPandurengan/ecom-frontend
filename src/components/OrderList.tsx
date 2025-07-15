@@ -56,6 +56,9 @@ const OrderList: React.FC = () => {
                             <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Montserrat-Thin" }}>
                                 <span>Shipping Address: {order.shippingAddress?.name}, {order.shippingAddress?.street}, {order.shippingAddress?.city}, {order.shippingAddress?.state}, {order.shippingAddress?.postalCode}</span>
                             </div>
+                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Montserrat-Thin" }}>
+                                <span>Track Id: {order.deliveryId}</span>
+                            </div>
                             <div className="mt-4">
                                 {order.products && order.products.length > 0 ? order.products.map((prod: any, pidx: number) => (
                                     <div key={prod.productId || pidx} className="flex mb-6 flex-col sm:flex-row items-center sm:items-start border-b pb-4 last:border-b-0 last:pb-0">
