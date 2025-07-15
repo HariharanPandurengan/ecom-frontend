@@ -5,6 +5,7 @@ import axios from "axios";
 import Footer from "./Header,Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { ShoppingBag } from 'lucide-react';
+import { use } from "framer-motion/client";
 
 const initialProductState = { 
   name: '', 
@@ -47,6 +48,7 @@ trendingProd: boolean;
 const ProductCard = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product>(initialProductState);
+  const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [images, setSelectedImage] = useState<string>("");
@@ -87,12 +89,26 @@ const ProductCard = () => {
                 // setSelectedImage(imageList);
                 if (sizeList.length > 0) setSelectedSize(sizeList[0]);
               }
+              fetchProductsByCategory(res.data.product[0].category);
             }
       })
       .catch(err => {
           console.log(err)
       })
     }
+
+    const fetchProductsByCategory = (categoryselected : string) => {
+      axios.post(`${import.meta.env.VITE_REACT_API_URL}productsByCategory`, { category: categoryselected })
+      .then(res => {
+          if (res.data.status === true) {
+              setProductsByCategory(res.data.products);
+              console.log("Products by category:", productsByCategory);
+          }
+      })
+      .catch(err => {
+          console.log(err);
+      });
+    };
     fetchProduct()
   }, []);
 
@@ -285,8 +301,7 @@ const ProductCard = () => {
       <Header />
       <div
         className="flex flex-col sm:flex-row mt-[60px] p-4 sm:p-6"
-        style={{ fontFamily: "Montserrat-Thin" }}
-      >
+        style={{ fontFamily: "Montserrat-Thin" }}>
         {/* Image Section */}
         <div className="flex-none h-[60vh] sm:h-[100vh] w-full sm:w-[40rem] relative">
           <img
@@ -541,6 +556,33 @@ const ProductCard = () => {
             <i>₹ {product.price}</i>
           </div>
         </form>
+        
+      </div>
+      {/* You may also like */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-semibold text-slate-900 mb-4" style={{fontFamily:'Montserrat-Thin'}}>
+          Our products you may like
+        </h2>
+
+        <div className="overflow-x-auto">
+          <div className="flex gap-4 pb-2" style={{minWidth: '600px'}}>
+            {productsByCategory.map((prod) => (
+              <div
+                key={prod._id}
+                className="min-w-[200px] max-w-[220px] bg-white rounded-lg shadow hover:shadow-md transition p-2 cursor-pointer"
+                onClick={() => navigate(`/product/${prod._id}`)}
+              >
+                <img
+                  src={Object.values(prod.images)[0]}
+                  alt={prod.name}
+                  className="w-full h-36 object-cover rounded-md mb-2"
+                />
+                <div style={{fontFamily: "Montserrat-Thin"}} className="text-sm font-medium text-slate-800">{prod.name}</div>
+                <div style={{fontFamily: "Montserrat-Thin"}} className="text-red-600 font-semibold text-base">₹ {prod.price}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
       {showSizeChart && (
   <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center size-chart">

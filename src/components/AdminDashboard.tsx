@@ -424,6 +424,13 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                         <button type="submit">Add Product</button>
                     </form>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/Adminorderdashboard')}
+                        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                        Go to Admin Dashboard
+                    </button>
                 </section>
                 <section className="section add-trending-product">
                     <h2 className="font-bold text-center">Products </h2>
