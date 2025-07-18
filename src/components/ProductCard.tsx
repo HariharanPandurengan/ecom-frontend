@@ -65,10 +65,13 @@ const ProductCard = () => {
 
   const sendingProdData = (productID : any) => {
     localStorage.setItem('current_product', productID)
-            console.log(productID)
+        console.log(productID)
         navigate('/ProductCard')
+          window.location.reload(); // refresh the page once after navigation
   }
+
   useEffect(() => {
+        window.scrollTo(0, 0);
     if(sessionStorage.getItem("cartId") === null || sessionStorage.getItem("cartId") === "" || sessionStorage.getItem("cartId") === undefined){
             setBagItemCount(false)
         }
@@ -321,6 +324,9 @@ const ProductCard = () => {
               {product.name}
             </h1>
           </div>
+          <div className="text-2xl sm:text-4xl mt-7 text-red-600">
+            <i>₹ {product.price}</i>
+          </div>
 
           {/* Colors */}
           <div className="w-full flex-none text-sm font-medium text-slate-700 mt-2">
@@ -552,9 +558,6 @@ const ProductCard = () => {
           </div>
 
           {/* Price */}
-          <div className="text-3xl sm:text-4xl mt-7 font-semibold text-red-600">
-            <i>₹ {product.price}</i>
-          </div>
         </form>
         
       </div>
@@ -570,7 +573,7 @@ const ProductCard = () => {
               <div
                 key={prod._id}
                 className="min-w-[200px] max-w-[220px] bg-white rounded-lg shadow hover:shadow-md transition p-2 cursor-pointer"
-                onClick={() => navigate(`/product/${prod._id}`)}
+                onClick={() => sendingProdData(prod._id)}
               >
                 <img
                   src={Object.values(prod.images)[0]}

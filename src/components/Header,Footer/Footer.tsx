@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
 
           {showStory && (
-            <p className="text-xs text-gray-600 font-['Lato'] leading-relaxed max-w-[420px] transition-opacity duration-300 ease-in-out">
+            <p style={{paddingLeft : "15px"}} className="text-xs text-gray-600 font-['Lato'] leading-relaxed max-w-[420px] transition-opacity duration-300 ease-in-out">
               In a world overflowing with options, men's fashion has become cluttered. Too many patterns. Too many silhouettes.<br/>
               Too little thought. At The Nirah, we believe beauty lies in simplicity — and that essentials <br/>
               make or break a man’s style. Our name comes from the Tamil word “Niram” — meaning colour. Crafted to <br/>
