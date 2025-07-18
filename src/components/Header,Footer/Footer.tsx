@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
 
           {showStory && (
-            <p className="text-xs text-gray-600 font-['Montserrat-Thin'] leading-relaxed max-w-[420px] transition-opacity duration-300 ease-in-out">
+            <p className="text-xs text-gray-600 font-['Lato'] leading-relaxed max-w-[420px] transition-opacity duration-300 ease-in-out">
               In a world overflowing with options, men's fashion has become cluttered. Too many patterns. Too many silhouettes.<br/>
               Too little thought. At The Nirah, we believe beauty lies in simplicity — and that essentials <br/>
               make or break a man’s style. Our name comes from the Tamil word “Niram” — meaning colour. Crafted to <br/>
@@ -78,7 +78,7 @@ const Footer = () => {
               href="https://wa.me/918976543210"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[1rem] font-['Avenir'] font-semibold uppercase"
+              className="text-[1rem] font-['Playfair-display'] font-semibold uppercase"
               style={{
                 background: "linear-gradient(90deg, #128c7e 0%, #25d366 60%, #075e54 100%)",
                 WebkitBackgroundClip: "text",
@@ -95,7 +95,7 @@ const Footer = () => {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[1rem] font-['Avenir'] font-semibold uppercase"
+              className="text-[1rem] font-['Playfair-display'] font-semibold uppercase"
               style={{
                 background: "linear-gradient(90deg, #f9ce34 0%, #ee2a7b 40%, #6228d7 70%, #2e2e92 100%)",
                 WebkitBackgroundClip: "text",
@@ -110,7 +110,7 @@ const Footer = () => {
             </a>
           </div>
           <div className="w-full flex justify-center mt-3">
-            <p className="text-[10px] text-gray-500 font-['Montserrat-Thin'] text-center m-0">
+            <p className="text-[10px] text-gray-500 font-['Lato'] text-center m-0">
               COPYRIGHT © 2025 NIRAH. ALL RIGHTS RESERVED
             </p>
           </div>

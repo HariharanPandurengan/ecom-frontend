@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const primaryColor = "#7B3F14";
 const accentColor = "#C8A165";
-const fontFamily = "Montserrat, sans-serif";
+const fontFamily = "Playfair-display, sans-serif";
 
 const CustomerLogin: React.FC = () => {
   const navigate = useNavigate();
@@ -127,7 +127,7 @@ const CustomerLogin: React.FC = () => {
             padding: 0.7rem !important;
             background: #7B3F14 !important;
             color: #fff !important;
-            font-family: Montserrat, sans-serif !important;
+            font-family: Playfair-display, sans-serif !important;
             font-weight: bold !important;
             border-radius: 0.25rem !important;
             letter-spacing: 1px !important;
@@ -159,7 +159,7 @@ const CustomerLogin: React.FC = () => {
             padding: 0.5rem !important;
             background: #7B3F14 !important;
             color: #fff !important;
-            font-family: Montserrat, sans-serif !important;
+            font-family: Playfair-display, sans-serif !important;
             font-weight: bold !important;
             border-radius: 0.25rem !important;
             letter-spacing: 1px !important;
@@ -184,7 +184,7 @@ const CustomerLogin: React.FC = () => {
                   className="block mb-1 text-base font-normal"
                   style={{
                     color: "#222",
-                    fontFamily: "Montserrat-Thin",
+                    fontFamily: "Lato",
                     letterSpacing: "0.01em",
                   }}
                   htmlFor="name"
@@ -193,7 +193,7 @@ const CustomerLogin: React.FC = () => {
                 </label>
                 <input
                   className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-                  style={{ background: "#FCFAF7", fontFamily: "Montserrat-Thin" }}
+                  style={{ background: "#FCFAF7", fontFamily: "Lato" }}
                   type="text"
                   id="name"
                   name="name"
@@ -207,7 +207,7 @@ const CustomerLogin: React.FC = () => {
                   className="block mb-1 text-base font-normal"
                   style={{
                     color: "#222",
-                    fontFamily: "Montserrat-Thin",
+                    fontFamily: "Lato",
                     letterSpacing: "0.01em",
                   }}
                   htmlFor="phone"
@@ -216,7 +216,7 @@ const CustomerLogin: React.FC = () => {
                 </label>
                 <input
                   className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-                  style={{ background: "#FCFAF7", fontFamily: "Montserrat-Thin" }}
+                  style={{ background: "#FCFAF7", fontFamily: "Lato" }}
                   type="text"
                   id="phone"
                   name="phone"
@@ -232,7 +232,7 @@ const CustomerLogin: React.FC = () => {
               className="block mb-1 text-base font-normal"
               style={{
                 color: "#222",
-                fontFamily: "Montserrat-Thin",
+                fontFamily: "Lato",
                 letterSpacing: "0.01em",
               }}
               htmlFor="email"
@@ -241,7 +241,7 @@ const CustomerLogin: React.FC = () => {
             </label>
             <input
               className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-              style={{ background: "#FCFAF7", fontFamily: "Montserrat-Thin" }}
+              style={{ background: "#FCFAF7", fontFamily: "Lato" }}
               type="email"
               id="email"
               name="email"
@@ -255,7 +255,7 @@ const CustomerLogin: React.FC = () => {
               className="block mb-1 text-base font-normal"
               style={{
                 color: "#222",
-                fontFamily: "Montserrat-Thin",
+                fontFamily: "Lato",
                 letterSpacing: "0.01em",
               }}
               htmlFor="password"
@@ -264,7 +264,7 @@ const CustomerLogin: React.FC = () => {
             </label>
             <input
               className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-              style={{ background: "#FCFAF7", fontFamily: "Montserrat-Thin" }}
+              style={{ background: "#FCFAF7", fontFamily: "Lato" }}
               type="password"
               id="password"
               name="password"
@@ -279,7 +279,7 @@ const CustomerLogin: React.FC = () => {
                 className="block mb-1 text-base font-normal"
                 style={{
                   color: "#222",
-                  fontFamily: "Montserrat-Thin",
+                  fontFamily: "Lato",
                   letterSpacing: "0.01em",
                 }}
                 htmlFor="confirmPassword"
@@ -288,7 +288,7 @@ const CustomerLogin: React.FC = () => {
               </label>
               <input
                 className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-                style={{ background: "#FCFAF7", fontFamily: "Montserrat-Thin" }}
+                style={{ background: "#FCFAF7", fontFamily: "Lato" }}
                 type="password"
                 id="confirmPassword"
                 name="confirmPassword"

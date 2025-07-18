@@ -435,7 +435,7 @@ catch (error) {
 					margin-top: 72px;
 				}
 				.checkout-stepper span {
-					font-family: Montserrat, sans-serif;
+					font-family: Playfair-display, sans-serif;
 					font-size: 1.25rem;
 					font-weight: bold;
 					letter-spacing: 0.03em;
@@ -585,20 +585,20 @@ catch (error) {
             <div className="w-full bg-[#FCFAF7] shadow-md border-b border-gray-200 p-8" style={{maxWidth: "900px", margin: "0 auto"}}>
                 <h2
                     className="text-3xl font-bold mb-6"
-                    style={{ fontFamily: "Montserrat, sans-serif" }}
+                    style={{ fontFamily: "Playfair-display, sans-serif" }}
                 >
                     Order Details
                 </h2>
-                <div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Montserrat-Thin" }}>
+                <div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Lato" }}>
                     <span>Cart total</span>
                     <span>{orderDetails.cartTotal}</span>
                 </div>
-                <div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Montserrat-Thin" }}>
+                <div className="text-lg mb-4 flex justify-between" style={{ fontFamily: "Lato" }}>
                     <span>Cart discount</span>
                     <span>{orderDetails.cartDiscount}</span>
                 </div>
-                {/* <div className="mb-4" style={{ fontFamily: "Montserrat-Thin" }}>
-                    <div className="text-lg" style={{ fontFamily: "Montserrat" }}>Convenience Fees</div>
+                {/* <div className="mb-4" style={{ fontFamily: "Lato" }}>
+                    <div className="text-lg" style={{ fontFamily: "Playfair-display" }}>Convenience Fees</div>
                     <div className="flex justify-between text-base ml-4 mt-1">
                         <span>Platform Fee</span>
                         <span>{orderDetails.platformFee}</span>
@@ -610,7 +610,7 @@ catch (error) {
                 </div> */}
                 <hr className="my-4 border-[#C8A165]" />
                 <div className="flex justify-between items-center text-2xl font-bold mb-6">
-                    <span style={{fontFamily:"Montserrat"}}>Order Total</span>
+                    <span style={{fontFamily:"Playfair-display"}}>Order Total</span>
                     <span>
                         {orderDetails.cartTotal +
 						orderDetails.cartDiscount}
@@ -632,7 +632,7 @@ catch (error) {
 									>
 										+	
 									</button>
-									<span className="mt-4 text-xl text-gray-500 font-semibold" style={{ fontFamily: "Montserrat-Thin" }}>
+									<span className="mt-4 text-xl text-gray-500 font-semibold" style={{ fontFamily: "Lato" }}>
 										CART IS EMPTY
 									</span>
 								</div>
@@ -672,14 +672,14 @@ catch (error) {
 										/>
 										<div className="sm:ml-6 flex flex-col justify-between w-full">
 											<div>
-												<h2 className="text-xl font-bold text-[#000] mb-1" style={{ fontFamily: "Montserrat" }} onClick={() => sendingProdData(prod._id)}>
+												<h2 className="text-xl font-bold text-[#000] mb-1" style={{ fontFamily: "Playfair-display" }} onClick={() => sendingProdData(prod._id)}>
 													{prod.name}
 												</h2>
-												{/* <p className="text-base text-gray-700 mb-2" style={{fontFamily : "Montserrat-thin"}}>{prod.description}</p> */}
+												{/* <p className="text-base text-gray-700 mb-2" style={{fontFamily : "Lato"}}>{prod.description}</p> */}
 												{/* Color, Size, Quantity and Remove X button on consecutive lines */}
 												<div className="flex flex-col gap-2 mt-2">
 													<div className="flex items-center">
-														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Color :</span>
+														<span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Color :</span>
 														<div
 															className={`w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer border-2 ${
 																cartColor[prod.cartId] ? "border-[#fff]" : "border-transparent"
@@ -714,12 +714,12 @@ catch (error) {
 															}`}
 															style={{ outline: prod.color ? "2px solid #C8A165" : "none" }}
 														></div>
-														{/* <span className="ml-2 text-sm" style={{ fontFamily: "Montserrat-Thin" }}>
+														{/* <span className="ml-2 text-sm" style={{ fontFamily: "Lato" }}>
 															{cartColor[prod.cartId] || prod.color}
 														</span> */}
 													</div>
 													<div className="flex items-center">
-														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Size :</span>
+														<span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Size :</span>
 														<div
 															className={`w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 cursor-pointer
 																${cartSize[prod.cartId] ? "font-semibold bg-slate-900 text-white" : ""}
@@ -732,27 +732,27 @@ catch (error) {
 														</div>
 													</div>
 													<div className="flex items-center">
-														<span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Quantity :</span>
+														<span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Quantity :</span>
 														<div className="flex items-center">
 															<button
 																type="button"
 																className="w-7 h-7 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-base"
-																style={{ fontFamily: "Montserrat" }}
+																style={{ fontFamily: "Playfair-display" }}
 																onClick={() => handleQuantityChange(prod.cartId, -1)}
 															>-</button>
-															<span className="mx-2 text-base font-normal" style={{ fontFamily: "Montserrat" }}>
+															<span className="mx-2 text-base font-normal" style={{ fontFamily: "Playfair-display" }}>
 																{cartQuantities[prod.cartId] || 1}
 															</span>
 															<button
 																type="button"
 																className="w-7 h-7 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-base"
-																style={{ fontFamily: "Montserrat" }}
+																style={{ fontFamily: "Playfair-display" }}
 																onClick={() => handleQuantityChange(prod.cartId, 1)}
 															>+</button>
 														</div>
 													</div>
 													<div className="flex items-center">
-														<span className="text-xl sm:text-2xl mt-9 font-semibold text-red-600" style={{ fontFamily: "Montserrat-Thin" }}> <i> ₹ {prod.price * (cartQuantities[prod.cartId] || 1)} </i></span>
+														<span className="text-xl sm:text-2xl mt-9 font-semibold text-red-600" style={{ fontFamily: "Lato" }}> <i> ₹ {prod.price * (cartQuantities[prod.cartId] || 1)} </i></span>
 													</div>
 												</div>
 											</div>
@@ -776,7 +776,7 @@ catch (error) {
 							)}
 							<button
 								className="w-full bg-[#7B3F14] text-white text-base font-semibold py-3 rounded mt-2 hover:bg-black"
-								onClick={() => handleStepChange("address")} style={{ fontFamily: "Montserrat" }}
+								onClick={() => handleStepChange("address")} style={{ fontFamily: "Playfair-display" }}
 							>
 								PROCEED TO SHIPPING
 							</button>
@@ -789,20 +789,20 @@ catch (error) {
                                         type="text"
                                         name="name"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="Name"
                                         value={shippingAddress.name}
                                         onChange={handleAddressChange}
                                     />
                                     <div className="flex">
-                                        <span className="flex items-center px-4 border border-[#C8A165] border-r-0 bg-[#FCFAF7] font-semibold" style={{ fontFamily: "Montserrat" }}>
+                                        <span className="flex items-center px-4 border border-[#C8A165] border-r-0 bg-[#FCFAF7] font-semibold" style={{ fontFamily: "Playfair-display" }}>
                                             +91
                                         </span>
                                         <input
                                             type="text"
                                             name="phonenumber"
                                             className="w-full p-3 border border-[#C8A165] rounded-none border-l-0 focus:outline-none"
-                                            style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                            style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                             placeholder="Phone Number"
                                             value={shippingAddress.phonenumber}
                                             onChange={handleAddressChange}
@@ -812,7 +812,7 @@ catch (error) {
                                         type="text"
                                         name="postalcode"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="Pin Code"
                                         value={shippingAddress.postalcode}
                                         onChange={handleAddressChange}
@@ -821,7 +821,7 @@ catch (error) {
                                         type="text"
                                         name="house"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="House / Flat No. / Office No."
                                         value={shippingAddress.house}
                                         onChange={handleAddressChange}
@@ -830,7 +830,7 @@ catch (error) {
                                         type="text"
                                         name="area"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="Area / Locality / Town"
                                         value={shippingAddress.area}
                                         onChange={handleAddressChange}
@@ -839,7 +839,7 @@ catch (error) {
                                         type="text"
                                         name="city"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="City"
                                         value={shippingAddress.city}
                                         onChange={handleAddressChange}
@@ -848,7 +848,7 @@ catch (error) {
                                         type="text"
                                         name="state"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="State"
                                         value={shippingAddress.state}
                                         onChange={handleAddressChange}
@@ -857,7 +857,7 @@ catch (error) {
                                         type="email"
                                         name="email"
                                         className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none"
-                                        style={{ background: "#FCFAF7", fontFamily: "Montserrat" }}
+                                        style={{ background: "#FCFAF7", fontFamily: "Playfair-display" }}
                                         placeholder="Email"
                                         value={shippingAddress.email}
                                         onChange={handleAddressChange}
@@ -867,7 +867,7 @@ catch (error) {
                                     className="w-full bg-[#7B3F14] text-white text-base font-semibold py-3 rounded mt-6 hover:bg-black"
                                     type="button"
                                     onClick={() => validateAndProceed()}
-									style={{ fontFamily: "Montserrat" }}
+									style={{ fontFamily: "Playfair-display" }}
                                 >
                                     PROCEED TO PAYMENT
                                 </button>
@@ -875,12 +875,12 @@ catch (error) {
                         )}
                         {activeStep === "payment" && (
                             <div className="flex flex-col items-center justify-center h-full text-2xl text-gray-400" style={{ minHeight: "300px" }}>
-                                <div className="mb-6 text-black text-xl font-semibold" style={{fontFamily : "Avenir"}}>Pay securely with Razorpay</div>
+                                <div className="mb-6 text-black text-xl font-semibold" style={{fontFamily : "Playfair-display"}}>Pay securely with Razorpay</div>
                                 <button
                                     type="button"
                                     className="bg-[#7B3F14] text-white px-8 py-3 rounded font-bold text-lg hover:bg-black transition-colors"
                                     onClick={handleRazorpayPayment}
-									style={{ fontFamily: "Montserrat" }}
+									style={{ fontFamily: "Playfair-display" }}
                                 >
                                     Pay Now
                                 </button>

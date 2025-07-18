@@ -1,36 +1,30 @@
-Playfair-display Variable Font
-========================
+Playfair Display Variable Font
+==============================
 
-This download contains Playfair-display as both variable fonts and static fonts.
+This download contains Playfair Display as both variable fonts and static fonts.
 
-Playfair-display is a variable font with this axis:
+Playfair Display is a variable font with this axis:
   wght
 
 This means all the styles are contained in these files:
-  Playfair-display-VariableFont_wght.ttf
-  Playfair-display-Italic-VariableFont_wght.ttf
+  PlayfairDisplay-VariableFont_wght.ttf
+  PlayfairDisplay-Italic-VariableFont_wght.ttf
 
 If your app fully supports variable fonts, you can now pick intermediate styles
 that aren’t available as static fonts. Not all apps support variable fonts, and
-in those cases you can use the static font files for Playfair-display:
-  static/Playfair-display-Thin.ttf
-  static/Playfair-display-ExtraLight.ttf
-  static/Playfair-display-Light.ttf
-  static/Playfair-display-Regular.ttf
-  static/Playfair-display-Medium.ttf
-  static/Playfair-display-SemiBold.ttf
-  static/Playfair-display-Bold.ttf
-  static/Playfair-display-ExtraBold.ttf
-  static/Playfair-display-Black.ttf
-  static/Playfair-display-ThinItalic.ttf
-  static/Playfair-display-ExtraLightItalic.ttf
-  static/Playfair-display-LightItalic.ttf
-  static/Playfair-display-Italic.ttf
-  static/Playfair-display-MediumItalic.ttf
-  static/Playfair-display-SemiBoldItalic.ttf
-  static/Playfair-display-BoldItalic.ttf
-  static/Playfair-display-ExtraBoldItalic.ttf
-  static/Playfair-display-BlackItalic.ttf
+in those cases you can use the static font files for Playfair Display:
+  static/PlayfairDisplay-Regular.ttf
+  static/PlayfairDisplay-Medium.ttf
+  static/PlayfairDisplay-SemiBold.ttf
+  static/PlayfairDisplay-Bold.ttf
+  static/PlayfairDisplay-ExtraBold.ttf
+  static/PlayfairDisplay-Black.ttf
+  static/PlayfairDisplay-Italic.ttf
+  static/PlayfairDisplay-MediumItalic.ttf
+  static/PlayfairDisplay-SemiBoldItalic.ttf
+  static/PlayfairDisplay-BoldItalic.ttf
+  static/PlayfairDisplay-ExtraBoldItalic.ttf
+  static/PlayfairDisplay-BlackItalic.ttf
 
 Get started
 -----------

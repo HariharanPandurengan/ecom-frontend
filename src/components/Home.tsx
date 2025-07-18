@@ -46,6 +46,7 @@ interface Product {
   }
 
   interface trendings {
+    id : string;
     name: string;
     price: string;
     images: Image;
@@ -201,11 +202,13 @@ const Home: React.FC = () => {
                     setProducts(res.data.products);
                     const trend = res.data.products.filter((item: Product) => item.trendingProd === true) ;
                     setTrendings([{
+                                id : "promo-video",
                                 name : "The Nirah",
                                 price : "The Nirah — from “Niram,” Tamil for colour. Crafted to simplify a man’s wardrobe, not complicate it. Essentials that build confidence, not confusion. Thoughtfully made across India. Because real style starts with the right basics.",
                                 images : {PromoVideo}
                     }])
                     setTrendings(prev => [...prev, ...trend.map((item: Product) => ({
+                        id : item._id,
                         name: "",
                         price: "",
                         images: item.images
@@ -896,7 +899,7 @@ const Home: React.FC = () => {
                                         <div
                                             className="mb-1 text-2xl font-bold drop-shadow"
                                             style={{
-                                                fontFamily: trendprod.name === "The Nirah" ? "Didot" : "Montserrat",
+                                                fontFamily: trendprod.name === "The Nirah" ? "Didot" : "Playfair-display",
                                                 pointerEvents: "auto"
                                             }}
                                         >
@@ -906,7 +909,7 @@ const Home: React.FC = () => {
                                         <div
                                             className="mb-2 drop-shadow"
                                             style={{
-                                                fontFamily: "Montserrat-Thin",
+                                                fontFamily: "Lato",
                                                 fontSize: trendprod.name === "The Nirah" ? "0.9rem" : "1.125rem", // text-sm
                                                 textAlign: "right",
                                                 pointerEvents: "auto",
@@ -922,11 +925,11 @@ const Home: React.FC = () => {
                                                     opacity: 0.5,
                                                     pointerEvents: "auto",
                                                     cursor: "pointer",
-                                                    fontFamily: "Montserrat"
+                                                    fontFamily: "Playfair-display"
                                                 }}
                                                 onClick={e => {
                                                     e.stopPropagation();
-                                                    sendingProdData(trendprod._id);
+                                                    sendingProdData(trendprod.id);
                                                 }}
                                                 onMouseOver={e => (e.currentTarget.style.backgroundColor = "#000")}
                                                 onMouseOut={e => (e.currentTarget.style.backgroundColor = "#7B3F14")}
@@ -966,7 +969,7 @@ const Home: React.FC = () => {
                 <h1
                     className="text-base sm:text-lg md:text-xl lg:text-2xl"
                     style={{
-                        fontFamily: "Montserrat-Thin, sans-serif",
+                        fontFamily: "Lato, sans-serif",
                         fontSize: "2rem",
                         marginBottom: "0.5rem"
                     }}
@@ -1003,7 +1006,7 @@ const Home: React.FC = () => {
                         className="mb-2 flex items-center select-none relative"
                         style={{
                             width: "100%",
-                            fontFamily: "Montserrat-Thin",
+                            fontFamily: "Lato",
                             fontSize: "0.95rem",
                             fontWeight: 400,
                             letterSpacing: "0.5px",

@@ -16,7 +16,7 @@
 }
 
 @font-face {
-  font-family: 'Montserrat-Thin';
+  font-family: 'Lato';
   src: url('./assets/Fonts/Montserrat/static/Montserrat-Light.ttf') format('truetype');
 }
 
@@ -26,10 +26,19 @@
 }
 
 @font-face {
-  font-family: 'Avenir-thin';
+  font-family: 'Lato';
   src: url('./assets/Fonts/avenir-lt-pro/AvenirLTProLight.otf') format('opentype');
 }
 
+@font-face {
+  font-family: 'playfair-display';
+  src: url('./assets/Fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('./assets//Fonts/Lato/Lato-Regular.ttf') format('truetype');
+}
 
 ::-webkit-scrollbar {
   width: 10px; /* Width of the scrollbar */
@@ -124,7 +133,7 @@ body{
   font-size: 16px;
   border-bottom: 1px solid #333333;
   outline:#333333;
-  font-family: Avenir-thin;
+  font-family: Lato;
 }
 .hamburgermenu:hover {
   color: #C8A165;
@@ -172,7 +181,7 @@ header .spacer {
   list-style: none;
   padding: 20px;
   margin: 0;
-  font-family: Montserrat;
+  font-family: Playfair-display;
   font-weight: bold;
 }
 .menu-items li {
@@ -190,7 +199,7 @@ header .spacer {
   padding: 20px;
   font-size: 16px;
   color: #333;
-  font-family: Montserrat;
+  font-family: Playfair-display;
   font-weight: bold;
 }
 .contact strong {
@@ -268,7 +277,7 @@ header .spacer {
 
 /* Shop by Section region css - Start */
 .shop-by-section {
-  font-family: Montserrat-Thin;
+  font-family: Lato;
   margin: 0;
   padding: 0;
   text-align: center;
@@ -300,7 +309,7 @@ header .spacer {
 }
 .section-text {
   position: absolute;
-  font-family: Montserrat-Thin;
+  font-family: Lato;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -321,7 +330,7 @@ header .spacer {
 /* Gender Button region css - Start*/
 .gender-button{
   display: flex;
-  font-family: Montserrat-Thin;
+  font-family: Lato;
   gap: 100px;
 }
 .men-button{
@@ -353,7 +362,7 @@ header .spacer {
   overflow-y: auto;
 }
 .filter-title{
-  font-family: 'Montserrat';
+  font-family: 'Playfair-display';
    text-transform: 'capitalize'; 
    color: '#000000';
 }
@@ -361,7 +370,7 @@ header .spacer {
   max-width: 100%;
   max-height: 500px;
   border-radius: 4px;
-  font-family: Avenir-Thin;
+  font-family: Lato;
 }
 .filter-dropdown p {
   margin: 0;
@@ -372,7 +381,7 @@ header .spacer {
   align-items: center;
   border-color: #333;
   color: '#000000';
-  font-family: 'Avenir'
+  font-family: 'Playfair-display'
 }
 .filter-dropdown
  p:after {
@@ -411,20 +420,20 @@ header .spacer {
   font-size: 1em;
   font-weight: bold;
   margin: 8px 0;
-  font-family: Montserrat-Thin;
+  font-family: Lato;
   color: #000;
 }
 .product-description {
   font-size: 1em;
   margin: 8px 0;
-  font-family: Montserrat-Italic;
+  font-family: Playfair-display-Italic;
   color: #333;
 }
 /* Product price */
 .product-price {
   font-size: 1em;
   color: crimson;
-  font-family: Montserrat-Thin;
+  font-family: Lato;
 }
 
 .carousel-container {
@@ -631,7 +640,7 @@ li {
 }
 
 .size-chart{
-  font-family: 'Montserrat-Thin';
+  font-family: 'Lato';
 }
 /* product-card page */
 .showproduct{

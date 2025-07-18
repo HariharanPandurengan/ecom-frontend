@@ -28,7 +28,7 @@ const OrderList: React.FC = () => {
         <>
             <Header />
             <div className="w-full bg-[#FCFAF7] shadow-md border-b border-gray-200 p-8" style={{maxWidth: "900px", margin: "0 auto", marginTop: "72px"}}>
-                <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "Playfair-display, sans-serif" }}>
                     My Orders
                 </h2>
             </div>
@@ -42,21 +42,21 @@ const OrderList: React.FC = () => {
                         <div key={order._id || idx} className="w-full max-w-2xl bg-[#FCFAF7] rounded-lg shadow-md mb-8 p-6 border border-[#C8A165]">
                             <div className="flex justify-between items-center mb-4">
                                 <div>
-                                    <span className="font-bold text-lg" style={{ fontFamily: "Montserrat" }}>Order ID:</span>
-                                    <span className="ml-2 text-base" style={{ fontFamily: "Montserrat-Thin" }}>{order.orderId}</span>
+                                    <span className="font-bold text-lg" style={{ fontFamily: "Playfair-display" }}>Order ID:</span>
+                                    <span className="ml-2 text-base" style={{ fontFamily: "Lato" }}>{order.orderId}</span>
                                 </div>
                                 <span className={`px-4 py-1 rounded-full text-sm font-semibold ${order.status === "Delivered" ? "bg-green-200 text-green-800" : order.status === "Pending" ? "bg-yellow-200 text-yellow-800" : "bg-gray-200 text-gray-800"}`}>
                                     {order.status || "Pending"}
                                 </span>
                             </div>
-                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Montserrat-Thin" }}>
+                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Lato" }}>
                                 <span>Order Date: {order.orderDate ? new Date(order.orderDate).toLocaleString() : "-"}</span>
                                 <span className="ml-4">Total: ₹{order.totalAmount}</span>
                             </div>
-                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Montserrat-Thin" }}>
+                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Lato" }}>
                                 <span>Shipping Address: {order.shippingAddress?.name}, {order.shippingAddress?.street}, {order.shippingAddress?.city}, {order.shippingAddress?.state}, {order.shippingAddress?.postalCode}</span>
                             </div>
-                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Montserrat-Thin" }}>
+                            <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: "Lato" }}>
                                 <span>Track Id: {order.deliveryId}</span>
                             </div>
                             <div className="mt-4">
@@ -79,14 +79,14 @@ const OrderList: React.FC = () => {
                                         />
                                         <div className="sm:ml-6 flex flex-col justify-between w-full">
                                             <div>
-                                                <h2 className="text-lg font-bold text-[#000] mb-1" style={{ fontFamily: "Montserrat" }}>
+                                                <h2 className="text-lg font-bold text-[#000] mb-1" style={{ fontFamily: "Playfair-display" }}>
                                                     {prod.name}
                                                 </h2>
-                                                <div className="text-base text-gray-700 mb-2" style={{fontFamily : "Montserrat-thin"}}>{prod.description}</div>
-                                                <div className="text-base font-semibold mt-2" style={{fontFamily : "Montserrat-thin"}}>₹{prod.price}</div>
+                                                <div className="text-base text-gray-700 mb-2" style={{fontFamily : "Lato"}}>{prod.description}</div>
+                                                <div className="text-base font-semibold mt-2" style={{fontFamily : "Lato"}}>₹{prod.price}</div>
                                                 <div className="flex flex-col gap-2 mt-2">
                                                     <div className="flex items-center">
-                                                        <span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Color:</span>
+                                                        <span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Color:</span>
                                                         <div
                                                             className={`w-7 h-7 rounded-lg flex items-center justify-center border-2 ${
                                                                 prod.colorSelected === "Green"
@@ -119,12 +119,12 @@ const OrderList: React.FC = () => {
                                                             }`}
                                                             style={{ outline: prod.colorSelected ? "2px solid #C8A165" : "none" }}
                                                         ></div>
-                                                        <span className="ml-2 text-sm" style={{ fontFamily: "Montserrat-Thin" }}>
+                                                        <span className="ml-2 text-sm" style={{ fontFamily: "Lato" }}>
                                                             {prod.colorSelected}
                                                         </span>
                                                     </div>
                                                     <div className="flex items-center">
-                                                        <span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Size:</span>
+                                                        <span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Size:</span>
                                                         <div
                                                             className={`w-9 h-9 border rounded-lg flex items-center justify-center text-slate-700 cursor-pointer
                                                                 ${prod.sizeSelected ? "font-semibold bg-slate-900 text-white" : ""}
@@ -137,8 +137,8 @@ const OrderList: React.FC = () => {
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center">
-                                                        <span className="text-sm mr-2" style={{ fontFamily: "Montserrat-Thin" }}>Qty:</span>
-                                                        <span className="text-base font-normal" style={{ fontFamily: "Montserrat" }}>
+                                                        <span className="text-sm mr-2" style={{ fontFamily: "Lato" }}>Qty:</span>
+                                                        <span className="text-base font-normal" style={{ fontFamily: "Playfair-display" }}>
                                                             {prod.quantity || 1}
                                                         </span>
                                                     </div>

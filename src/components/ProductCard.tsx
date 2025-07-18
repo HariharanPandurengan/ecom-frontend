@@ -301,7 +301,7 @@ const ProductCard = () => {
       <Header />
       <div
         className="flex flex-col sm:flex-row mt-[60px] p-4 sm:p-6"
-        style={{ fontFamily: "Montserrat-Thin" }}>
+        style={{ fontFamily: "Lato" }}>
         {/* Image Section */}
         <div className="flex-none h-[60vh] sm:h-[100vh] w-full sm:w-[40rem] relative">
           <img
@@ -316,7 +316,7 @@ const ProductCard = () => {
           <div className="flex flex-wrap">
             <h1
               className="flex-auto text-2xl sm:text-3xl font-semibold text-slate-900"
-              style={{ fontFamily: "Avenir" }}
+              style={{ fontFamily: "Playfair-display" }}
             >
               {product.name}
             </h1>
@@ -416,7 +416,7 @@ const ProductCard = () => {
           </div>
 
           {/* Quantity */}
-          <div className="w-full flex-none text-sm text-slate-700 mt-0 mb-2" style={{ fontFamily: "Montserrat-Thin" }}>
+          <div className="w-full flex-none text-sm text-slate-700 mt-0 mb-2" style={{ fontFamily: "Lato" }}>
             Quantity:
           </div>
           <div className="flex items-center gap-4 mb-6">
@@ -424,14 +424,14 @@ const ProductCard = () => {
               <button
                 type="button"
                 className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-lg"
-                style={{ fontFamily: "Montserrat" }}
+                style={{ fontFamily: "Playfair-display" }}
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}
               >-</button>
-              <span className="mx-3 text-lg font-normal" style={{ fontFamily: "Montserrat" }}>{quantity}</span>
+              <span className="mx-3 text-lg font-normal" style={{ fontFamily: "Playfair-display" }}>{quantity}</span>
               <button
                 type="button"
                 className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C8A165] text-white font-bold text-lg"
-                style={{ fontFamily: "Montserrat" }}
+                style={{ fontFamily: "Playfair-display" }}
                 onClick={() => setQuantity(q => q + 1)}
               >+</button>
             </div>
@@ -529,24 +529,24 @@ const ProductCard = () => {
 
           {/* Product Details */}
           <div className="mt-6 border-t border-slate-200 pt-4">
-            <h2 className="text-2xl font-semibold text-slate-900" style={{fontFamily:'Montserrat-Thin'}}>
+            <h2 className="text-2xl font-semibold text-slate-900" style={{fontFamily:'Lato'}}>
               Product Details
             </h2>
             <ul className="mt-4 space-y-2 text-base text-slate-700">
               <li>
-                <strong style={{fontFamily:'Montserrat-Thin'}}>Material:</strong> {product.material}
+                <strong style={{fontFamily:'Lato'}}>Material:</strong> {product.material}
               </li>
               <li>
-                <strong style={{fontFamily:'Montserrat-Thin'}}>Fit:</strong> {product.fits}
+                <strong style={{fontFamily:'Lato'}}>Fit:</strong> {product.fits}
               </li>
               <li>
-                <strong style={{fontFamily:'Montserrat-Thin'}}>Sleeve:</strong> {product.sleeves}
+                <strong style={{fontFamily:'Lato'}}>Sleeve:</strong> {product.sleeves}
               </li>
               <li>
-                <strong style={{fontFamily:'Montserrat-Thin'}}>Color:</strong> {product.colors.join(", ")}
+                <strong style={{fontFamily:'Lato'}}>Color:</strong> {product.colors.join(", ")}
               </li>
               <li>
-                <strong style={{fontFamily:'Montserrat-Thin'}}>Description:</strong> {product.description}
+                <strong style={{fontFamily:'Lato'}}>Description:</strong> {product.description}
               </li>
             </ul>
           </div>
@@ -560,7 +560,7 @@ const ProductCard = () => {
       </div>
       {/* You may also like */}
       <div className="mt-12">
-        <h2 className="text-2xl font-semibold text-slate-900 mb-4" style={{fontFamily:'Montserrat-Thin'}}>
+        <h2 className="text-2xl font-semibold text-slate-900 mb-4" style={{fontFamily:'Lato'}}>
           Our products you may like
         </h2>
 
@@ -577,8 +577,8 @@ const ProductCard = () => {
                   alt={prod.name}
                   className="w-full h-36 object-cover rounded-md mb-2"
                 />
-                <div style={{fontFamily: "Montserrat-Thin"}} className="text-sm font-medium text-slate-800">{prod.name}</div>
-                <div style={{fontFamily: "Montserrat-Thin"}} className="text-red-600 font-semibold text-base">₹ {prod.price}</div>
+                <div style={{fontFamily: "Lato"}} className="text-sm font-medium text-slate-800">{prod.name}</div>
+                <div style={{fontFamily: "Lato"}} className="text-red-600 font-semibold text-base">₹ {prod.price}</div>
               </div>
             ))}
           </div>

@@ -239,7 +239,7 @@ const handleClick = () => {
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "8px 0 0 0" }}>
                             <img src={usericon} alt="Profile" style={{ width: "60px", height: "60px", borderRadius: "50%", marginBottom: "8px", border: "2px solid #C8A165" }} />
-                            <span style={{ fontWeight: 600, fontSize: "1.1rem", color: "#7B3F14", marginBottom: "16px", fontFamily: "Montserrat" }}>{userName}</span>
+                            <span style={{ fontWeight: 600, fontSize: "1.1rem", color: "#7B3F14", marginBottom: "16px", fontFamily: "Playfair-display" }}>{userName}</span>
                         </div>
                         <ul style={{ listStyle: "none", padding: "20px", margin: 0 }}>
                             <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
@@ -248,7 +248,7 @@ const handleClick = () => {
                                     <circle cx="12" cy="8" r="4" fill="#000" />
                                     <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
                                 </svg>
-                                <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Playfair-display" }}>
                                     Login
                                 </Link>
                             </li>
@@ -259,7 +259,7 @@ const handleClick = () => {
                                     <circle cx="20" cy="21" r="1" fill="#000"/>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
-                                <Link to="/CheckoutPage" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                <Link to="/CheckoutPage" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Playfair-display" }}>
                                     Cart
                                 </Link>
                             </li>
@@ -271,7 +271,7 @@ const handleClick = () => {
                                     <rect x="7" y="11" width="10" height="2" rx="1" fill="#fff"/>
                                     <rect x="7" y="15" width="6" height="2" rx="1" fill="#fff"/>
                                 </svg>
-                                <Link to="/OrderList" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Montserrat" }}>
+                                <Link to="/OrderList" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Playfair-display" }}>
                                     Orders
                                 </Link>
                             </li>
@@ -280,7 +280,7 @@ const handleClick = () => {
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
                                     <path d="M16 17l5-5-5-5M21 12H9M13 21a9 9 0 1 1 0-18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
-                                <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Montserrat" }} onClick={() => {
+                                <button style={{ width: "100%", textAlign: "left", background: "none", border: "none", padding: 0, cursor: "pointer", color: "#7B3F14", fontWeight: 600, fontFamily: "Playfair-display" }} onClick={() => {
                                     // TODO: Add logout logic
                                     sessionStorage.removeItem("user");
                                     sessionStorage.removeItem("userId");
@@ -359,7 +359,7 @@ const handleClick = () => {
             </style>
             <div className="fixed top-[9%] right-0 bottom-0 w-full bg-gray-500 bg-opacity-50 p-5 flex justify-center items-start z-[999]">
                 <div className="search-popup-modal relative bg-white p-2 pe-5 w-full max-w-2xl rounded-md search-popup-content">
-                    <h3 className="search-popup-title text-center text-3xl font-['Montserrat-Thin'] pb-[10px]">
+                    <h3 className="search-popup-title text-center text-3xl font-['Lato'] pb-[10px]">
                         "{searchFilter.length}" Results found for "{aSearch}"
                     </h3>
                     {/* Mobile: slider, Desktop: grid */}
