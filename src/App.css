@@ -3,6 +3,7 @@
   src: url('./assets/Fonts/Montserrat/static/Montserrat-Black.ttf') format('truetype');
 }
 
+
 @font-face {
   font-family: 'Didot';
   src: url('./assets/Fonts/didot-2/Didot.otf') format('opentype');
