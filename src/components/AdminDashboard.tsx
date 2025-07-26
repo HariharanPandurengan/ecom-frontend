@@ -118,7 +118,6 @@ const AdminDashboard: React.FC = () => {
     ];
 
     useEffect(()=>{
-        window.location.reload();
         if(localStorage.getItem('AdminLogin') === 'true'){
             fetchProducts()
         }
