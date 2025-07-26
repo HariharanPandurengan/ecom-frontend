@@ -40,15 +40,21 @@ const CustomerLogin: React.FC = () => {
           password: loginData.password,
         }
       );
-      if (userRes.data && userRes.data.user) {
-        sessionStorage.setItem("user", JSON.stringify(userRes.data.user));
-        // Store user id separately
-        sessionStorage.setItem("userId", userRes.data.user._id || userRes.data.user.id);
-        sessionStorage.setItem("cartId", userRes.data.user.cartId || "");
-        navigate('/Home');
-        alert('Login successful! Redirecting to home page...');
-      } else {
-        alert(userRes.data?.message || 'Login failed. Please check your credentials and try again.');
+      if(userRes.data.status === true){
+        localStorage.setItem('userLogin','true')
+        localStorage.setItem('email',userRes.data.email)
+        localStorage.setItem('authTokenUser',userRes.data.authToken)
+        if (userRes.data && userRes.data.user) {
+          sessionStorage.setItem("user", JSON.stringify(userRes.data.user));
+          // Store user id separately
+          sessionStorage.setItem("userId", userRes.data.user._id || userRes.data.user.id);
+          sessionStorage.setItem("cartId", userRes.data.user.cartId || "");
+          navigate('/Home');
+          alert('Login successful! Redirecting to home page...');
+        }
+      }
+      else {
+        alert('Login failed. Please check your credentials and try again.');
       }
     } catch (error: any) {
       console.error("Error during login:", error);
@@ -58,7 +64,7 @@ const CustomerLogin: React.FC = () => {
     }
   };
 
-    const addUser = async (e: FormEvent<HTMLFormElement>) => {
+  const addUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const newUser = {
@@ -80,12 +86,20 @@ const CustomerLogin: React.FC = () => {
           email: newUser.email,
           password: newUser.password,
         });
-        if (loginres.data && loginres.data.user) {
-          sessionStorage.setItem("user", JSON.stringify(loginres.data.user));
-          sessionStorage.setItem("userId", loginres.data.user._id || loginres.data.user.id);
-          
-          navigate('/Home');
-          alert('Signup successful! Redirecting to home page...');
+        if(loginres.data.status === true){
+          localStorage.setItem('userLogin','true')
+          localStorage.setItem('email',loginres.data.email)
+          localStorage.setItem('authTokenUser',loginres.data.authToken)
+          if (loginres.data && loginres.data.user) {
+            sessionStorage.setItem("user", JSON.stringify(loginres.data.user));
+            // Store user id separately
+            sessionStorage.setItem("userId", loginres.data.user._id || loginres.data.user.id);
+            navigate('/Home');
+            alert('Signup successful! Redirecting to home page...');
+          }
+        }
+        else {
+          alert('Login after signup failed. Please check your credentials and try again.');
         }
       }
       else {

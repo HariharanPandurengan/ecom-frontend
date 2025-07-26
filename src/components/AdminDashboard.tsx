@@ -118,7 +118,6 @@ const AdminDashboard: React.FC = () => {
     ];
 
     useEffect(()=>{
-        fetchProducts();
         if(localStorage.getItem('AdminLogin') === 'true'){
             fetchProducts()
         }
@@ -127,11 +126,24 @@ const AdminDashboard: React.FC = () => {
         }
     },[])
 
+    const header = {
+        headers: {
+            username: localStorage.getItem('username'),
+            authToken: localStorage.getItem('authToken')
+        }
+    }
+
     const fetchProducts = () => {
-        axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`)
+        axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`,header)
         .then(res=>{
             if(res.data.status === true){
                 setProducts(res.data.products);
+            }
+            if(res.data.message && res.data.message == "Unauthorized"){
+                localStorage.setItem('AdminLogin','false')
+                localStorage.setItem('username',"")
+                localStorage.setItem('authToken',"")
+                navigate("/AdminLogin")
             }
         })
         .catch(err=>{
@@ -268,13 +280,19 @@ const AdminDashboard: React.FC = () => {
                 link = `${import.meta.env.VITE_REACT_API_URL}editProduct`
                 formData.append('id', editProdID);
             }
-
-            console.log(formData.images)
             
             await axios.post(link,formData,{ headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                username: localStorage.getItem('username'),
+                authToken: localStorage.getItem('authToken')
             }})
             .then(res=>{
+                if(res.data.message && res.data.message == "Unauthorized"){
+                    localStorage.setItem('AdminLogin','false')
+                    localStorage.setItem('username',"")
+                    localStorage.setItem('authToken',"")
+                    navigate("/AdminLogin")
+                }
                 if(res.data.status === true){
                     setProduct(initialProductState);
                     fetchProducts()
@@ -314,8 +332,14 @@ const AdminDashboard: React.FC = () => {
     
     async function deleteProd(e){
         e.preventDefault();
-        await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteProduct`,{product:product,id:delProdID})
+        await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteProduct`,{product:product,id:delProdID},header)
         .then(res=>{
+            if(res.data.message && res.data.message == "Unauthorized"){
+                localStorage.setItem('AdminLogin','false')
+                localStorage.setItem('username',"")
+                localStorage.setItem('authToken',"")
+                navigate("/AdminLogin")
+            }
             if(res.data.status === true){
                 fetchProducts()
                 setDeleteP(false)

@@ -33,6 +33,13 @@ const CheckoutPage = () => {
 		email: "",
 	});
 
+	const header = {
+        headers: {
+            email: localStorage.getItem('email'),
+            authToken: localStorage.getItem('authTokenUser')
+        }
+    }
+
 	// Fetch cart data from backend
 	useEffect(() => {
 		const userId = sessionStorage.getItem("userId");
@@ -43,61 +50,66 @@ const CheckoutPage = () => {
 		// Use an async IIFE for async/await inside useEffect
 		(async () => {
 			try {
-				const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId });
-				setCartId(res.data.cart._id);
-				const cartArr = res.data.cart.products;
-				console.log("Cart items:", cartArr);
-				setCartItems(cartArr);
+				const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId },header);
+				if(res.data.message && res.data.message == "Unauthorized"){
+                    alert("Login Required")
+                }else{
+					setCartId(res.data.cart._id);
+					const cartArr = res.data.cart.products;
+					setCartItems(cartArr);
 
-				// Fetch product details for each cart item using productId
-				const productDetails: any[] = [];
-				for (const item of cartArr) {
-					try {
-						const prodRes = await axios.post(
-							`${import.meta.env.VITE_REACT_API_URL}getProduct`,
-							{ product_id: item.productId }
-						);
-						if (
-							prodRes.data.status === true &&
-							Array.isArray(prodRes.data.product) &&
-							prodRes.data.product.length > 0
-						) {
-							productDetails.push({
-								...prodRes.data.product[0],
-								cartQuantity: item.quantity || 1,
-								cartColor: item.colorSelected || "",
-								cartSize: item.sizeSelected || "",
-								cartId: item._id,
-							});
+					// Fetch product details for each cart item using productId
+					const productDetails: any[] = [];
+					for (const item of cartArr) {
+						try {
+							const prodRes = await axios.post(
+								`${import.meta.env.VITE_REACT_API_URL}getProduct`,
+								{ product_id: item.productId },header
+							);
+							
+								if (
+									prodRes.data.status === true &&
+									Array.isArray(prodRes.data.product) &&
+									prodRes.data.product.length > 0
+								) {
+									productDetails.push({
+										...prodRes.data.product[0],
+										cartQuantity: item.quantity || 1,
+										cartColor: item.colorSelected || "",
+										cartSize: item.sizeSelected || "",
+										cartId: item._id,
+									});
+								}
+							
+						} catch {
+							// skip on error
 						}
-					} catch {
-						// skip on error
 					}
-				}
-				console.log("Product details:", productDetails);
-				setCartProducts(productDetails);
+					setCartProducts(productDetails);
 
-				const qtyObj: { [id: string]: number } = {};
-				const colorObj: { [id: string]: string } = {};
-				const sizeObj: { [id: string]: string } = {};
-				let total = 0;
-				productDetails.forEach((prod: any) => {
-					qtyObj[prod.cartId] = prod.cartQuantity;
-					colorObj[prod.cartId] = prod.cartColor || "";
-					sizeObj[prod.cartId] = prod.cartSize || "";
-					total += (Number(prod.price) || 0) * (prod.cartQuantity || 1);
-				});
-				setCartQuantities(qtyObj);
-				setCartColor(colorObj);
-				setCartSize(sizeObj);
-				console.log("Cart quantities:", qtyObj);
-				console.log("Cart coloe:", colorObj);
-				console.log("Cart size:", sizeObj);
-				setOrderDetails(od => ({
-					...od,
-					cartTotal: total,
-					cartDiscount: res.data.cartDiscount || 0,
-				}));
+					const qtyObj: { [id: string]: number } = {};
+					const colorObj: { [id: string]: string } = {};
+					const sizeObj: { [id: string]: string } = {};
+					let total = 0;
+					productDetails.forEach((prod: any) => {
+						qtyObj[prod.cartId] = prod.cartQuantity;
+						colorObj[prod.cartId] = prod.cartColor || "";
+						sizeObj[prod.cartId] = prod.cartSize || "";
+						total += (Number(prod.price) || 0) * (prod.cartQuantity || 1);
+					});
+					setCartQuantities(qtyObj);
+					setCartColor(colorObj);
+					setCartSize(sizeObj);
+					console.log("Cart quantities:", qtyObj);
+					console.log("Cart coloe:", colorObj);
+					console.log("Cart size:", sizeObj);
+					setOrderDetails(od => ({
+						...od,
+						cartTotal: total,
+						cartDiscount: res.data.cartDiscount || 0,
+					}));
+                }
+				
 			} catch {
 				setCartItems([]);
 				setCartProducts([]);
@@ -142,56 +154,69 @@ const CheckoutPage = () => {
         sizeSelected: prod.cartSize,
       })),
       cartId
-    });
+    },header)
+	.then(res => {
+		if(res.data.message && res.data.message == "Unauthorized"){
+			alert("To update cart login required")
+		}
+	})
+	.catch(err => {
+		console.log(err)
+	})
 
-    const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId });
-    const cartArr = res.data.cart.products;
-    setCartItems(cartArr);
+    const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getCart`, { userId },header);
+	if(res.data.message && res.data.message == "Unauthorized"){
+		alert("Login Required")
+	}else{
+		const cartArr = res.data.cart.products;
+		setCartItems(cartArr);
 
-    const productDetails = [];
-    for (const item of cartArr) {
-      try {
-        const prodRes = await axios.post(
-          `${import.meta.env.VITE_REACT_API_URL}getProduct`,
-          { product_id: item.productId }
-        );
-        if (
-          prodRes.data.status === true &&
-          Array.isArray(prodRes.data.product) &&
-          prodRes.data.product.length > 0
-        ) {
-          productDetails.push({
-            ...prodRes.data.product[0],
-            cartQuantity: item.quantity || 1,
-            cartColor: item.colorSelected || "",
-            cartSize: item.sizeSelected || "",
-            cartId: item._id,
-          });
-        }
-      } catch {
-        // skip on error
-      }
-    }
-    setCartProducts(productDetails);
+		const productDetails = [];
+		for (const item of cartArr) {
+		try {
+			const prodRes = await axios.post(
+			`${import.meta.env.VITE_REACT_API_URL}getProduct`,
+			{ product_id: item.productId }
+			);
+			if (
+			prodRes.data.status === true &&
+			Array.isArray(prodRes.data.product) &&
+			prodRes.data.product.length > 0
+			) {
+			productDetails.push({
+				...prodRes.data.product[0],
+				cartQuantity: item.quantity || 1,
+				cartColor: item.colorSelected || "",
+				cartSize: item.sizeSelected || "",
+				cartId: item._id,
+			});
+			}
+		} catch {
+			// skip on error
+		}
+		}
+		setCartProducts(productDetails);
 
-    const qtyObj = {};
-    const colorObj = {};
-    const sizeObj = {};
-    let total = 0;
-    productDetails.forEach(prod => {
-      qtyObj[prod.cartId] = prod.cartQuantity;
-      colorObj[prod.cartId] = prod.cartColor || "";
-      sizeObj[prod.cartId] = prod.cartSize || "";
-      total += (Number(prod.price) || 0) * (prod.cartQuantity || 1);
-    });
-    setCartQuantities(qtyObj);
-    setCartColor(colorObj);
-    setCartSize(sizeObj);
-    setOrderDetails(od => ({
-      ...od,
-      cartTotal: total,
-      cartDiscount: res.data.cartDiscount || 0,
-    }));
+		const qtyObj = {};
+		const colorObj = {};
+		const sizeObj = {};
+		let total = 0;
+		productDetails.forEach(prod => {
+		qtyObj[prod.cartId] = prod.cartQuantity;
+		colorObj[prod.cartId] = prod.cartColor || "";
+		sizeObj[prod.cartId] = prod.cartSize || "";
+		total += (Number(prod.price) || 0) * (prod.cartQuantity || 1);
+		});
+		setCartQuantities(qtyObj);
+		setCartColor(colorObj);
+		setCartSize(sizeObj);
+		setOrderDetails(od => ({
+		...od,
+		cartTotal: total,
+		cartDiscount: res.data.cartDiscount || 0,
+		}));
+	}
+    
   } catch {
     setCartItems([]);
     setCartProducts([]);
@@ -273,9 +298,17 @@ const CheckoutPage = () => {
 							orderDate,
 							shippingAddress: shippingAddr,
 							paymentId: response.razorpay_payment_id,
-						});
-						alert("Order placed successfully!");
-						navigate("/Home");
+						},header)
+						.then(res => {
+							if(res.data.message && res.data.message == "Unauthorized"){
+								alert("Login Required")
+							}else{
+								alert("Order placed successfully!");
+								navigate("/Home")
+							}
+						})
+						.catch(err => console.log(err))
+						
 					} catch {
 						alert("Order creation failed.");
 					}
@@ -310,7 +343,20 @@ const CheckoutPage = () => {
 				await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateUser`, {
 					userId: sessionStorage.getItem("userId"),
 					cartId : cartId
-				});
+				},{
+					headers: {
+						email2: localStorage.getItem('email'),
+						authToken: localStorage.getItem('authTokenUser')
+					}
+				})
+				.then(res => {
+					if(res.data.message && res.data.message == "Unauthorized"){
+						alert("Login Required")
+					}
+				})
+				.catch(err => {
+					console.log(err)
+				})
 			}
 			catch {
 				alert("Failed to update user data.");
@@ -341,24 +387,34 @@ const CheckoutPage = () => {
 			await axios.post(`${import.meta.env.VITE_REACT_API_URL}removeFromCart`, {
 				userId,
 				cartId,
-			});
-			setCartProducts(products => products.filter((p: any) => p.cartId !== cartId));
-			setCartItems(items => items.filter((item: any) => item._id !== cartId));
-			setCartQuantities(qty => {
-				const updated = { ...qty };
-				delete updated[cartId];
-				return updated;
-			});
-			setCartColor(color => {
-				const updated = { ...color };
-				delete updated[cartId];
-				return updated;
-			});
-			setCartSize(size => {
-				const updated = { ...size };
-				delete updated[cartId];
-				return updated;
-			});
+			},header)
+			.then(res => {
+				if(res.data.message && res.data.message == "Unauthorized"){
+					alert("Login Required")
+				}
+				else{
+					setCartProducts(products => products.filter((p: any) => p.cartId !== cartId));
+					setCartItems(items => items.filter((item: any) => item._id !== cartId));
+					setCartQuantities(qty => {
+						const updated = { ...qty };
+						delete updated[cartId];
+						return updated;
+					});
+					setCartColor(color => {
+						const updated = { ...color };
+						delete updated[cartId];
+						return updated;
+					});
+					setCartSize(size => {
+						const updated = { ...size };
+						delete updated[cartId];
+						return updated;
+					});
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
 		} catch {
 			alert("Failed to remove product from cart.");
 		}
@@ -389,28 +445,48 @@ const CheckoutPage = () => {
 const handleProductCount = async (order) => {
 
 	try {
-	await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateQuantityforProduct`, {
-			products : order
-	});
-	alert("Product quantities updated successfully.");
-}
-catch (error) {
-	console.error("Failed to update product quantities:", error);
-	alert("Failed to update product quantities.");
-}
+		await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateQuantityforProduct`, {
+				products : order
+		},header)
+		.then(res => {
+			if(res.data.message && res.data.message == "Unauthorized"){
+				alert("Login Required")
+			}
+			else{
+				alert("Product quantities updated successfully.");
+			}
+		})
+		.catch(err => {
+			console.log(err)
+		})
+	}
+	catch (error) {
+		console.error("Failed to update product quantities:", error);
+		alert("Failed to update product quantities.");
+	}
 }
 
 	const handleClearCart = async () => {
 		const userId = sessionStorage.getItem("userId");
 		if (!userId || !cartItems.length) return;
 		try {
-			await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteCart`, { _id : cartId });
-			setCartProducts([]);
-			setCartItems([]);
-			setCartQuantities({});
-			setCartColor({});
-			setCartSize({});
-			alert("Cart deleted");
+			await axios.post(`${import.meta.env.VITE_REACT_API_URL}deleteCart`, { _id : cartId },header)
+			.then(res => {
+				if(res.data.message && res.data.message == "Unauthorized"){
+					alert("Login Required")
+				}
+				else{
+					setCartProducts([]);
+					setCartItems([]);
+					setCartQuantities({});
+					setCartColor({});
+					setCartSize({});
+					alert("Cart deleted");
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
 		} catch {
 			alert("Failed to delete cart.");
 		}

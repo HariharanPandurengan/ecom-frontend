@@ -10,12 +10,23 @@ const OrderList: React.FC = () => {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const header = {
+        headers: {
+            email: localStorage.getItem('email'),
+            authToken: localStorage.getItem('authTokenUser')
+        }
+    }
+
     useEffect(() => {
         if (!userId) return;
         (async () => {
             try {
-                const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getOrder`, { userId });
-                setOrders(res.data.orders || []);
+                const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL}getOrder`, { userId },header);
+                if(res.data.message && res.data.message == "Unauthorized"){
+                    alert("Login Required")
+                }else{
+                    setOrders(res.data.orders || []);
+                }
             } catch {
                 setOrders([]);
             } finally {

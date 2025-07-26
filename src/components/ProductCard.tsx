@@ -63,6 +63,13 @@ const ProductCard = () => {
     setSelectedImage(e.target.value);
   }
 
+  const header = {
+        headers: {
+            email: localStorage.getItem('email'),
+            authToken: localStorage.getItem('authTokenUser')
+        }
+    }
+
   const sendingProdData = (productID : any) => {
     localStorage.setItem('current_product', productID)
         console.log(productID)
@@ -221,8 +228,6 @@ const ProductCard = () => {
       setQuantity(1);
     }
   };
-
-  console.log(product)
 
   return (
     <div>
@@ -487,10 +492,23 @@ const ProductCard = () => {
                       productSize: selectedSize.toString(),
                       quantity: Number(quantity),
                     }
-                  );
-                  alert("Added to cart!");
-                  sessionStorage.setItem("cartId", localStorage.getItem("current_product") || "");
-                  setBagItemCount(true);
+                    ,
+                    header
+                  )
+                  .then(res => {
+                    if(res.data.message && res.data.message == "Unauthorized"){
+                      alert("Login Required")
+                    }
+                    else{
+                      alert("Added to cart!");
+                      sessionStorage.setItem("cartId", localStorage.getItem("current_product") || "");
+                      setBagItemCount(true);
+                    }
+                    
+                  })
+                  .catch(err => {
+                      console.log(err)
+                  })
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }
@@ -521,9 +539,21 @@ const ProductCard = () => {
                       productSize: selectedSize.toString(),
                       quantity: Number(quantity),
                     }
-                  );
-                  navigate("/CheckoutPage");
-                  setBagItemCount(false); 
+                  )
+                  .then(res => {
+                    if(res.data.message && res.data.message == "Unauthorized"){
+                      alert("Login Required")
+                    }
+                    else{
+                      navigate("/CheckoutPage");
+                      setBagItemCount(false);
+                    }
+                    
+                  })
+                  .catch(err => {
+                      console.log(err)
+                  })
+                   
                 } catch (err) {
                   alert("Failed to add to cart.");
                 }

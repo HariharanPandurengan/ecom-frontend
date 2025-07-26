@@ -13,13 +13,17 @@ const AdminLogin: React.FC = () => {
         .then(res=>{
             if(res.data.status === true){
                 localStorage.setItem('AdminLogin','true')
+                localStorage.setItem('username',res.data.username)
+                localStorage.setItem('authToken',res.data.authToken)
                 navigate('/AdminDashboard')
             }
             else{
+                localStorage.setItem('AdminLogin','false')
                 alert('wrong username or password')
             }
         })
         .catch(err=>{
+            localStorage.setItem('AdminLogin','false')
             console.log(err)
         })
     };

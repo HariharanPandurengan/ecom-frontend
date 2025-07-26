@@ -289,7 +289,18 @@ const handleClick = () => {
                                     alert("Logged out successfully");
                                     setUserName(null);
                                     window.location.reload();
-
+                                    if(localStorage.getItem("AdminLogin") === "true"){
+                                        localStorage.setItem('AdminLogin','false')
+                                        localStorage.setItem('username',"")
+                                        localStorage.setItem('authToken',"")
+                                        navigate("/AdminLogin")
+                                    }
+                                    if(localStorage.getItem("userLogin") === "true"){
+                                        localStorage.setItem('userLogin','false')
+                                        localStorage.setItem('email',"")
+                                        localStorage.setItem('authTokenUser',"")
+                                        navigate("/CustomerLogin")
+                                    }
                                 }}>
                                     Logout
                                 </button>

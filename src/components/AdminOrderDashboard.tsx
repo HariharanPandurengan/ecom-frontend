@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminOrdersDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -8,6 +9,12 @@ const AdminOrdersDashboard = () => {
   const fetchOrders = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_REACT_API_URL}getAllOrders`);
+      if(res.data.message && res.data.message == "Unauthorized"){
+          localStorage.setItem('AdminLogin','false')
+          localStorage.setItem('username',"")
+          localStorage.setItem('authToken',"")
+          navigate("/AdminLogin")
+      }
       if (res.data && res.data.orders) {
         setOrders(res.data.orders);
       } else {
@@ -21,20 +28,36 @@ const AdminOrdersDashboard = () => {
     }
   };
 
+  const navigate = useNavigate()
+
   useEffect(() => {
-    fetchOrders();
+    
+    if(localStorage.getItem('AdminLogin') === 'true'){
+        fetchOrders();
+    }
+    else{
+        navigate('/AdminLogin')
+    }
+        
   }, []);
 
   const updateDeliveryId = async ({ orderId, deliveryId }) => {
-  try {
     await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateDeliveryId`, {
       orderId,
       deliveryId,
-    });
-    alert("Shipment ID updated successfully");
-  } catch (error) {
-    throw error;
-  }
+    })
+    .then(res => {
+      if(res.data.message && res.data.message == "Unauthorized"){
+        alert("Login Required")
+      }
+      else{
+        alert("Shipment ID updated successfully");
+      }
+      
+    })
+    .catch(err => {
+        console.log(err)
+    })
 };
 
 
@@ -46,9 +69,22 @@ const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
     await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateOrderStatus`, {
       orderId,
       status: currentStatus
-    });
+    })
+    .then(res => {
+      if(res.data.message && res.data.message == "Unauthorized"){
+        alert("Login Required")
+      }
+      else{
+        alert("Status updated successfully!");
+        fetchOrders();
+      }
+      
+    })
+    .catch(err => {
+        console.log(err)
+    })
 
-    alert("Status updated successfully!");
+    
 
     // Only update quantities if transitioning from 'Pending' to 'Accepted'
     // if (currentStatus === "Pending" && newStatus === "Accepted") {
@@ -65,7 +101,6 @@ const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
     //   }
     // }
 
-    fetchOrders(); // Refresh the list
   } catch (error) {
     console.error("Failed to update order status:", error);
     alert("Failed to update status.");
