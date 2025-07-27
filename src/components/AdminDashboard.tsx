@@ -461,16 +461,72 @@ const AdminDashboard: React.FC = () => {
                     <div>
                         {
                             products.length !== 0 ? products.map((prod,index) => {
-                                                        return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'150px',overflow:"hidden"}}>
+                                                        return  <div key={prod} className="relative" style={{border:'1px solid gray',margin:'5px',padding:'5px',display:'flex',alignItems:'center',width:'100%',maxHeight:'350px',overflow:"hidden"}}>
+                                                                    <h3>{(index+1)+'. '}</h3>
                                                                     <div style={{width:'30%',overflow:"hidden"}}>
                                                                         <img style={{width:'100%'}} src={((prod.images && Object.values(prod.images).length !== 0) && Object.values(prod.images)[0]) || ""} />
                                                                     </div>
                                                                     <div style={{display:'flex',alignItems:'center',marginLeft:'10px'}}>
-                                                                        <h3>{(index+1)+'. '}</h3>
-                                                                        <div style={{display:'flex',alignItems:'center'}}>
-                                                                            <h3 style={{marginRight:'10px'}}>{prod.name}</h3>
-                                                                            <p style={{marginRight:'10px'}}>| {prod.price+' RS'} |</p>
-                                                                            <p>{prod.material} |</p>
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                                                            <dl>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Name:</dt>
+                                                                                    <dd>{prod.name}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Price:</dt>
+                                                                                    <dd style={{ color: 'red' }}>{'₹' + prod.price}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Material:</dt>
+                                                                                    <dd>{prod.material}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Colors Available:</dt>
+                                                                                    <dd>{prod.colors.join(', ')}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Total Quantity:</dt>
+                                                                                    <dd>{prod.totalQuantity}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex', gap: 8 }}>
+                                                                                    <span style={{ fontWeight: 'bold', minWidth: 130 }}>Sizes Available:</span>
+                                                                                    <span>
+                                                                                    {Object.entries(prod.sizes).map(([color, sizeObj]) => (
+                                                                                        <div key={color}>
+                                                                                        <span style={{ fontWeight: 'bold' }}>{color}:</span>{' '}
+                                                                                        {Object.entries(sizeObj).map(([size, qty], idx, arr) => (
+                                                                                            <span key={size}>
+                                                                                            {size} : {qty}{idx < arr.length - 1 ? ', ' : ''}
+                                                                                            </span>
+                                                                                        ))}
+                                                                                        </div>
+                                                                                    ))}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Fit:</dt>
+                                                                                    <dd>{prod.fits}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Sleeve:</dt>
+                                                                                    <dd>{prod.sleeves}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Occasion:</dt>
+                                                                                    <dd>{prod.occasion}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Pattern:</dt>
+                                                                                    <dd>{prod.pattern}</dd>
+                                                                                </div>
+                                                                                <div style={{ display: 'flex' }}>
+                                                                                    <dt style={{ fontWeight: 'bold', minWidth: 130 }}>Trending:</dt>
+                                                                                    <dd style={{ color: prod.trendingProd ? 'green' : 'red' }}>
+                                                                                    {prod.trendingProd ? 'Yes' : 'No'}
+                                                                                    </dd>                                                                                
+                                                                                </div>
+                                                                            </dl>
                                                                         </div>
                                                                     </div>
                                                                     <div className="absolute top-0 right-1 w-[10%] h-[100%] flex items-center justify-between">
