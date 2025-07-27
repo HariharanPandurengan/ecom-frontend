@@ -9,8 +9,6 @@
   src: url('./assets/Fonts/didot-2/Didot.otf') format('opentype');
 }
 
-
-
 @font-face {
   font-family: 'Montserrat-Italic';
   src: url('./assets/Fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
