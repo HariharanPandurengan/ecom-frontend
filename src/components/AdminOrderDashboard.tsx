@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const AdminOrdersDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
@@ -17,6 +19,19 @@ const AdminOrdersDashboard = () => {
       }
       if (res.data && res.data.orders) {
         setOrders(res.data.orders);
+        const resUsers = await axios.get(`${import.meta.env.VITE_REACT_API_URL}getAllUsers`);
+        const resProducts = await axios.get(`${import.meta.env.VITE_REACT_API_URL}getProducts`)
+        if(resUsers.data.message && res.data.message == "Unauthorized")
+        {
+          localStorage.setItem('AdminLogin','false')
+          localStorage.setItem('username',"")
+          localStorage.setItem('authToken',"")
+          navigate("/AdminLogin")
+        }
+        else{
+          setUsers(resUsers.data.users);
+          setProducts(resProducts.data.products)
+        }
       } else {
         console.error("No orders found in response");
         setOrders([]);
@@ -40,6 +55,8 @@ const AdminOrdersDashboard = () => {
     }
         
   }, []);
+
+
 
   const updateDeliveryId = async ({ orderId, deliveryId }) => {
     await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateDeliveryId`, {
@@ -133,13 +150,27 @@ const handleStatusUpdate = async (orderId: string, currentStatus: string) => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {orders.map((order, index) => (
-                <tr key={index}>
+                    <tr
+                      key={index}
+                      className={
+                        order.status === "Pending"
+                          ? "bg-orange-100"
+                          : order.status === "Delivered"
+                          ? "bg-green-100"
+                          : ["Accepted", "Shipped"].includes(order.status)
+                          ? "bg-gray-100"
+                          : ""
+                      }
+                    >
                   <td className="px-4 py-2">{order.orderId}</td>
-                  <td className="px-4 py-2">{order.userId}</td>
+                  <td className="px-4 py-2"><span>{users.find(user => user._id === order.userId)?.name || "Unknown User"} | </span><span>{users.find(user => user._id === order.userId)?.username || "Unknown User"}</span></td>
                   <td className="px-4 py-2">
                     {order.products.map((p, i) => (
                       <div key={i} className="mb-1">
-                        <strong>ID:</strong> {p.productId}, <strong>Qty:</strong> {p.quantity}, <strong>Color:</strong> {p.colorSelected}, <strong>Size:</strong> {p.sizeSelected}
+                        <strong>Name:</strong> {products.find(prod => prod._id === p.productId)?.name } <br/>
+                        <strong>Qty:</strong> {p.quantity} <br/>
+                        <strong>Color:</strong> {p.colorSelected} <br/>
+                        <strong>Size:</strong> {p.sizeSelected}
                       </div>
                     ))}
                   </td>
