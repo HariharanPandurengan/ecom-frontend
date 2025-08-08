@@ -77,11 +77,13 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   
 const handleClick = () => {
-    navigate("/", { state: { scrollTo: "productSection" } }); // pass the target section name
+              navigate('/')
+        window.scrollTo(0,960);
   };
 
   const handleFooterClick = () => {
-    navigate("/", { state: { scrollTo: "footer" } }); // pass the target section name
+          navigate('/')
+        window.scrollTo(0,1920);
   };
 
   const sendingProdData = (productID : any) => {
