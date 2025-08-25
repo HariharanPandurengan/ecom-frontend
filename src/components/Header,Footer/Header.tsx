@@ -22,7 +22,6 @@ interface Image {
     [key: string]:  string ; 
 }
 
-
 interface Product {
     name: string;
     price: string;
@@ -252,6 +251,16 @@ const handleClick = () => {
                                 </svg>
                                 <Link to="/CustomerLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Playfair-display" }}>
                                     Login
+                                </Link>
+                            </li>
+                            <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
+                                {/* Profile SVG */}
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+                                    <circle cx="12" cy="8" r="4" fill="#000" />
+                                    <rect x="4" y="15" width="16" height="6" rx="3" fill="#000" />
+                                </svg>
+                                <Link to="/CustomerOTPLogin" style={{ color: "#222", fontSize: "1rem", textDecoration: "none", fontFamily: "Playfair-display" }}>
+                                    Login by OTP
                                 </Link>
                             </li>
                             <li style={{ margin: "14px 0", display: "flex", alignItems: "center" }}>
