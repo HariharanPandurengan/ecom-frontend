@@ -1,33 +1,8 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import "../App.css";
 import Header from "./Header,Footer/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-// Extend Window interface to include recaptchaVerifier
-declare global {
-  interface Window {
-    recaptchaVerifier?: any;
-  }
-}
-
-// Import Firebase SDK (Modular v9+)
-import { initializeApp } from "firebase/app";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyDZQajS9_CnRD9xSU0wl6wkHbcyO9sCg2I",
-  authDomain: "nirah-f6509.firebaseapp.com",
-  projectId: "nirah-f6509",
-  storageBucket: "nirah-f6509.firebasestorage.app",
-  messagingSenderId: "576534215594",
-  appId: "1:576534215594:web:e6f09402d5860d0610c9d3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
 const primaryColor = "#7B3F14";
 const accentColor = "#C8A165";
@@ -40,48 +15,37 @@ const CustomerOTPLogin = () => {
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [loading, setLoading] = useState(false);
-  const [confirmationResult, setConfirmationResult] = useState<any>(null);
+  const [verificationSid, setVerificationSid] = useState<string>("");
 
-  useEffect(() => {
-    setupRecaptcha();
-  }, []);
-  // Setup Recaptcha
-  const setupRecaptcha = () => {
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {});
-  };
-
-
-  const setPhoneNumber = (value : string) => {
+  const setPhoneNumber = (value: string) => {
     // Allow only digits and limit to 10 characters
     if (/^\d{0,10}$/.test(value)) {
       setPhone(value);
-      setupRecaptcha();
     }
-  }
-  // Send OTP
+  };
+
+  // Send OTP using Twilio
   const sendOtp = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const appVerifier = window.recaptchaVerifier;
 
-      const fullPhone = `+91${phone}`; // Change +91 if you want international format
-      console.log(auth);
-    //   signInWithPhoneNumber(auth, fullPhone, appVerifier)
-    //   .then((confirmationResult) => {
-    //   // SMS sent. Prompt user to type the code from the message, then sign the
-    //   // user in with confirmationResult.confirm(code).
-    //   window.confirmationResult = confirmationResult;
-    //   // ...
-    // }).catch((error) => {
-    //   // Error; SMS not sent
-    //   // ...
-    // });
-      const result = await signInWithPhoneNumber(auth, fullPhone, appVerifier);
-      console.log(result);
-      setConfirmationResult(result);
-      setStep("otp");
-      alert("OTP sent successfully!");
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REACT_API_URL}mobileOTPVerification`,
+        {
+          headers: {
+            phonenumber: phone,
+          }
+        }
+      );
+      
+      if (response.data.status) {
+        setVerificationSid(response.data.verificationSid);
+        setStep("otp");
+        alert("OTP sent successfully!");
+      } else {
+        alert(response.data.message || "Failed to send OTP!");
+      }
     } catch (error) {
       console.error("Error sending OTP:", error);
       alert("Failed to send OTP. Please try again.");
@@ -90,25 +54,36 @@ const CustomerOTPLogin = () => {
     }
   };
 
-  // Verify OTP
+  // Verify OTP using Twilio
   const verifyOtp = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      if (confirmationResult) {
-        const result = await confirmationResult.confirm(otp);
-        const user = result.user;
 
-        // Save session
+    try {
+      // You'll need to create this API endpoint for OTP verification
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_API_URL}verifyOTP`,
+        {
+          phonenumber: phone,
+          otp: otp,
+          verificationSid: verificationSid
+        }
+      );
+
+      if (response.data.status) {
+        // Store phone number in localStorage instead of Firebase user data
         localStorage.setItem("userLogin", "true");
-        localStorage.setItem("authTokenUser", await user.getIdToken());
-        sessionStorage.setItem("user", JSON.stringify(user));
-        sessionStorage.setItem("userId", user.uid);
+        localStorage.setItem("userPhoneNumber", phone);
+        localStorage.setItem("loginTimestamp", Date.now().toString());
+        
+        // Optional: Store verification status
+        sessionStorage.setItem("isVerified", "true");
+        sessionStorage.setItem("phoneNumber", phone);
 
         alert("Login successful! Redirecting...");
         navigate("/Home");
       } else {
-        alert("Please request OTP first.");
+        alert(response.data.message || "Invalid OTP. Please try again.");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
@@ -116,6 +91,38 @@ const CustomerOTPLogin = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const resendOtp = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_REACT_API_URL}mobileOTPVerification`,
+        {
+          headers: {
+            phonenumber: phone,
+          }
+        }
+      );
+      
+      if (response.data.status) {
+        setVerificationSid(response.data.verificationSid);
+        alert("OTP resent successfully!");
+      } else {
+        alert(response.data.message || "Failed to resend OTP!");
+      }
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+      alert("Failed to resend OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const goBackToPhoneStep = () => {
+    setStep("phone");
+    setOtp("");
+    setVerificationSid("");
   };
 
   return (
@@ -145,60 +152,90 @@ const CustomerOTPLogin = () => {
               >
                 Phone Number
               </label>
-              <input
-                className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
-                style={{ background: "#FCFAF7", fontFamily: "Lato" }}
-                type="text"
-                id="phone"
-                name="phone"
-                value={phone}
-                onChange={(e) => setPhoneNumber(e.target.value) }
-                required
-              />
+              <div className="flex">
+                <span
+                  className="flex items-center px-3 border border-r-0 border-[#C8A165] bg-[#FCFAF7]"
+                  style={{ fontFamily: "Lato" }}
+                >
+                  +91
+                </span>
+                <input
+                  className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal"
+                  style={{ background: "#FCFAF7", fontFamily: "Lato" }}
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="Enter 10-digit phone number"
+                  required
+                />
+              </div>
             </div>
           )}
 
           {step === "otp" && (
-            <div className="mb-4">
-              <label
-                className="block mb-1 text-base font-normal"
-                style={{ color: "#222", fontFamily: "Lato", letterSpacing: "0.01em" }}
-                htmlFor="otp"
-              >
-                Enter OTP
-              </label>
-              <input
-                className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal tracking-widest text-center"
-                style={{ background: "#FCFAF7", fontFamily: "Lato", fontSize: "1.3rem" }}
-                type="text"
-                id="otp"
-                name="otp"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-                maxLength={6}
-              />
-            </div>
+            <>
+              <div className="mb-4">
+                <label
+                  className="block mb-1 text-base font-normal"
+                  style={{ color: "#222", fontFamily: "Lato", letterSpacing: "0.01em" }}
+                  htmlFor="otp"
+                >
+                  Enter OTP sent to +91{phone}
+                </label>
+                <input
+                  className="w-full p-3 border border-[#C8A165] rounded-none focus:outline-none font-normal tracking-widest text-center"
+                  style={{ background: "#FCFAF7", fontFamily: "Lato", fontSize: "1.3rem" }}
+                  type="text"
+                  id="otp"
+                  name="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="######"
+                  required
+                  maxLength={6}
+                />
+              </div>
+              
+              <div className="flex justify-between mb-4">
+                <button
+                  type="button"
+                  onClick={goBackToPhoneStep}
+                  className="text-sm underline"
+                  style={{ color: primaryColor, fontFamily: "Lato" }}
+                >
+                  Change Phone Number
+                </button>
+                <button
+                  type="button"
+                  onClick={resendOtp}
+                  disabled={loading}
+                  className="text-sm underline"
+                  style={{ color: primaryColor, fontFamily: "Lato" }}
+                >
+                  Resend OTP
+                </button>
+              </div>
+            </>
           )}
-          <div id="recaptcha-container"></div>
+
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-3 mt-2 rounded font-bold"
+            disabled={loading || (step === "phone" && phone.length !== 10) || (step === "otp" && otp.length < 4)}
+            className="w-full py-3 mt-2 rounded font-bold transition-opacity"
             style={{
               background: primaryColor,
               color: "#fff",
               fontFamily,
               fontSize: "1.1rem",
               letterSpacing: "1px",
-              opacity: loading ? 0.7 : 1,
+              opacity: loading || (step === "phone" && phone.length !== 10) || (step === "otp" && otp.length < 4) ? 0.5 : 1,
             }}
           >
             {loading ? "Please wait..." : step === "phone" ? "Send OTP" : "Verify OTP"}
           </button>
         </form>
-
-        {/* Firebase Recaptcha container */}
       </div>
     </div>
   );
