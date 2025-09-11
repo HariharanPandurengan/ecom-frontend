@@ -3,6 +3,7 @@ import "../App.css";
 import Header from "./Header,Footer/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { height } from "@fortawesome/free-solid-svg-icons/faSearch";
 
 const primaryColor = "#7B3F14";
 const accentColor = "#C8A165";
@@ -62,11 +63,10 @@ const CustomerOTPLogin = () => {
     try {
       // You'll need to create this API endpoint for OTP verification
       const response = await axios.post(
-        `${import.meta.env.VITE_REACT_API_URL}verifyOTP`,
+        `${import.meta.env.VITE_REACT_API_URL}verifyMobileOTP`,
         {
           phonenumber: phone,
-          otp: otp,
-          verificationSid: verificationSid
+          code: otp
         }
       );
 
@@ -192,7 +192,7 @@ const CustomerOTPLogin = () => {
                   name="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  placeholder="######"
+                  placeholder="- - - -"
                   required
                   maxLength={6}
                 />
@@ -202,17 +202,15 @@ const CustomerOTPLogin = () => {
                 <button
                   type="button"
                   onClick={goBackToPhoneStep}
-                  className="text-sm underline"
-                  style={{ color: primaryColor, fontFamily: "Lato" }}
+                  className="bg-black text-white font-semibold px-4 py-2 w-1/2 mr-2 h-1/2"
                 >
-                  Change Phone Number
+                  Change Phone No.
                 </button>
                 <button
                   type="button"
                   onClick={resendOtp}
                   disabled={loading}
-                  className="text-sm underline"
-                  style={{ color: primaryColor, fontFamily: "Lato" }}
+                  className="bg-black text-white font-semibold px-4 py-2 w-1/2 ml-2 h-1/2"
                 >
                   Resend OTP
                 </button>
