@@ -70,21 +70,16 @@ const CustomerOTPLogin = () => {
         }
       );
 
-      if (response.data.status) {
-        // Store phone number in localStorage instead of Firebase user data
-        localStorage.setItem("userLogin", "true");
-        localStorage.setItem("userPhoneNumber", phone);
-        localStorage.setItem("loginTimestamp", Date.now().toString());
-        
-        // Optional: Store verification status
-        sessionStorage.setItem("isVerified", "true");
-        sessionStorage.setItem("phoneNumber", phone);
-
-        alert("Login successful! Redirecting...");
-        navigate("/Home");
+      const userExists = await verifyUserInDatabase(phone);
+      if (userExists) {
+        redirectToHome();
+        return;
+      } else if (response.data.status) {
+        addUserToDatabase(phone);
       } else {
         alert(response.data.message || "Invalid OTP. Please try again.");
       }
+
     } catch (error) {
       console.error("Error verifying OTP:", error);
       alert("Invalid OTP. Please try again.");
@@ -93,6 +88,57 @@ const CustomerOTPLogin = () => {
     }
   };
 
+  const addUserToDatabase = async (phoneNumber: string) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_API_URL}addUserbyPhoneNumber`,
+        { phone: phoneNumber }
+      );
+      if (response.data.status) {
+        console.log("User added to database");
+        verifyUserInDatabase(phoneNumber).then((exists) => {
+          if (exists) {
+            redirectToHome();
+          } else {
+            console.error("User verification failed after addition");
+          }
+        });
+      } else {
+        console.error("Failed to add user to database");
+      }
+    } catch (error) {
+      console.error("Error adding user to database:", error);
+    }
+  };
+
+  const verifyUserInDatabase = async (phoneNumber: string) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_API_URL}getUserbyPhoneNumber`,
+        { phone: phoneNumber }
+      );
+      console.log("User verification response:", response.data);
+      sessionStorage.setItem('userId',response.data.user._id)
+      localStorage.setItem('authTokenUser',response.data.authToken)
+      return response.data;
+    }
+    catch (error) {
+      console.error("Error verifying user in database:", error);
+      return false;
+    }
+  };
+
+  const redirectToHome = () => {
+        localStorage.setItem("userLogin", "true");
+        localStorage.setItem("userPhoneNumber", phone);
+        localStorage.setItem("loginTimestamp", Date.now().toString());
+        // Optional: Store verification status
+        sessionStorage.setItem("isVerified", "true");
+        sessionStorage.setItem("phoneNumber", phone);
+
+        alert("Login successful! Redirecting...");
+        navigate("/Home");
+  };
   const resendOtp = async () => {
     setLoading(true);
     try {

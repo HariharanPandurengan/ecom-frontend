@@ -296,6 +296,8 @@ const handleClick = () => {
                                     sessionStorage.removeItem("user");
                                     sessionStorage.removeItem("userId");
                                     sessionStorage.removeItem("cartId");
+                                    sessionStorage.removeItem("phoneNumber");
+                                    sessionStorage.removeItem("isVerified");
                                     setIsProfileMenuOpen(false);
                                     alert("Logged out successfully");
                                     setUserName(null);
@@ -309,6 +311,7 @@ const handleClick = () => {
                                     if(localStorage.getItem("userLogin") === "true"){
                                         localStorage.setItem('userLogin','false')
                                         localStorage.setItem('email',"")
+                                        localStorage.setItem("userPhoneNumber","");
                                         localStorage.setItem('authTokenUser',"")
                                         navigate("/CustomerLogin")
                                     }

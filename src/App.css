@@ -647,7 +647,7 @@ li {
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow-y: auto;
-  background-image: url(C:\Users\akash\OneDrive\Documents\GitHub\ecom-frontend\src\assets\bgs\Chaotic20-%2010.jpg);
+  /* background-image: url(C:\Users\akash\OneDrive\Documents\GitHub\ecom-frontend\src\assets\bgs\Chaotic20-%2010.jpg); */
 }
 .productimage-container{
   max-width: 100%;

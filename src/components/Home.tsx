@@ -297,6 +297,7 @@ const Home: React.FC = () => {
                 }, {}),
             }
         }))
+        setIsCollapsed(true);
     }
 
 
