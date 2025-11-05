@@ -54,6 +54,7 @@ const ProductCard = () => {
   const [images, setSelectedImage] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
   const [showSizeChart, setShowSizeChart] = useState(false);
+  const [refundPolicyVisible, setRefundPolicyVisible] = useState(false);
   const image = "src/assets/Pictures/blue shirt.jpg";
 
   const handleSizeChange = (e : any) => {
@@ -66,7 +67,8 @@ const ProductCard = () => {
   const header = {
         headers: {
             email: localStorage.getItem('email'),
-            authToken: localStorage.getItem('authTokenUser')
+            phonenumber : localStorage.getItem('userPhoneNumber'),
+            authtoken: localStorage.getItem('authTokenUser')
         }
     }
 
@@ -474,6 +476,7 @@ const ProductCard = () => {
               type="button"
               onClick={async () => {
                 const userId = sessionStorage.getItem("userId");
+                console.log("header",header);
                 if (!userId) {
                   navigate("/CustomerLogin");
                   return;
@@ -491,8 +494,7 @@ const ProductCard = () => {
                       productColor: selectedColor.toString(),
                       productSize: selectedSize.toString(),
                       quantity: Number(quantity),
-                    }
-                    ,
+                    },
                     header
                   )
                   .then(res => {
@@ -520,6 +522,7 @@ const ProductCard = () => {
               className="custom-btn buy-now h-10 w-full sm:w-40 px-6 font-semibold rounded-md border border-slate-200"
               type="button"
               onClick={async () => {
+                console.log("header",header.headers);
                 const userId = sessionStorage.getItem("userId");
                 if (!userId) {
                   navigate("/CustomerLogin");
@@ -538,7 +541,8 @@ const ProductCard = () => {
                       productColor: selectedColor.toString(),
                       productSize: selectedSize.toString(),
                       quantity: Number(quantity),
-                    }
+                    },
+                    header
                   )
                   .then(res => {
                     if(res.data.message && res.data.message == "Unauthorized"){
@@ -584,6 +588,9 @@ const ProductCard = () => {
               <li>
                 <strong style={{fontFamily:'Lato'}}>Description:</strong> {product.description}
               </li>
+              <li>
+                <strong style={{fontFamily:'Lato', cursor: 'pointer', color: 'blue', fontSize: "0.8rem"}} onClick={() => setRefundPolicyVisible(true)}>Return & Refund Policy</strong>
+              </li>
             </ul>
           </div>
 
@@ -617,6 +624,33 @@ const ProductCard = () => {
           </div>
         </div>
       </div>
+      {refundPolicyVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-md relative">
+            <div
+              onClick={() => setRefundPolicyVisible(false)}
+              className="absolute top-2 right-4 text-xl font-bold text-gray-500 hover:text-black cursor-pointer"
+            >
+              &times;
+            </div>
+            <div style={{ maxWidth: 400, padding: 20, border: "1px solid #ccc", background: "#fafafa", fontFamily: "Lato" }}>
+              <h2>Refund and Return Policy</h2>
+              <p>We value your satisfaction and strive to ensure a seamless shopping experience.</p><br/>
+              <ul>
+                <li>Returns are accepted within <strong>7–14 days</strong> from the date of delivery.</li><br/>
+                <li>Returned items must be <strong>unused</strong>, <strong>unwashed</strong>, and accompanied by all <strong>original tags and packaging</strong>.</li><br/>
+                <li>Refunds will be processed to the <strong>original method of payment</strong> after the returned product has been inspected and approved.</li><br/>
+                <li>Exchanges may be requested for size or color variations, subject to product availability.</li><br/>
+              </ul>
+              <p>For further details, please review our complete policy or contact our customer service team.</p>
+              <div style={{ marginTop: 16 }}>
+                <a href="/return-policy" style={{ marginRight: 16, textDecoration: "underline", color: "#1a73e8" }}>View Full Policy</a>
+                <a href="/start-return" style={{ textDecoration: "underline", color: "#1a73e8" }}>Initiate a Return</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {showSizeChart && (
   <div className="fixed inset-0 bg-black bg-opacity-40 z-[999] flex items-center justify-center size-chart">
     <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] max-w-md relative">

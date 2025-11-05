@@ -26,6 +26,7 @@ const OrderList: React.FC = () => {
                     alert("Login Required")
                 }else{
                     setOrders(res.data.orders || []);
+                    console.log("Fetched orders:", res.data.orders);
                 }
             } catch {
                 setOrders([]);

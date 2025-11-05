@@ -40,6 +40,7 @@ const CustomerLogin: React.FC = () => {
           password: loginData.password,
         }
       );
+      console.log("Login response:", userRes.data);
       if(userRes.data.status === true){
         localStorage.setItem('userLogin','true')
         localStorage.setItem('email',userRes.data.email)

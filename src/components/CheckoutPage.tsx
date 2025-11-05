@@ -36,7 +36,8 @@ const CheckoutPage = () => {
 	const header = {
         headers: {
             email: localStorage.getItem('email'),
-            authToken: localStorage.getItem('authTokenUser')
+			phone : localStorage.getItem('userPhoneNumber'),
+            authtoken: localStorage.getItem('authTokenUser')
         }
     }
 
@@ -197,9 +198,9 @@ const CheckoutPage = () => {
 		}
 		setCartProducts(productDetails);
 
-		const qtyObj = {};
-		const colorObj = {};
-		const sizeObj = {};
+		const qtyObj: { [key: string]: number } = {};
+		const colorObj: { [key: string]: string } = {};
+		const sizeObj: { [key: string]: string } = {};
 		let total = 0;
 		productDetails.forEach(prod => {
 		qtyObj[prod.cartId] = prod.cartQuantity;
@@ -339,12 +340,23 @@ const CheckoutPage = () => {
         if (step === "cart") {
             setActiveStep("cart");
         } else if (step === "address") {
+            if (cartItems.length === 0) {
+                alert("Please add items to the cart before proceeding to address.");
+                return;
+            }
+            setActiveStep("address");
+        }
+        else if (step === "payment") {
 			try {
 				await axios.post(`${import.meta.env.VITE_REACT_API_URL}updateUser`, {
 					userId: sessionStorage.getItem("userId"),
+					name : shippingAddress.name,
+					email : shippingAddress.email,
+					username : shippingAddress.email,
 					cartId : cartId
 				},{
 					headers: {
+						phone2 : localStorage.getItem('userPhoneNumber'),
 						email2: localStorage.getItem('email'),
 						authToken: localStorage.getItem('authTokenUser')
 					}
@@ -361,14 +373,8 @@ const CheckoutPage = () => {
 			catch {
 				alert("Failed to update user data.");
 			}
-            if (cartItems.length === 0) {
-                alert("Please add items to the cart before proceeding to address.");
-                return;
-            }
-            setActiveStep("address");
-        }
-        else if (step === "payment") {
             if (activeStep !== "address") {
+				
                 alert("Please complete the address step before proceeding to payment.");
                 return;
             }
